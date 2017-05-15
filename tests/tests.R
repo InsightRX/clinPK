@@ -165,6 +165,12 @@ assert("PK 1cmt infusion dose calculation",
        round(pk_1cmt_inf_dose_from_cmax(cmax = 10, tau = 24, t_inf = 1,
                                         CL = 10, V = 50),1) == 547.1)
 
+## 1cmt oral
+assert("1cmt oral", round(sum(pk_1cmt_oral(KA = 1)$dv),1) == 52.3)
+
+## 1cmt oral when KA = KEL
+assert("1cmt oral", round(sum(pk_1cmt_oral(KA = .1)$dv),1) == 35.2)
+
 ## Kel estimation
 dose <- 1000
 V <- 50
