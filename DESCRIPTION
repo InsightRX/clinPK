@@ -2,12 +2,13 @@ Package: clinPK
 Type: Package
 Title: Functions for clinical pharmacokinetics
 Version: 0.9
-Date: 2017-05-08
+Date: 2017-06-05
 Author: Ron Keizer
 Maintainer: Ron Keizer <ronkeizer@gmail.com>
-Description: Equations for pharmacokinetics.
+Description: Equations for clinical pharmacokinetics.
 Imports:
-    testit
+    testit,
+    curl
 License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 6.0.1
