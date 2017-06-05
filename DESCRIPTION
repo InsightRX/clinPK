@@ -1,11 +1,11 @@
 Package: clinPK
 Type: Package
-Title: Functions for clinical pharmacokinetics
-Version: 0.9
+Title: Clinical pharmacokinetics toolkit
+Version: 0.9.0
 Date: 2017-06-05
 Author: Ron Keizer
 Maintainer: Ron Keizer <ronkeizer@gmail.com>
-Description: Equations for clinical pharmacokinetics.
+Description: Equations and tools for clinical pharmacokinetics
 Imports:
     testit,
     curl
