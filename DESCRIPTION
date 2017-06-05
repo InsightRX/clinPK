@@ -1,11 +1,11 @@
 Package: clinPK
 Type: Package
-Title: Clinical pharmacokinetics toolkit
+Title: Clinical Pharmacokinetics Toolkit
 Version: 0.9.0
 Date: 2017-06-05
 Author: Ron Keizer
 Maintainer: Ron Keizer <ronkeizer@gmail.com>
-Description: Equations and tools for clinical pharmacokinetics.
+Description: Collection of tools for clinical pharmacokinetics. This package provides a comprehensive collection of equations commonly used in clinical pharmacokinetics and clinical pharmacology as R functions. The package includes equations for dose individualization, compartmental pharmacokinetics, drug exposure, antropomorphic calculations, clinical chemistry, and conversion of common clinical parameters. Where possible and relevant, it provides multiple published and peer-reviewed equations within the respective R function.
 Imports:
     testit,
     curl
