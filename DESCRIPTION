@@ -5,7 +5,7 @@ Version: 0.9.0
 Date: 2017-06-05
 Author: Ron Keizer
 Maintainer: Ron Keizer <ronkeizer@gmail.com>
-Description: Equations and tools for clinical pharmacokinetics
+Description: Equations and tools for clinical pharmacokinetics.
 Imports:
     testit,
     curl
