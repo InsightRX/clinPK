@@ -31,3 +31,7 @@ References:
 `al-sallami`: Al-Sallami et al. Clin Pharmacokinet 2015
 `storset`: Storset E et al. TDM 2016
 }
+\examples{
+calc_ffm(weight = 70, bmi = 25, sex = "male")
+calc_ffm(weight = 70, height = 180, age = 40, sex = "female", method = "storset")
+}

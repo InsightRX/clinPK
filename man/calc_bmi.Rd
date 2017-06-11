@@ -14,3 +14,6 @@ calc_bmi(weight, height)
 \description{
 Calculate BMI
 }
+\examples{
+calc_bmi(weight = 70, height = 160)
+}

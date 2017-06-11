@@ -20,8 +20,12 @@ calc_ibw(weight = NULL, height = NULL, age = NULL, sex = "male",
 
 \item{method_adults}{method to use for >=18 years. Choose from `devine` (default, Devine BJ. Drug Intell Clin Pharm. 1974;8:650-655).}
 
-\item{digits}{number of decimals (can be NULL to for no rounding)
-
+\item{digits}{number of decimals (can be NULL to for no rounding)}
+}
+\description{
+Get an estimate of ideal body weight. This function allows several commonly used equations
+}
+\details{
 Equations:
 
 <1yo Use actual body weight
@@ -33,7 +37,7 @@ Equations:
     IBW (male) = 39 + (2.27 x height in inches over 5 feet)
     IBW (female) = 42.2 + (2.27 x height in inches over 5 feet)
 
-  Methods not implemented yet:
+Methods not implemented yet:
   McLaren: IBW =
     - step1:   x = 50th percentile height for given age
     - step2: IBW = 50th percentile weight for x on weight-for-height scale
@@ -41,10 +45,11 @@ Equations:
   BMI: IBW = 50th percentile of BMI for given age x (height in m)^2
   ADA: IBW = 50th percentile of WT for given age
 
-_ 18 years old (Devine equation)
+>= 18 years old (Devine equation)
   IBW (male) = 50 + (2.3 x height in inches over 5 feet)
-  IBW (female) = 45.5 + (2.3 x height in inches over 5 feet)}
+  IBW (female) = 45.5 + (2.3 x height in inches over 5 feet)
 }
-\description{
-Get an estimate of ideal body weight. This function allows several commonly used equations
+\examples{
+calc_ibw(weight = 70, height = 170, age = 40, sex = "female")
+calc_ibw(weight = 30, height = 140, age = 10, sex = "female")
 }

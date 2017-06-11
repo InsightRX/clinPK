@@ -20,3 +20,7 @@ calc_abw(weight = NULL, ibw = NULL, factor = 0.4, verbose = TRUE, ...)
 \description{
 Often used for chemotherapy calculations when actual weight > 120% of IBW.
 }
+\examples{
+calc_abw(weight = 80, ibw = 60)
+calc_abw(weight = 80, height = 160, sex = "male", age = 60)
+}

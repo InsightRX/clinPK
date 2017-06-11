@@ -16,3 +16,7 @@ calc_bsa(weight = NULL, height = NULL, method = "dubois")
 \description{
 Get an estimate of body-surface area based on weight and height
 }
+\examples{
+calc_bsa(weight = 70, height = 170)
+calc_bsa(weight = 70, height = 170, method = "gehan_george")
+}

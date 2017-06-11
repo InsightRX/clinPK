@@ -7,6 +7,9 @@
 #' @param verbose show output?
 #' @param factor weighting factor, commonly 0.4 or 0.3
 #' @param ... parameters passed to ibw function (if `ibw` not specified)
+#' @examples
+#' calc_abw(weight = 80, ibw = 60)
+#' calc_abw(weight = 80, height = 160, sex = "male", age = 60)
 #' @export
 calc_abw <- function(weight = NULL, ibw = NULL, factor = 0.4, verbose = TRUE, ...) {
   if(is.null(weight)) {

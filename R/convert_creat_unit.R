@@ -6,6 +6,10 @@
 convert_creat_unit <- function(
   value = NULL,
   unit_in = "mg/dL") {
+  if(class(value) == "list" && !is.null(value$value) && !is.null(value$unit)) {
+    unit_in <- value$unit
+    value <- value$value
+  }
   if(!tolower(unit_in) %in% c("mg/dl", "mmol/l")) {
     stop("Input unit needs to be either mg/dL or mmol/L.")
   }

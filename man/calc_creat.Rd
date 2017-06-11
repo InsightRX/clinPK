@@ -22,3 +22,7 @@ Clin Chim Acta. 2004. For age 15-18, a linear interpolation is used between
 equations for <15 and >18 years as described in Johanssen A et al. Ther Drug
 Monit 2011.
 }
+\examples{
+calc_creat(sex = "male", age = 40)
+calc_creat(sex = "male", age = c(10, 17, 60))
+}

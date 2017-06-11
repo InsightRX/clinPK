@@ -10,6 +10,9 @@
 #' @param sex sex, either `male` or `female`
 #' @param age age in years
 #' @param digits number of digits to round to
+#' @examples
+#' calc_creat(sex = "male", age = 40)
+#' calc_creat(sex = "male", age = c(10, 17, 60))
 #' @export
 calc_creat <- function (
   sex = NULL,
@@ -23,10 +26,10 @@ calc_creat <- function (
     stop("Age required.")
   }
   scr <- rep(0, length(age))
-  scr[age <= 15] <- -2.37330 -(12.91367*log(age[age <= 15])) + 23.93581*sqrt(age[age <= 15])
-  sel1 <- (age > 15 && age < 18) & sex == "male"
+  scr[age <= 15] <- -2.37330 -(12.91367 * log(age[age <= 15])) + 23.93581 * sqrt(age[age <= 15])
+  sel1 <- (age > 15 & age < 18) & sex == "male"
   scr[sel1]   <- 9.5471 * age[sel1] - 87.847
-  sel2 <- (age > 15 && age < 18) & sex == "female"
+  sel2 <- (age > 15 & age < 18) & sex == "female"
   scr[sel2] <- 4.7137 * age[sel2] - 15.347
   scr[age >= 18 & sex == "male"]   <- 84
   scr[age >= 18 & sex == "female"] <- 69.5

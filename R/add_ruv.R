@@ -2,6 +2,9 @@
 #'
 #' @param x data
 #' @param ruv list with arguments prop, add, exp
+#' @examples
+#' y <- pk_1cmt_inf()$y
+#' y + add_ruv(prop = 0.1, add = 0.05)
 #' @export
 add_ruv <- function (x, ruv = list()) {
   if(!is.null(ruv$prop)) {

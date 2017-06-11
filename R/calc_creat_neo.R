@@ -8,6 +8,9 @@
 #'
 #' @param pma post-natal age in weeks
 #' @param digits number of digits to round to
+#' @examples
+#' calc_creat_neo(pma = 36)
+#' convert_creat_unit(calc_creat_neo(pma = 36))
 #' @export
 calc_creat_neo <- function (
   pma = NULL,

@@ -4,6 +4,8 @@
 #' @param CL Clearance
 #' @param V Volume of distribution
 #' @param t_auc if AUCtau is not known but only AUCt, `t_auc` specifies time until which AUC_t is calculated to be able to calculate dose
+#' @examples
+#' auc2dose(450, CL = 5, V = 50)
 #' @export
 auc2dose <- function(auc, CL, V, t_auc = NA) {
   dose_inf <- as.numeric(auc * CL)

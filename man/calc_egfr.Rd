@@ -59,3 +59,11 @@ Calculate the estimated glomerulal filtration rate (an estimate of renal functio
 \details{
 Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
 }
+\examples{
+calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
+calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70, unit_out = "L/hr")
+calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70, bsa = 1.8, method = "ckd_epi")
+calc_egfr(sex = "male", age = 50, scr = c(1.1, 0.8), weight = 70, height = 170, method = "jelliffe")
+calc_egfr(sex = "male", age = 50, scr = c(1.1, 0.8), weight = 70, height = 170, method = "jelliffe_unstable")
+calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70, bsa = 1.6, method = "malmo_lund_rev", relative = FALSE)
+}

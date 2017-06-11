@@ -4,6 +4,10 @@
 #' @param cystatin serum cystatin concentration (mg/L)
 #' @param cystatin_unit, only `mg/L` available
 #' @param unit_out eGFR output unit, choose from `ml/min`, `ml/hr`, `l/min`, `l/hr`
+#' @examples
+#' calc_egfr_cystatin(1.0)
+#' calc_egfr_cystatin(1.0, method = "larsson")
+#' calc_egfr_cystatin(1.0, unit_out = "l/hr")
 #' @export
 calc_egfr_cystatin <- function (
   cystatin = NULL,

@@ -14,3 +14,7 @@ add_ruv(x, ruv = list())
 \description{
 Add residual variability to data
 }
+\examples{
+y <- pk_1cmt_inf()$y
+y + add_ruv(prop = 0.1, add = 0.05)
+}

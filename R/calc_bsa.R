@@ -5,6 +5,9 @@
 #' @param weight weight
 #' @param height height
 #' @param method estimation method, choose from `dubois`, `mosteller`, `haycock`, `gehan_george`, `boyd`
+#' @examples
+#' calc_bsa(weight = 70, height = 170)
+#' calc_bsa(weight = 70, height = 170, method = "gehan_george")
 #' @export
 calc_bsa <- function (
   weight = NULL,

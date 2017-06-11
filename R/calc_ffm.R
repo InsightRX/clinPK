@@ -14,6 +14,9 @@
 #' @param age age, only used for Storset equation
 #' @param method estimation method, either `green` (default), `holford`, or `storset`
 #' @param digits round to number of digits
+#' @examples
+#' calc_ffm(weight = 70, bmi = 25, sex = "male")
+#' calc_ffm(weight = 70, height = 180, age = 40, sex = "female", method = "storset")
 #' @export
 calc_ffm <- function (
   weight = NULL,

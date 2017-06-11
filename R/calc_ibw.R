@@ -2,14 +2,6 @@
 #'
 #' Get an estimate of ideal body weight. This function allows several commonly used equations
 #'
-#' @param age age in years, can be vector
-#' @param weight weight in kg, can be vector
-#' @param height height in cm, can be vector
-#' @param sex either `male` or `female`, can be vector
-#' @param method_children method to use for children >1 and <18 years. Choose from `standard`, `mclaren` (McLaren DS, Read WWC. Lancet. 1972;2:146-148.), `moore` (Moore DJ et al. Nutr Res. 1985;5:797-799), `bmi` (), `ada` (American Dietary Association)
-#' @param method_adults method to use for >=18 years. Choose from `devine` (default, Devine BJ. Drug Intell Clin Pharm. 1974;8:650-655).
-#' @param digits number of decimals (can be NULL to for no rounding)
-#'
 #' Equations:
 #'
 #' <1yo Use actual body weight
@@ -29,10 +21,20 @@
 #'   BMI: IBW = 50th percentile of BMI for given age x (height in m)^2
 #'   ADA: IBW = 50th percentile of WT for given age
 #'
-#' _ 18 years old (Devine equation)
+#' >= 18 years old (Devine equation)
 #'   IBW (male) = 50 + (2.3 x height in inches over 5 feet)
 #'   IBW (female) = 45.5 + (2.3 x height in inches over 5 feet)
 #'
+#' @param age age in years, can be vector
+#' @param weight weight in kg, can be vector
+#' @param height height in cm, can be vector
+#' @param sex either `male` or `female`, can be vector
+#' @param method_children method to use for children >1 and <18 years. Choose from `standard`, `mclaren` (McLaren DS, Read WWC. Lancet. 1972;2:146-148.), `moore` (Moore DJ et al. Nutr Res. 1985;5:797-799), `bmi` (), `ada` (American Dietary Association)
+#' @param method_adults method to use for >=18 years. Choose from `devine` (default, Devine BJ. Drug Intell Clin Pharm. 1974;8:650-655).
+#' @param digits number of decimals (can be NULL to for no rounding)
+#' @examples
+#' calc_ibw(weight = 70, height = 170, age = 40, sex = "female")
+#' calc_ibw(weight = 30, height = 140, age = 10, sex = "female")
 #' @export
 calc_ibw <- function (
   weight = NULL,
