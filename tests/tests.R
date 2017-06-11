@@ -122,7 +122,7 @@ assert("FFM Al-Sallami",
 ## Test creatinine estimates
 assert(calc_creat(sex = c("male", "female"), age = c(20,20))$value == c(84.0, 69.5))
 assert(calc_creat(sex = c("male", "female"), age = c(16,16))$value == c(64.9, 60.1))
-assert(calc_creat(sex = c("male", "female"), age = c(16,14))$value == c(64.9, 50.6))
+assert(calc_creat(sex = c("male", "female"), age = c(16,14))$value == c(64.9, 53.1))
 
 ## convert creatinine
 assert(round(convert_creat_unit(84, unit_in = "mmol/L")$value, 3) == 0.95)

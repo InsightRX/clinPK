@@ -16,5 +16,5 @@ Add residual variability to data
 }
 \examples{
 y <- pk_1cmt_inf()$y
-y + add_ruv(prop = 0.1, add = 0.05)
+y + add_ruv(y, list(prop = 0.1, add = 0.05))
 }
