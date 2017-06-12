@@ -2,6 +2,10 @@
 #'
 #' @param value weight in any allowed unit
 #' @param unit unit of weight, one of "lbs", "pound", "pounds", "oz", "ounce", "ounces"
+#' @examples
+#' weight2kg(250, unit = "oz")
+#' weight2kg(250, unit = "pounds")
+#' weight2kg(250, unit = "lbs")
 #' @export
 weight2kg <- function(value = NULL, unit = NULL) {
   if(is.null(value)) {

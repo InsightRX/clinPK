@@ -8,6 +8,8 @@
 #' @param Q inter-compartimental clearance
 #' @param V2 volume of peripheral compartment
 #' @param ruv residual error (list)
+#' @examples
+#' pk_2cmt_bolus(dose = 1000, tau = 24, CL = 5, V = 50, Q = 15, V2 = 200)
 #' @export
 pk_2cmt_bolus <- function(
     t = c(0:24),

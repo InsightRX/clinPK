@@ -7,10 +7,14 @@
 convert_creat_unit(value = NULL, unit_in = "mg/dL")
 }
 \arguments{
-\item{value}{serum creatinine in either mg/dL or mmol/L}
+\item{value}{serum creatinine in either mg/dL or micromol/L}
 
-\item{unit_in}{unit, either `mg/dL` or `mmol/L`}
+\item{unit_in}{unit, either `mg/dL` or `micromol/L`}
 }
 \description{
 Convert creatinine to different unit
+}
+\examples{
+convert_creat_unit(1)
+convert_creat_unit(88.42, unit_in = "micromol/l")
 }

@@ -3,6 +3,9 @@
 #' @param interval dose value
 #' @param possible available increments of dose
 #' @param type pick either `nearest` absolute interval, or nearest `lower`, or nearest `higher` interval.
+#' @examples
+#' find_nearest_interval(19.7)
+#' find_nearest_interval(19.7, c(6, 8, 12))
 #' @export
 find_nearest_interval <- function(interval = NULL, possible = c(4, 6, 8, 12, 24, 36, 48), type = "absolute") {
   if(!is.null(interval)) {

@@ -9,6 +9,10 @@
 #' @param Q inter-compartimental clearance
 #' @param V2 volume of peripheral compartment
 #' @param ruv residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. `list(prop=0.1, add=1, exp=0)`
+#' @examples
+#' pk_2cmt_inf_ss(
+#'   dose = 1000, tau = 12, t_inf = 2,
+#'   CL = 5, V = 50, Q = 20, V2 = 200)
 #' @export
 pk_2cmt_inf_ss <- function(
     t = c(0:24),

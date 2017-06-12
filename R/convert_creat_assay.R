@@ -5,6 +5,8 @@
 #' @param scr vector of serum creatinine values
 #' @param from assay type, either `jaffe`, `enzymatic` or `idms`
 #' @param to assay type, either `jaffe`, `enzymatic` or `idms`
+#' @examples
+#' convert_creat_assay(scr = c(1.1, 0.8, 0.7), from = "enzymatic", to = "jaffe")
 #' @export
 convert_creat_assay <- function(
   scr,
@@ -32,10 +34,9 @@ convert_creat_assay <- function(
   if (tolower(to) %in% c("enzymatic_idms", "idms")) {
     scr <- (scr * 1.027) - 0.254
   }
-  if(scr >= 0.1) {
-    return(scr)
-  } else {
-    warning(paste0("Couldn't reliably convert creatinine value between assays, return original value (", from, ")."))
-    return(scr_orig)
+  if(any(scr < 0.1)) {
+    scr[scr < 0.1] <- 0.1
+    warning(paste0("Can't reliably convert creatinine value <0.1 between assays, returning 0.1 for thoses values."))
   }
+  return(scr)
 }

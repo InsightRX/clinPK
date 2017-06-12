@@ -12,3 +12,6 @@ lbs2kg(lbs)
 \description{
 Convert lbs to kg
 }
+\examples{
+lbs2kg(2.20462)
+}

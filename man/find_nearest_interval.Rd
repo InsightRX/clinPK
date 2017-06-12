@@ -17,3 +17,7 @@ find_nearest_interval(interval = NULL, possible = c(4, 6, 8, 12, 24, 36,
 \description{
 Generic function to calculate the interval nearest to a possible dosing interval
 }
+\examples{
+find_nearest_interval(19.7)
+find_nearest_interval(19.7, c(6, 8, 12))
+}

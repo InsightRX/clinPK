@@ -6,6 +6,12 @@
 #' @param CL clearance
 #' @param V volume of distribution
 #' @param ruv residual error (list)
+#' @examples
+#' pk_1cmt_bolus(dose = 500, tau = 12, CL = 5, V = 50)
+#' pk_1cmt_bolus(dose = 500, tau = 12, CL = 5, V = 50, t = 24)
+#' pk_1cmt_bolus(
+#'   dose = 500, tau = 12, CL = 5, V = 50,
+#'   ruv = list(prop = 0.1, add = 0.1))
 #' @export
 pk_1cmt_bolus <- function(
     t = c(0:24),

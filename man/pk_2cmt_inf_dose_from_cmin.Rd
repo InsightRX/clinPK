@@ -27,3 +27,9 @@ pk_2cmt_inf_dose_from_cmin(cmin = 1, tau = 12, t_inf = 1, CL = 3,
 Calculate dose to achieve steady state trough
 for 2-compartmental PK model with infusion dosing at steady state
 }
+\examples{
+dos <- pk_2cmt_inf_dose_from_cmin(
+  cmin = 10, tau = 12, t_inf = 2,
+  CL = 5, V = 50, Q = 20, V2 = 200)
+find_nearest_dose(dos, 100)
+}

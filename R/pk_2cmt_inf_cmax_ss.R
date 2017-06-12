@@ -8,6 +8,10 @@
 #' @param Q inter-compartimental clearance
 #' @param V2 volume of peripheral compartment
 #' @param ruv residual error (list)
+#' @examples
+#' pk_2cmt_inf_cmax_ss(
+#'   dose = 1000, tau = 12, t_inf = 2,
+#'   CL = 5, V = 50, Q = 20, V2 = 200)
 #' @export
 pk_2cmt_inf_cmax_ss <- function(
   dose = 100,
@@ -20,7 +24,7 @@ pk_2cmt_inf_cmax_ss <- function(
   ruv = NULL
 ) {
   return(pk_2cmt_inf_ss(
-    t=0,
+    t=t_inf,
     dose = dose, tau=tau, t_inf = t_inf,
     CL=CL, V=V, Q=Q, V2=V2,
     ruv=ruv)$dv)

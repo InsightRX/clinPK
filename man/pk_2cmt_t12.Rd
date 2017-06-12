@@ -20,3 +20,6 @@ pk_2cmt_t12(CL = 3, V = 30, Q = 2, V2 = 20, phase = "both")
 \description{
 Calculate half-life(s) for 2-compartment model
 }
+\examples{
+pk_2cmt_t12(CL = 5, V = 50, Q = 20, V2 = 200)
+}

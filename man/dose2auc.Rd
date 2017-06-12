@@ -2,9 +2,9 @@
 % Please edit documentation in R/dose2auc.R
 \name{dose2auc}
 \alias{dose2auc}
-\title{Convert dose to expected AUCtau or AUCt for 1 compartment linear PK model}
+\title{Convert dose to expected AUCinf or AUCt for 1 compartment linear PK model}
 \usage{
-dose2auc(dose, CL, V, t_auc = NA)
+dose2auc(dose, CL, V, t_auc = NULL)
 }
 \arguments{
 \item{dose}{dose amount}
@@ -13,8 +13,12 @@ dose2auc(dose, CL, V, t_auc = NA)
 
 \item{V}{Volume of distribution}
 
-\item{t_auc}{if AUCtau is not known but only AUCt, `t_auc` specifies time until which AUC_t is calculated to be able to calculate dose}
+\item{t_auc}{if AUC_t is desired, `t_auc` specifies time until which AUC_t is calculated}
 }
 \description{
-Convert dose to expected AUCtau or AUCt for 1 compartment linear PK model
+Convert dose to expected AUCinf or AUCt for 1 compartment linear PK model
+}
+\examples{
+dose2auc(dose = 1000, CL = 5, V = 50)
+dose2auc(dose = 1000, CL = 5, V = 50, t_auc = c(12, 24, 48, 72))
 }

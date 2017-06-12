@@ -8,6 +8,11 @@
 #' @param V volume of distribution
 #' @param Q inter-compartimental clearance
 #' @param V2 volume of peripheral compartment
+#' @examples
+#' dos <- pk_2cmt_inf_dose_from_cmax(
+#'   cmax = 25, tau = 12, t_inf = 2,
+#'   CL = 5, V = 50, Q = 20, V2 = 200)
+#' find_nearest_dose(dos, 100)
 #' @export
 pk_2cmt_inf_dose_from_cmax <- function(cmax = 1, tau = 12, t_inf = 1,
                                        CL = 3, V = 30,

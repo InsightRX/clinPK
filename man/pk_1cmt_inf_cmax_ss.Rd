@@ -22,3 +22,6 @@ pk_1cmt_inf_cmax_ss(dose, tau, CL, V, t_inf, ruv = NULL)
 \description{
 Takes single values for dose or model parameters, or vector of either dose or parameters (but not both).
 }
+\examples{
+pk_1cmt_inf_cmax_ss(dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50)
+}

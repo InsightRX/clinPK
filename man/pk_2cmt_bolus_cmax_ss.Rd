@@ -25,3 +25,6 @@ pk_2cmt_bolus_cmax_ss(dose = 100, tau = 12, CL = 3, V = 30, Q = 2,
 \description{
 Cmax for 2-compartmental PK model, bolus dosing at steady state
 }
+\examples{
+pk_2cmt_bolus_cmax_ss(dose = 1000, tau = 12, CL = 5, V = 50, Q = 20, V2 = 200)
+}

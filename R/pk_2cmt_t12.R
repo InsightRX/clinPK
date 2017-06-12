@@ -5,6 +5,8 @@
 #' @param Q inter-compartimental clearance
 #' @param V2 volume of peripheral compartment
 #' @param phase `alpha`, `beta` (default) or `both` to indicate initial (distribution) or terminal (elimination) phase.
+#' @examples
+#' pk_2cmt_t12(CL = 5, V = 50, Q = 20, V2 = 200)
 #' @export
 pk_2cmt_t12 <- function(
   CL = 3,

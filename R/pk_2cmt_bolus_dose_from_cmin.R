@@ -7,6 +7,11 @@
 #' @param V volume of distribution
 #' @param Q inter-compartimental clearance
 #' @param V2 volume of peripheral compartment
+#' @examples
+#' dos <- pk_2cmt_bolus_dose_from_cmin(
+#'   cmin = 5, tau = 12,
+#'   CL = 5, V = 50, Q = 20, V2 = 200)
+#' find_nearest_dose(dos, 100)
 #' @export
 pk_2cmt_bolus_dose_from_cmin <- function(cmin = 1,
                                          tau = 12,

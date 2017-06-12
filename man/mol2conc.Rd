@@ -19,3 +19,6 @@ mol2conc(mol = NULL, unit_mol = NULL, unit_conc = NULL,
 \description{
 Convert molar to concentration
 }
+\examples{
+mol2conc(1, unit_mol = "mmol/l", mol_weight = 180)
+}

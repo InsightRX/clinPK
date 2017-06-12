@@ -7,6 +7,11 @@
 #' @param t_inf infusion time
 #' @param V volume of distribution
 #' @param ruv residual error (list)
+#' @examples
+#' pk_1cmt_inf(dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50)
+#' pk_1cmt_inf(
+#'   dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50,
+#'   ruv = list(prop = 0.1, add = 0.1))
 #' @export
 pk_1cmt_inf <- function(
     t = c(0:24),

@@ -4,6 +4,8 @@
 #' @param unit_conc, one of `g/l`, `mg/l`, `microg/l`, `mcg/l", `ng/l`, `mg/ml`, `microg/ml`, `mcg/ml`, `ng/ml`
 #' @param mol_weight concentration in g/mol
 #' @param unit_mol one of `mol/L`, `mmol/mL`, `mmol/L`
+#' @examples
+#' conc2mol(100, unit_conc = "g/l", mol_weight = 180.15588)
 #' @export
 conc2mol <- function(
   conc = NULL,

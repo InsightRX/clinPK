@@ -2,6 +2,10 @@
 #'
 #' @param CL clearance
 #' @param V volume of central compartment
+#'
+#' @examples
+#' pk_1cmt_t12(CL = 5, V = 50)
+#'
 #' @export
 pk_1cmt_t12 <- function(
   CL = 3,

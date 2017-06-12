@@ -12,3 +12,6 @@ cm2inch(cm)
 \description{
 Convert cm to inch
 }
+\examples{
+cm2inch(2.54)
+}

@@ -10,6 +10,8 @@
 #' @param t_inf infusion time
 #' @param kel_init estimate of elimination rate
 #' @param n_iter number of iterations to improve estimate of elimination rate
+#' @examples
+#' calc_kel_single_tdm(dose = 1000, t = 18)
 #' @export
 calc_kel_single_tdm <- function (
   dose = 1000,

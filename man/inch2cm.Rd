@@ -12,3 +12,6 @@ inch2cm(inch)
 \description{
 Convert inch to cm
 }
+\examples{
+inch2cm(1)
+}

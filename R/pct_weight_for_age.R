@@ -6,6 +6,9 @@
 #' @param sex either `male` or `female`
 #' @param weight weight in kg. Optional, if specified, will calculate closest percentile and return in list as `percentile`
 #' @param ... parameters passed to `read_who_table()`
+#' @examples
+#' pct_weight_for_age(age = 5, sex = "female")
+#' pct_weight_for_age(age = 5, weight = 20, sex = "female")
 #' @export
 pct_weight_for_age <- function(age = NULL, weight = NULL, sex = NULL, ...) {
   if(is.null(age)) {

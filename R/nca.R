@@ -6,6 +6,10 @@
 #' @param method `log_linear` or `linear`
 #' @param scale list with scaling for auc and concentration (`conc`)
 #' @param dv_min minimum concentrations, lower observations will be set to this value
+#' @examples
+#' data <- data.frame(time = c(0, 2, 4, 6, 8, 12, 16),
+#'                    dv   = c(0, 10, 14, 11, 9, 5, 1.5))
+#' nca(data)
 #' @export
 nca <- function (
     data = NULL,

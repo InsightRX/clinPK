@@ -6,6 +6,10 @@
 #' @param V2 volume of peripheral compartment
 #' @param tau interval (hours)
 #' @param t_inf infusion time (hours)
+#'
+#' @examples
+#' pk_2cmt_t12_interval(CL = 5, V = 50, Q = 20, V2 = 200, tau = 12, t_inf = 2)
+#'
 #' @export
 pk_2cmt_t12_interval <- function(
   CL = 3,

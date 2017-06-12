@@ -28,6 +28,6 @@ calc_creat_neo <- function (
   scr <- 166.48 - 2.849 * pma
   return(list(
     value = round(scr, digits),
-    unit = "mmol/L"
+    unit = "micromol/L"
   ))
 }

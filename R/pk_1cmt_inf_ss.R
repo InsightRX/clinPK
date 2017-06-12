@@ -7,6 +7,11 @@
 #' @param CL clearance
 #' @param V volume of distribution
 #' @param ruv residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. `list(prop=0.1, add=1, exp=0)`
+#' @examples
+#' pk_1cmt_inf_ss(dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50)
+#' pk_1cmt_inf_ss(
+#'   dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50,
+#'   ruv = list(prop = 0.1, add = 0.1))
 #' @export
 pk_1cmt_inf_ss <- function(
     t = c(0:24),

@@ -18,3 +18,7 @@ pct_weight_for_age(age = NULL, weight = NULL, sex = NULL, ...)
 \description{
 Based on tables from WHO: http://www.who.int/childgrowth/standards/weight_for_age/en/
 }
+\examples{
+pct_weight_for_age(age = 5, sex = "female")
+pct_weight_for_age(age = 5, weight = 20, sex = "female")
+}

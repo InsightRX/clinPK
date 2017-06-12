@@ -7,6 +7,9 @@
 #' @param height height
 #' @param bmi bmi Optional, if specified, will calculate closest percentile and return in list as `percentile`
 #' @param ... parameters passed to `read_who_table()`
+#' @examples
+#' pct_bmi_for_age(age = 8, sex = "male")
+#' pct_bmi_for_age(age = 8, bmi = 15, sex = "male")
 #' @export
 pct_bmi_for_age <- function(age = NULL, bmi = NULL, sex = NULL, height = NULL, ...) {
   if(is.null(age)) {

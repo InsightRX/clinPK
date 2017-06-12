@@ -1,7 +1,10 @@
 #' Convert creatinine to different unit
 #'
-#' @param value serum creatinine in either mg/dL or mmol/L
-#' @param unit_in unit, either `mg/dL` or `mmol/L`
+#' @param value serum creatinine in either mg/dL or micromol/L
+#' @param unit_in unit, either `mg/dL` or `micromol/L`
+#' @examples
+#' convert_creat_unit(1)
+#' convert_creat_unit(88.42, unit_in = "micromol/l")
 #' @export
 convert_creat_unit <- function(
   value = NULL,
@@ -10,13 +13,13 @@ convert_creat_unit <- function(
     unit_in <- value$unit
     value <- value$value
   }
-  if(!tolower(unit_in) %in% c("mg/dl", "mmol/l")) {
-    stop("Input unit needs to be either mg/dL or mmol/L.")
+  if(!tolower(unit_in) %in% c("mg/dl", "micromol/l", "mumol/l")) {
+    stop("Input unit needs to be either mg/dL or micromol/L.")
   }
   if(tolower(unit_in) == "mg/dl") {
     out <- list(
       value = value * 88.42,
-      unit = "mmol/L"
+      unit = "micromol/L"
     )
   } else {
     out <- list(

@@ -25,3 +25,9 @@ pk_1cmt_inf_ss(t = c(0:24), dose = 100, t_inf = 1, tau = 12, CL = 3,
 \description{
 Concentration predictions for 2-compartmental PK model with infusion dosing at steady state
 }
+\examples{
+pk_1cmt_inf_ss(dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50)
+pk_1cmt_inf_ss(
+  dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50,
+  ruv = list(prop = 0.1, add = 0.1))
+}

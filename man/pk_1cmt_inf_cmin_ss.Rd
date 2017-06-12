@@ -23,3 +23,6 @@ pk_1cmt_inf_cmin_ss(dose = 100, tau = 12, CL = 3, V = 30, t_inf = 2,
 \description{
 Takes single values for dose or model parameters, or vector of either dose or parameters (but not both).
 }
+\examples{
+pk_1cmt_inf_cmin_ss(dose = 500, tau = 12, t_inf = 2, CL = 5, V = 50)
+}

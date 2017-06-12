@@ -3,8 +3,11 @@
 #' @param dose dose value
 #' @param increment available increments of dose
 #' @param type how to round, one of `round`, `floor`, or `ceiling`
+#' @examples
+#' find_nearest_dose(573)
+#' find_nearest_dose(573, increment = 50)
 #' @export
-find_nearest_dose <- function(dose = NULL, increment = 250, type="round") {
+find_nearest_dose <- function(dose = NULL, increment = 250, type = "round") {
   if(!is.null(dose)) {
     if(type %in% c("round", "floor", "ceiling")) {
       if(type == "round") {

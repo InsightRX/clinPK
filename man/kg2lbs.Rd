@@ -12,3 +12,6 @@ kg2lbs(kg)
 \description{
 Convert kg to lbs
 }
+\examples{
+kg2lbs(1)
+}

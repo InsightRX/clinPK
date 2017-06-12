@@ -27,6 +27,10 @@ pk_1cmt_oral(t = c(0:24), dose = 100, tau = 12, KA = 1, CL = 3,
 \description{
 Concentration predictions for 1-compartmental oral PK model after single or multiple bolus doses
 }
+\examples{
+pk_1cmt_oral(dose = 500, tau = 12, CL = 5, V = 50, KA = 1)
+
+}
 \references{
 Garrett ER. The Bateman function revisited: a critical reevaluation of the quantitative expressions to characterize concentrations in the one compartment body model as a function of time with first-order invasion and first-order elimination. J Pharmacokinet Biopharm (1994) 22(2):103-128.
 

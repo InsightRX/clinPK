@@ -16,7 +16,7 @@ calc_lbw(weight = NULL, bmi = NULL, sex = NULL, height = NULL,
 
 \item{height}{height in cm}
 
-\item{method}{estimation method, either `green` (default), `holford`}
+\item{method}{estimation method, either `green` (default), `boer`, `james`, `hume`}
 
 \item{digits}{round to number of digits}
 }
@@ -28,7 +28,12 @@ Note: technically not the same as fat-free mass, although difference is small.
 
 References:
 `green`: Green and Duffull. Clin Pharmacol Ther 2002;
-`james`: Absalom AR et al. Br J Anaesth 2009; 103:26-37
-`hume`: Hume R et al. J Clin Pathol. 1966 Jul; 19(4):389-91.
-`boer`: Boer P et al. Am J Physiol 1984; 247: F632-5
+`james`: Absalom AR et al. Br J Anaesth 2009; 103:26-37.
+         James W. Research on obesity. London: Her Majesty's Stationary Office, 1976.
+`hume` : Hume R et al. J Clin Pathol. 1966 Jul; 19(4):389-91.
+`boer` : Boer P et al. Am J Physiol 1984; 247: F632-5
+}
+\examples{
+calc_lbw(weight = 80, height = 170, sex = "male")
+calc_lbw(weight = 80, height = 170, sex = "male", method = "james")
 }

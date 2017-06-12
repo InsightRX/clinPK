@@ -19,3 +19,6 @@ conc2mol(conc = NULL, unit_conc = NULL, mol_weight = NULL,
 \description{
 Convert concentration to molar
 }
+\examples{
+conc2mol(100, unit_conc = "g/l", mol_weight = 180.15588)
+}

@@ -6,16 +6,20 @@
 #'
 #' References:
 #' `green`: Green and Duffull. Clin Pharmacol Ther 2002;
-#' `james`: Absalom AR et al. Br J Anaesth 2009; 103:26-37
-#' `hume`: Hume R et al. J Clin Pathol. 1966 Jul; 19(4):389-91.
-#' `boer`: Boer P et al. Am J Physiol 1984; 247: F632-5
+#' `james`: Absalom AR et al. Br J Anaesth 2009; 103:26-37.
+#'          James W. Research on obesity. London: Her Majesty's Stationary Office, 1976.
+#' `hume` : Hume R et al. J Clin Pathol. 1966 Jul; 19(4):389-91.
+#' `boer` : Boer P et al. Am J Physiol 1984; 247: F632-5
 #'
 #' @param weight total body weight in kg
 #' @param bmi bmi
 #' @param height height in cm
 #' @param sex sex, either `male` of `female`
-#' @param method estimation method, either `green` (default), `holford`
+#' @param method estimation method, either `green` (default), `boer`, `james`, `hume`
 #' @param digits round to number of digits
+#' @examples
+#' calc_lbw(weight = 80, height = 170, sex = "male")
+#' calc_lbw(weight = 80, height = 170, sex = "male", method = "james")
 #' @export
 calc_lbw <- function (
   weight = NULL,
@@ -24,7 +28,7 @@ calc_lbw <- function (
   height = NULL,
   method = "green",
   digits = 1) {
-  methods <- c("green", "holford", "boer", "james", "hume")
+  methods <- c("green", "boer", "james", "hume")
   if(! method %in% methods) {
     stop(paste0("Unknown estimation method, please choose from: ", paste(methods, collapse=" ")))
   }
@@ -51,9 +55,9 @@ calc_lbw <- function (
       }
       if(method == "james") {
         if(sex == "male") {
-          lbm <-  1.1 * weight + 128 * (weight/height)^2
+          lbm <-  1.1 * weight - 128 * (weight/height)^2
         } else {
-          lbm <-  1.07 * weight + 148 * (weight/height)^2
+          lbm <-  1.07 * weight - 148 * (weight/height)^2
         }
       }
     }

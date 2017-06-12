@@ -14,3 +14,8 @@ weight2kg(value = NULL, unit = NULL)
 \description{
 Convert any weight unit to kg
 }
+\examples{
+weight2kg(250, unit = "oz")
+weight2kg(250, unit = "pounds")
+weight2kg(250, unit = "lbs")
+}

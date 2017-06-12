@@ -125,7 +125,7 @@ assert(calc_creat(sex = c("male", "female"), age = c(16,16))$value == c(64.9, 60
 assert(calc_creat(sex = c("male", "female"), age = c(16,14))$value == c(64.9, 53.1))
 
 ## convert creatinine
-assert(round(convert_creat_unit(84, unit_in = "mmol/L")$value, 3) == 0.95)
+assert(round(convert_creat_unit(84, unit_in = "micromol/L")$value, 3) == 0.95)
 assert(round(convert_creat_unit(1.2, unit_in = "mg/dL")$value,3) == 106.104)
 assert(round(convert_creat_unit(1.2)$value,3) == 106.104)
 
