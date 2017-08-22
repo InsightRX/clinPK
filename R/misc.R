@@ -1,8 +1,8 @@
 #' Check if values in vector are empty
 #'
 #' @param x vector
-is.nil <- function(x) {
-  return(any(c(is.null(x), length(x) == 0, x == "")))
+is.nil <- function(x = NULL) {
+  return(is.null(x) || any(c(length(x) == 0, is.na(x), x == "")))
 }
 
 #' factors or characters to numeric
