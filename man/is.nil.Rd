@@ -4,7 +4,7 @@
 \alias{is.nil}
 \title{Check if values in vector are empty}
 \usage{
-is.nil(x)
+is.nil(x = NULL)
 }
 \arguments{
 \item{x}{vector}
