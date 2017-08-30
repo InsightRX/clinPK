@@ -39,6 +39,8 @@ Equations and tools for clinical pharmacokinetics
 
 - `kg2lbs()`: kg to pounds
 - `lbs2kg()`: pounds to kg
+- `kg2oz()`: kg to ounces
+- `oz2kg()`: ounces to kg
 - `weight2kg()`: any weight unit to kg
 - `cm2inch()`: cm to inches
 - `inch2cm()`: inches to cm
