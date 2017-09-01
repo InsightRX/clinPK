@@ -37,3 +37,23 @@ kg2lbs <- function(kg) {
 lbs2kg <- function(lbs) {
  return(lbs/2.20462)
 }
+
+#' Convert kg to oz
+#'
+#' @param kg vector
+#' @examples
+#' kg2oz(1)
+#' @export
+kg2oz <- function(kg) {
+  return(kg*35.274)
+}
+
+#' Convert oz to kg
+#'
+#' @param oz vector
+#' @examples
+#' oz2kg(2.20462)
+#' @export
+oz2kg <- function(lbs) {
+  return(lbs/35.274)
+}
