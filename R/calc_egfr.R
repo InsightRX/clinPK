@@ -57,6 +57,7 @@ calc_egfr <- function (
   bsa_method = "dubois",
   relative = NULL,
   unit_out = "mL/min",
+  verbose = TRUE,
   ...
   ) {
     method <- gsub("-", "_", tolower(method))
@@ -93,10 +94,10 @@ calc_egfr <- function (
       if(method == "schwartz_revised") {
         scr_assay <- "idms"
       }
-      message("Creatinine assay not specified, assuming ", scr_assay, ".")
+      if(verbose) message("Creatinine assay not specified, assuming ", scr_assay, ".")
     }
     if(is.null(scr_unit)) {
-      message("Creatinine unit not specified, assuming mg/dL.")
+      if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
       scr_unit <- "mg/dl"
     }
     if(!is.nil(sex)) {
@@ -311,7 +312,7 @@ calc_egfr <- function (
               stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
             } else {
               crcl[i] <- crcl[i] * (bsa/1.73)
-              message("eGFR from Schwartz commonly reported as relative to 1.73m^2 BSA. Consider using 'relative=TRUE' argument.")
+              if(verbose) message("eGFR from Schwartz commonly reported as relative to 1.73m^2 BSA. Consider using 'relative=TRUE' argument.")
             }
           } else {
             unit <- paste0(unit_out, "/1.73m^2")
