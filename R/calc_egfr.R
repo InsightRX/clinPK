@@ -194,9 +194,9 @@ calc_egfr <- function (
           }
           cr_prod <- (29.305-(0.203*age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
           crcl[i] <- ((vol * (scr1 - scr2)/dt + cr_prod) * 100) / (1440 * scr_av)
-          if(any(crcl[i] < 1)) {
-            crcl[crcl[i] < 1] <- 1
-            warning("Some eGFR values calculated by Jellife equation for unstable patients were < 1 ml/min. Please check input data.")
+          if(crcl[i] < 1) { # sanity check
+            crcl[i] <- 1
+            warning("Some eGFR values calculated by Jellife equation for unstable patients were < 1 mL/min. Please check input data.")
           }
           if(!relative) {
             if(is.nil(bsa)) {
