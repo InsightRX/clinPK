@@ -23,7 +23,7 @@
 #' @param height height, only relevant when converting to/from BSA-relative unit
 #' @param bsa body surface area
 #' @param bsa_method BSA estimation method, see `bsa()` for details
-#' @param times vector of sampling times for creatinine (only used in Jelliffe equation for unstable patients)
+#' @param times vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)
 #' @param ckd chronic kidney disease? (Schwartz equations only)
 #' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
 #' @param unit_out `ml/min` (default), `L/hr`, or `mL/hr`
@@ -135,6 +135,15 @@ calc_egfr <- function (
             scr[i] <- scr[i] * 88.40
           }
           crcl[i] = ((6580 - (38.8 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr[i]
+          if(!relative) {
+            if(is.nil(bsa)) {
+              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
+            } else {
+              crcl[i] <- crcl[i] * (bsa/1.73)
+            }
+          } else {
+            unit <- paste0(unit_out, "/1.73m^2")
+          }
         }
         if(method == "jelliffe") {
           if(is.nil(scr[i]) || is.nil(sex) || is.nil(age) || is.nil(bsa)) {
@@ -144,6 +153,15 @@ calc_egfr <- function (
             scr[i] <- scr[i] * 88.40
           }
           crcl[i] = ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / (scr[i]*0.0113)
+          if(!relative) {
+            if(is.nil(bsa)) {
+              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
+            } else {
+              crcl[i] <- crcl[i] * (bsa/1.73)
+            }
+          } else {
+            unit <- paste0(unit_out, "/1.73m^2")
+          }
         }
         if(method == "jelliffe_unstable") {
           if(is.nil(scr[i]) || is.nil(sex) || is.nil(age) || is.nil(weight)) {
@@ -176,6 +194,19 @@ calc_egfr <- function (
           }
           cr_prod <- (29.305-(0.203*age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
           crcl[i] <- ((vol * (scr1 - scr2)/dt + cr_prod) * 100) / (1440 * scr_av)
+          if(any(crcl[i] < 1)) {
+            crcl[crcl[i] < 1] <- 1
+            warning("Some eGFR values calculated by Jellife equation for unstable patients were < 1 ml/min. Please check input data.")
+          }
+          if(!relative) {
+            if(is.nil(bsa)) {
+              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
+            } else {
+              crcl[i] <- crcl[i] * (bsa/1.73)
+            }
+          } else {
+            unit <- paste0(unit_out, "/1.73m^2")
+          }
         }
         if(method == "mdrd") {
           if(is.nil(scr[i]) || is.nil(sex) || is.nil(race) || is.nil(age)) {
