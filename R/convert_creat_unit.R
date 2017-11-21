@@ -13,11 +13,11 @@ convert_creat_unit <- function(
     unit_in <- value$unit
     value <- value$value
   }
-  allowed <- c("mg/dl", "micromol/l", "mumol/l")
+  allowed <- c("mg/dl", "micromol/l", "mumol/l", "mg_dl", "micromol_l", "mumol_l")
   if(! tolower(unit_in) %in% allowed) {
     stop(paste0("Input unit needs to be one of ", paste(allowed, collapse = " ")))
   }
-  if(tolower(unit_in) == "mg/dl") {
+  if(tolower(unit_in) %in% c("mg/dl", "mg_dl")) {
     out <- list(
       value = value * 88.42,
       unit = "micromol/L"
