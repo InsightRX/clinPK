@@ -7,6 +7,7 @@
 #' @param tau dosing interval
 #' @param t_inf infusion time
 #' @param steady_state assume taken at steady state?
+#' @param trapezoidal use trapezoidal rule to calculate AUC? Otherwise use dose/CL.
 #' @param return_parameters return all parameters instead of only kel?
 #' @examples
 #' calc_kel_double_tdm(dose = 1000, t = c(3, 18), dv = c(30, 10))
@@ -18,7 +19,9 @@ calc_kel_double_tdm <- function (
   dv = c(30, 10),
   tau = 12,
   t_inf = 1,
+  auc24 = FALSE,
   steady_state = TRUE,
+  trapezoidal = FALSE,
   return_parameters = FALSE
 ) {
   if(length(t) != 2 || length(dv) != 2) {
@@ -33,14 +36,26 @@ calc_kel_double_tdm <- function (
     Vd <- Vd * 1/(1-exp(-kel * tau))
   }
   CL <- Vd * kel
+  if(trapezoidal) {
+    AUC <- ((cmax - cmin) / (log(cmax) - log(cmin))) * (tau - t_inf)
+    if(steady_state) {
+      AUC <- AUC + (cmax - cmin) * t_inf/2 + cmin * t_inf
+    } else {
+      AUC <- AUC + (cmax * t_inf/2)
+    }
+  } else {
+    AUC <- dose / CL
+  }
+  if(auc24) AUC <- AUC * (24/tau)
   if(return_parameters) {
     return(list(
       kel = kel,
-      cmax = cmax,
-      cmin = cmin,
       t12 = t12,
       Vd = Vd,
-      CL = CL
+      CL = CL,
+      AUC = AUC,
+      cmax = cmax,
+      cmin = cmin
     ))
   }
   return(kel)

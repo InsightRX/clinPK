@@ -5,7 +5,8 @@
 \title{Calculate elimination rate when given two TDM samples}
 \usage{
 calc_kel_double_tdm(dose = 1000, V = 50, t = c(2, 11.5), dv = c(30, 10),
-  tau = 12, t_inf = 1, steady_state = TRUE, return_parameters = FALSE)
+  tau = 12, t_inf = 1, auc24 = FALSE, steady_state = TRUE,
+  trapezoidal = FALSE, return_parameters = FALSE)
 }
 \arguments{
 \item{dose}{dose amount}
@@ -22,11 +23,13 @@ calc_kel_double_tdm(dose = 1000, V = 50, t = c(2, 11.5), dv = c(30, 10),
 
 \item{steady_state}{assume taken at steady state?}
 
+\item{trapezoidal}{use trapezoidal rule to calculate AUC? Otherwise use dose/CL.}
+
 \item{return_parameters}{return all parameters instead of only kel?}
 }
 \description{
 Calculate elimination rate when given two TDM samples
 }
 \examples{
-calc_kel_double_tdm(dose = 1000, t = c(3, 18))
+calc_kel_double_tdm(dose = 1000, t = c(3, 18), dv = c(30, 10))
 }
