@@ -8,7 +8,7 @@ calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
   scr = NULL, scr_unit = NULL, scr_assay = NULL, race = "other",
   weight = NULL, height = NULL, bsa = NULL, preterm = FALSE,
   ckd = FALSE, times = NULL, bsa_method = "dubois", relative = NULL,
-  unit_out = "mL/min", ...)
+  unit_out = "mL/min", verbose = TRUE, ...)
 }
 \arguments{
 \item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`}
@@ -35,7 +35,7 @@ calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
 
 \item{ckd}{chronic kidney disease? (Schwartz equations only)}
 
-\item{times}{vector of sampling times for creatinine (only used in Jelliffe equation for unstable patients)}
+\item{times}{vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)}
 
 \item{bsa_method}{BSA estimation method, see `bsa()` for details}
 
