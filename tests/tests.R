@@ -189,20 +189,16 @@ kel_est <- calc_kel_single_tdm(
 )
 assert("estimation of elimination rate", abs(kel_est - kel)/kel < 0.05)
 
-calc_kel_double_tdm(dose = 1000,
-                    t = c(2.5, 11.5),
-                    steady_state = TRUE,
-                    dv = c(30, 10), return_parameters = TRUE, auc24 = TRUE)
 kel2_test <- calc_kel_double_tdm(dose = 1000,
                     t = c(2.5, 11.5), t_inf = 1,
                     steady_state = TRUE,
-                    dv = c(30, 10), return_parameters = TRUE, auc24 = TRUE)
+                    dv = c(30, 10), return_parameters = TRUE)
 assert("correct values calculated kel for 2 samples",
     all(c(
        round(kel2_test$kel, 2) == 0.12,
        round(kel2_test$CL, 2) == 4.15,
        round(kel2_test$V, 2) == 33.98,
-       round(kel2_test$AUC, 1) == 482.1))
+       round(kel2_test$AUCss24, 1) == 482.1))
 )
 
 ## auc2dose
