@@ -13,7 +13,7 @@ Equations and tools for clinical pharmacokinetics
 - `calc_t12()`: calculate effective half-life based on two TDM points.
 - `calc_amts_for_conc()`: Calculate the amounts in all compartments in a compartmental PK system based on a given concentration in the central compartment, and assuming steady state.
 - `find_nearest_dose()`: Find nearest available dose based on smallest available dosing unit
-- `find_nearest_interval()`: Find nearest (or nearest higher / nearest lower) dosing interval 
+- `find_nearest_interval()`: Find nearest (or nearest higher / nearest lower) dosing interval
 
 ## Anthropomorphic equations
 
@@ -67,7 +67,7 @@ Functions to simulate concentrations for linear PK models.
 | `pk_1cmt_bolus_cmin_ss()` | 1 | bolus | steady state | Cmin |
 | `pk_1cmt_bolus_cmax_ss()` | 1 | bolus | steady state | Cmax |
 | `pk_1cmt_t12()` | 1 | - | - | half-life |
-| `pk_1cmt_oral()` | 1 | oral | - | concentration | 
+| `pk_1cmt_oral()` | 1 | oral | - | concentration |
 | `pk_2cmt_bolus()` | 2 | bolus | single/multi dose | concentration table |
 | `pk_2cmt_bolus_ss()` | 2 | bolus | steady state | concentration table |
 | `pk_2cmt_bolus_cmin_ss()` | 2 | bolus | steady state | Cmin |
@@ -89,6 +89,6 @@ Functions to calculate the dose expected to achieve a specific target exposure.
 | `pk_1cmt_bolus_dose_for_cmax` | 1 | bolus | cmax | dose |
 | `pk_2cmt_inf_dose_for_cmax()` | 2 | infusion | cmax | dose |
 | `pk_2cmt_bolus_dose_for_cmax()` | 2 | bolus | cmax | dose |
+| `pk_1cmt_inf_dose_for_range()` | 1 | infusion | auc/cmin + conc range | dose |
 | `dose2auc()` | 1 | - | auc | auc |
 | `auc2dose()` | 1 | - | auc | dose |
-
