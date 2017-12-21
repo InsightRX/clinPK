@@ -10,7 +10,7 @@ calc_dose_auc_cmax_cmin(target = list(), parameters = list(),
 \arguments{
 \item{target}{list of `auc`, `cmax`, and `cmin`}
 
-\item{parameters}{list of `CL` and `V`}
+\item{parameters}{list of `CL` and `V`, or `KEL` and `CL`}
 
 \item{interval}{dosing interval}
 
