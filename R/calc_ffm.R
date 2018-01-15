@@ -3,9 +3,16 @@
 #' Get an estimate of body-surface area based on weight, height, and sex (and age for Storset equation).
 #'
 #' References:
-#' `green`: Janmahasatian et al. Clin Pharmacokinet. 2005;44(10):1051-65)
+#' `janmahasatian`, `green`: Janmahasatian et al. Clin Pharmacokinet. 2005;44(10):1051-65)
 #' `al-sallami`: Al-Sallami et al. Clin Pharmacokinet 2015
 #' `storset`: Storset E et al. TDM 2016
+#' `bucaloiu`: Bucaloiu ID et al. Int J of Nephrol Renovascular Dis. 2011 (Morbidly obese females)
+#' `hume`: Hume R. J Clin Pathol 1966
+#' `james`: James WPT et al. Research on obesity: a report of the DHSS/MRC Group 1976
+#' `garrow_webster`: Garrow JS, Webster J. Quetelet's index (W/H2) as a measure of fatness. Int J Obesity 1984
+#'
+#' Overview:
+#' - Sinha J, Duffull1 SB, Al-Sallami HS. Clin Pharmacokinet 2018. https://doi.org/10.1007/s40262-017-0622-5
 #'
 #' @param weight total body weight in kg
 #' @param bmi BMI, only used in `green` method. If `weight` and `height` are both specified, `bmi` will be calculated on-the-fly.
@@ -24,16 +31,17 @@ calc_ffm <- function (
   sex = NULL,
   height = NULL,
   age = NULL,
-  method = "green",
+  method = "janmahasatian",
   digits = 1) {
-  methods <- c("green", "al-sallami", "storset")
+  methods <- c("janmahasatian", "green", "al-sallami", "storset", "bucaloiu", "hume", "james", "garrow_webster")
   if(! method %in% methods) {
     stop(paste0("Unknown estimation method, please choose from: ", paste(methods, collapse=" ")))
   }
   if(is.null(sex) || !(sex %in% c("male", "female"))) {
     stop("Sex needs to be either male or female!")
   }
-  if(method == "green") {
+  sex <- tolower(sex)
+  if(method %in% c("janmahasatian", "green")) {
     if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex)) {
       stop("Equation needs weight, BMI or height, and sex of patient!")
     } else {
@@ -68,6 +76,54 @@ calc_ffm <- function (
         ffm <- (11.4 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1-age*0.0007)
       } else {
         ffm <- (10.2 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1-age*0.0007)
+      }
+    }
+  }
+  if(method == "bucaloiu") { # morbidly obese females
+    if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
+      stop("Equation needs weight, height, sex, and age of patient!")
+    } else {
+      if(sex == "male") {
+        stop("This equation is only meant for (obese) females.")
+      } else {
+        bmi <- calc_bmi(weight = weight, height = height, sex = sex)
+        if(any(bmi < 25)) {
+          warning("This equation is only meant for obese females.")
+        }
+        ffm <- -11.41 + 0.354 * weight + 11.06 * height/100
+      }
+    }
+  }
+  if(method == "hume") {
+    if(is.null(weight) || is.null(height) || is.null(sex)) {
+      stop("Equation needs weight, height, sex of patient!")
+    } else {
+      if(sex == "male") {
+        ffm <- 0.3281 * weight + 0.33929 * height - 29.5336
+      } else {
+        ffm <- 0.29569 * weight + 0.41813 * height - 43.2933
+      }
+    }
+  }
+  if(method == "james") {
+    if(is.null(weight) || is.null(height) || is.null(sex)) {
+      stop("Equation needs weight, height, sex of patient!")
+    } else {
+      if(sex == "male") {
+        ffm <- 1.1 * weight - 128*(weight/height)^2
+      } else {
+        ffm <- 1.07 * weight - 148*(weight/height)^2
+      }
+    }
+  }
+  if(method == "garrow_webster") {
+    if(is.null(weight) || is.null(height) || is.null(sex)) {
+      stop("Equation needs weight, height of patient!")
+    } else {
+      if(sex == "male") {
+        ffm <- 0.285 * weight + 12.1*(height/100)^2
+      } else {
+        ffm <- 0.287 * weight + 9.74*(height/100)^2
       }
     }
   }
