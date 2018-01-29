@@ -35,6 +35,6 @@ calc_creat <- function (
   scr[age >= 18 & sex == "female"] <- 69.5
   return(list(
     value = round(scr, digits),
-    unit = "mmol/L"
+    unit = "micromol/L"
   ))
 }
