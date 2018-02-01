@@ -5,7 +5,7 @@
 #' - Revised Lund-Malmo
 #' - Modification of Diet in Renal Disease study (MDRD)
 #' - Schwartz
-#' - Schwartz revised
+#' - Schwartz revised / bedside
 #' - Jelliffe
 #' - Jelliffe (for unstable renal function)
 #' - Wright
@@ -17,7 +17,6 @@
 #' @param age age
 #' @param scr serum creatinine (mg/dL)
 #' @param scr_unit, `mg/dL` or `micromol/L` (==`umol/L`)
-#' @param scr_assay, `jaffe` or `enzymatic` or `idms`
 #' @param race `black` or `other`
 #' @param weight weight
 #' @param height height, only relevant when converting to/from BSA-relative unit
@@ -46,7 +45,6 @@ calc_egfr <- function (
   age = NULL,
   scr = NULL,
   scr_unit = NULL,
-  scr_assay = NULL,
   race = "other",
   weight = NULL,
   height = NULL,
@@ -65,7 +63,7 @@ calc_egfr <- function (
     available_methods <- c(
       "cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
       "malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev",
-      "mdrd", "ckd_epi", "schwartz", "schwartz_revised", "jelliffe", "jelliffe_unstable",
+      "mdrd", "ckd_epi", "schwartz", "schwartz_revised", "bedside_schwartz", "jelliffe", "jelliffe_unstable",
       "wright")
     if(!method %in% available_methods) {
       stop(paste0("Sorry, eGFR calculation method not recognized! Please choose from: ", paste0(available_methods, collapse=" ")))
@@ -88,13 +86,6 @@ calc_egfr <- function (
       }
       ibw <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
       weight <- calc_abw(weight = weight, ibw = ibw, ...) # recalculate wt to abw, potentially specify factor
-    }
-    if(is.null(scr_assay)) {
-      scr_assay <- "jaffe"
-      if(method == "schwartz_revised") {
-        scr_assay <- "idms"
-      }
-      if(verbose) message("Creatinine assay not specified, assuming ", scr_assay, ".")
     }
     if(is.null(scr_unit)) {
       if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
@@ -306,34 +297,34 @@ calc_egfr <- function (
             unit <- paste0(unit_out, "/1.73m^2")
           }
         }
-        if(method == "schwartz" || method == "schwartz_revised") {
-          if(is.nil(scr[i]) || is.nil(age) || is.nil(sex) || is.nil(height) || is.nil(preterm)) {
-            stop("Schwartz equation requires: scr, sex, height, preterm, and age as input!")
+        if(method %in% c("schwartz", "schwartz_revised", "bedside_schwartz")) {
+          if(method == "schwartz") {
+            if(is.nil(scr[i]) || is.nil(age) || is.nil(sex) || is.nil(height) || is.nil(preterm)) {
+              stop("Schwartz equation requires: scr, sex, height, preterm, and age as input!")
+            }
+          }
+          if(method %in% c("schwartz_revised", "bedside_schwartz")) {
+            if(is.nil(scr[i]) || is.nil(age) || is.nil(sex) || is.nil(height)) {
+              stop("Revised/Bedside Schwartz equation requires: scr, sex, height, and age as input!")
+            }
           }
           if(tolower(scr_unit[i]) %in% c("umol/l", "mumol/l", "micromol/l")) {
             scr[i] <- scr[i] / 88.40
           }
-          if(method == "schwartz") {
-            scr[i] <- convert_creat_assay(scr[i], from = scr_assay, to = "jaffe")
-          }
-          if(method == "schwartz_revised") {
-            scr[i] <- convert_creat_assay(scr[i], from = scr_assay, to = "idms")
-          }
-          if(method == "schwartz_revised") {
+          if(method %in% c("bedside_schwartz", "schwartz_revised")) {
             k <- 0.413
+            if(age < 1) message("This equation is not meant for patients < 1 years of age.")
           } else {
+            ## Original Schwartz equation from 1987:
             k <- 0.55
             if (age < 1) {
               k <- 0.45
-              if(age < (40/52)) {
+              if(preterm) {
                 k <- 0.33
               }
             } else {
-              if(sex == "male") {
+              if(age > 13 && sex == "male") {
                 k <- 0.7
-              }
-              if(ckd) {
-                k <- 0.413
               }
             }
           }
