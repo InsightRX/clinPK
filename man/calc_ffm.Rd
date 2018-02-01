@@ -5,7 +5,7 @@
 \title{Calculate fat-free mass}
 \usage{
 calc_ffm(weight = NULL, bmi = NULL, sex = NULL, height = NULL,
-  age = NULL, method = "green", digits = 1)
+  age = NULL, method = "janmahasatian", digits = 1)
 }
 \arguments{
 \item{weight}{total body weight in kg}
@@ -27,9 +27,16 @@ Get an estimate of body-surface area based on weight, height, and sex (and age f
 }
 \details{
 References:
-`green`: Janmahasatian et al. Clin Pharmacokinet. 2005;44(10):1051-65)
+`janmahasatian`, `green`: Janmahasatian et al. Clin Pharmacokinet. 2005;44(10):1051-65)
 `al-sallami`: Al-Sallami et al. Clin Pharmacokinet 2015
 `storset`: Storset E et al. TDM 2016
+`bucaloiu`: Bucaloiu ID et al. Int J of Nephrol Renovascular Dis. 2011 (Morbidly obese females)
+`hume`: Hume R. J Clin Pathol 1966
+`james`: James WPT et al. Research on obesity: a report of the DHSS/MRC Group 1976
+`garrow_webster`: Garrow JS, Webster J. Quetelet's index (W/H2) as a measure of fatness. Int J Obesity 1984
+
+Overview:
+- Sinha J, Duffull1 SB, Al-Sallami HS. Clin Pharmacokinet 2018. https://doi.org/10.1007/s40262-017-0622-5
 }
 \examples{
 calc_ffm(weight = 70, bmi = 25, sex = "male")

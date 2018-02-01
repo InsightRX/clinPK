@@ -4,7 +4,7 @@
 \alias{oz2kg}
 \title{Convert oz to kg}
 \usage{
-oz2kg(lbs)
+oz2kg(oz)
 }
 \arguments{
 \item{oz}{vector}

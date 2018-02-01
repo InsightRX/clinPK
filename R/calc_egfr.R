@@ -27,6 +27,7 @@
 #' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
 #' @param unit_out `ml/min` (default), `L/hr`, or `mL/hr`
 #' @param preterm is patient preterm?
+#' @param verbose verbocity, show guidance and warnings. `TRUE` by default
 #' @param ... arguments passed on
 #' @examples
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)

@@ -54,6 +54,6 @@ kg2oz <- function(kg) {
 #' @examples
 #' oz2kg(2.20462)
 #' @export
-oz2kg <- function(lbs) {
-  return(lbs/35.274)
+oz2kg <- function(oz) {
+  return(oz/35.274)
 }

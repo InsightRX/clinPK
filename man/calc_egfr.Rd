@@ -5,9 +5,9 @@
 \title{Calculate eGFR}
 \usage{
 calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
-  scr = NULL, scr_unit = NULL, scr_assay = NULL, race = "other",
-  weight = NULL, height = NULL, bsa = NULL, preterm = FALSE,
-  ckd = FALSE, times = NULL, bsa_method = "dubois", relative = NULL,
+  scr = NULL, scr_unit = NULL, race = "other", weight = NULL,
+  height = NULL, bsa = NULL, preterm = FALSE, ckd = FALSE,
+  times = NULL, bsa_method = "dubois", relative = NULL,
   unit_out = "mL/min", verbose = TRUE, ...)
 }
 \arguments{
@@ -20,8 +20,6 @@ calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
 \item{scr}{serum creatinine (mg/dL)}
 
 \item{scr_unit, }{`mg/dL` or `micromol/L` (==`umol/L`)}
-
-\item{scr_assay, }{`jaffe` or `enzymatic` or `idms`}
 
 \item{race}{`black` or `other`}
 
@@ -43,6 +41,8 @@ calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
 
 \item{unit_out}{`ml/min` (default), `L/hr`, or `mL/hr`}
 
+\item{verbose}{verbocity, show guidance and warnings. `TRUE` by default}
+
 \item{...}{arguments passed on}
 }
 \description{
@@ -51,7 +51,7 @@ Calculate the estimated glomerulal filtration rate (an estimate of renal functio
 - Revised Lund-Malmo
 - Modification of Diet in Renal Disease study (MDRD)
 - Schwartz
-- Schwartz revised
+- Schwartz revised / bedside
 - Jelliffe
 - Jelliffe (for unstable renal function)
 - Wright

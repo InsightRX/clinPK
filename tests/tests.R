@@ -50,7 +50,7 @@ assert("Schwartz error", class(err3[1]) == "character") # error message when no 
 assert("Schwartz revised",
        calc_egfr(age = 0.5, sex = "male", scr = .5,  height = 50, method = "schwartz_revised")$value == 41.3)
 assert("Schwartz",
-       calc_egfr(age = 0.5, sex = "male", scr = .5, weight = 4.5, height = 50, method = "schwartz")$value == 33)
+       calc_egfr(age = 0.5, sex = "male", scr = .5, weight = 4.5, height = 50, method = "schwartz")$value == 45)
 
 l <- calc_egfr(
   method = "malmo_lund_revised",
