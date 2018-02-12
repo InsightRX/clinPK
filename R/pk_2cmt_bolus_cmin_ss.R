@@ -20,7 +20,7 @@ pk_2cmt_bolus_cmin_ss <- function(
     ruv = NULL
   ) {
   return(pk_2cmt_bolus_ss(
-    t=tau-1e-10,
+    t = rep(tau-1e-10, length(dose)),
     dose = dose, tau=tau,
     CL=CL, V=V, Q=Q, V2=V2,
     ruv=ruv)$dv)
