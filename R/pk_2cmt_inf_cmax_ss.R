@@ -24,7 +24,7 @@ pk_2cmt_inf_cmax_ss <- function(
   ruv = NULL
 ) {
   return(pk_2cmt_inf_ss(
-    t=t_inf,
+    t = rep(t_inf, length(dose)),
     dose = dose, tau=tau, t_inf = t_inf,
     CL=CL, V=V, Q=Q, V2=V2,
     ruv=ruv)$dv)
