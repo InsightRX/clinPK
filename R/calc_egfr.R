@@ -12,7 +12,7 @@
 #'
 #' Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
 #'
-#' @param method eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`
+#' @param method eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`
 #' @param sex sex
 #' @param age age
 #' @param scr serum creatinine (mg/dL)
@@ -63,6 +63,7 @@ calc_egfr <- function (
     method <- gsub("cockroft", "cockcroft", tolower(method)) # legacy support for typo
     available_methods <- c(
       "cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
+      "cockcroft_gault_adaptive",
       "malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev",
       "mdrd", "ckd_epi", "schwartz", "schwartz_revised", "bedside_schwartz", "jelliffe", "jelliffe_unstable",
       "wright")
@@ -75,18 +76,31 @@ calc_egfr <- function (
         stop("Sorry, specified serum Cr unit not recognized!")
       }
     }
-    if(method == "cockcroft_gault_ideal") {
-      if(is.nil(height) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
-        stop("Cockcroft-Gault using ideal body weight requires: scr, sex, weight, height, and age as input!")
-      }
-      weight <- calc_ibw(height = height, age = age, sex = sex) # recalculate wt to ibw
-    }
-    if(method == "cockcroft_gault_adjusted") {
+    weight_for_egfr <- "Total BW"
+    if(method %in% c("cockcroft_gault_ideal")) {
       if(is.nil(height) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
         stop("Cockcroft-Gault using adjusted body weight requires: scr, sex, weight, height, and age as input!")
       }
+    }
+    if(method %in% c("cockcroft_gault_ideal")) {
+      weight_for_egfr <- "Ideal BW"
+      weight <- calc_ibw(height = height, age = age, sex = sex) # recalculate wt to ibw
+    }
+    if(method %in% c("cockcroft_gault_adjusted")) {
+      if(is.nil(height) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
+        stop("Cockcroft-Gault using ideal or adjusted body weight requires: scr, sex, weight, height, and age as input!")
+      }
       ibw <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
       weight <- calc_abw(weight = weight, ibw = ibw, ...) # recalculate wt to abw, potentially specify factor
+      weight_for_egfr <- "Adjusted BW"
+    }
+    if(method == "cockcroft_gault_adaptive") {
+      if(is.nil(height) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
+        stop("Cockcroft-Gault using adaptive body weight requires: scr, sex, weight, height, and age as input!")
+      }
+      tmp <- calc_dosing_weight(weight = weight, height = height, age = age, sex = sex, verbose = verbose, ...)
+      weight <- tmp$value
+      weight_for_egfr <- tmp$type
     }
     if(is.null(scr_unit)) {
       if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
@@ -246,7 +260,7 @@ calc_egfr <- function (
             unit <- paste0(unit_out, "/1.73m^2")
           }
         }
-        if(method %in% c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted")) {
+        if(method %in% c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted", "cockcroft_gault_adaptive")) {
           if(is.nil(scr[i]) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
             stop("cockcroft-Gault equation requires: scr, sex, weight, and age as input!")
           }
@@ -350,7 +364,8 @@ calc_egfr <- function (
       }
       return(list(
         value = crcl,
-        unit = unit
+        unit = unit,
+        weight = weight_for_egfr
       ))
     } else {
       return(FALSE)

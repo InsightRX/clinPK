@@ -4,7 +4,8 @@
 \alias{pct_bmi_for_age}
 \title{Percentile BMI for age for children}
 \usage{
-pct_bmi_for_age(age = NULL, bmi = NULL, sex = NULL, height = NULL, ...)
+pct_bmi_for_age(age = NULL, bmi = NULL, sex = NULL, height = NULL,
+  return_median = FALSE, ...)
 }
 \arguments{
 \item{age}{age in years}
@@ -14,6 +15,8 @@ pct_bmi_for_age(age = NULL, bmi = NULL, sex = NULL, height = NULL, ...)
 \item{sex}{either `male` or `female`}
 
 \item{height}{height}
+
+\item{return_median}{just return the median expected value}
 
 \item{...}{parameters passed to `read_who_table()`}
 }

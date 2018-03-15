@@ -5,12 +5,13 @@
 #' @param age age in years
 #' @param sex either `male` or `female`
 #' @param weight weight in kg. Optional, if specified, will calculate closest percentile and return in list as `percentile`
+#' @param return_median just return the median expected value
 #' @param ... parameters passed to `read_who_table()`
 #' @examples
 #' pct_weight_for_age(age = 5, sex = "female")
 #' pct_weight_for_age(age = 5, weight = 20, sex = "female")
 #' @export
-pct_weight_for_age <- function(age = NULL, weight = NULL, sex = NULL, ...) {
+pct_weight_for_age <- function(age = NULL, weight = NULL, sex = NULL, return_median = FALSE, ...) {
   if(is.null(age)) {
     stop("Age required.")
   }
@@ -25,5 +26,9 @@ pct_weight_for_age <- function(age = NULL, weight = NULL, sex = NULL, ...) {
     pct <- data.frame(cbind("age" = age, matrix(unlist(tmp), nrow=length(age))))
     colnames(pct)[-1] <- names(tmp[[1]])
   }
-  return(pct)
+  if(return_median) {
+    return(pct$P50)
+  } else {
+    return(pct)
+  }
 }
