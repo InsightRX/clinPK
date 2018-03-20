@@ -177,9 +177,7 @@ calc_egfr <- function (
             scr[i] <- scr[i] / 88.40
           }
           vol <- 0.4 * weight * 10
-          ifelse(sex == "male", 0.85, 0.765)
-          corr <- 0.85
-          if(sex == "female") { corr <- 0.765 }
+          corr <- ifelse(sex == "male", 0.85, 0.765)
           scr1 <- scr[i]
           scr2 <- scr[i]
           if(i > 1) {
