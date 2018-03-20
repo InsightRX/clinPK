@@ -10,7 +10,7 @@
 #' @param ... pased to `calc_abw()` function
 #' @export
 #' @examples
-#' calc_egfr(weight = 50, height = 170, sex = "female", age = 50)
+#' calc_dosing_weight(weight = 50, height = 170, sex = "female", age = 50)
 calc_dosing_weight <- function(weight, height, age, sex, verbose = TRUE, ...) {
   if(is.null(weight) || is.null(height) || is.null(age) || is.null(sex)) {
     stop("Dosing weight calculation requires weight, height, age, and sex.")
