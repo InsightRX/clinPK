@@ -29,5 +29,5 @@ This is derived using following:
 - If TBW < IBW, use TBW
 }
 \examples{
-calc_egfr(weight = 50, height = 170, sex = "female", age = 50)
+calc_dosing_weight(weight = 50, height = 170, sex = "female", age = 50)
 }
