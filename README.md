@@ -78,9 +78,9 @@ Functions to simulate concentrations for linear PK models.
 
 ## PK steady state equations
 
-- `accumulation_ratio`: calculate the accumulation ratio for given halflife or elimination rate and dosing interval
-- `fraction_of_ss`: calculate fraction of steady state reached after certain time or number of doses
-- `time_to_ss`: calculate time to steady state in time units or number of doses
+- `accumulation_ratio()`: calculate the accumulation ratio for given halflife or elimination rate and dosing interval
+- `fraction_of_ss()`: calculate fraction of steady state reached after certain time or number of doses
+- `time_to_ss()`: calculate time to steady state in time units or number of doses
 
 ## Dose / TDM calculations
 
