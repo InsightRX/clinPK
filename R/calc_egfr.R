@@ -177,7 +177,6 @@ calc_egfr <- function (
             scr[i] <- scr[i] / 88.40
           }
           vol <- 0.4 * weight * 10
-          corr <- ifelse(sex == "male", 0.85, 0.765)
           scr1 <- scr[i]
           scr2 <- scr[i]
           if(i > 1) {
@@ -196,7 +195,7 @@ calc_egfr <- function (
               dt <- 1 # doesn't matter, for first obs we're not looking at a previous sample anyhow
             }
           }
-          cr_prod <- (29.305-(0.203*age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
+          cr_prod <- (29.305-(0.203 * age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
           crcl[i] <- ((vol * (scr1 - scr2)/dt + cr_prod) * 100) / (1440 * scr_av)
           if(crcl[i] < 1) { # sanity check
             crcl[i] <- 1

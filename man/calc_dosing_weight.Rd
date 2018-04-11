@@ -19,6 +19,8 @@ calc_dosing_weight(weight, height, age, sex, verbose = TRUE, ...)
 
 \item{sex}{sex}
 
+\item{verbose}{verbosity (`TRUE` or `FALSE`)}
+
 \item{...}{pased to `calc_abw()` function}
 }
 \description{

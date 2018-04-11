@@ -7,6 +7,7 @@
 #' @param height height
 #' @param sex sex
 #' @param age age
+#' @param verbose verbosity (`TRUE` or `FALSE`)
 #' @param ... pased to `calc_abw()` function
 #' @export
 #' @examples
