@@ -4,7 +4,8 @@
 \alias{pct_height_for_age}
 \title{Percentile height for age for children}
 \usage{
-pct_height_for_age(age = NULL, height = NULL, sex = NULL, ...)
+pct_height_for_age(age = NULL, height = NULL, sex = NULL,
+  return_median = FALSE, ...)
 }
 \arguments{
 \item{age}{age in years}
@@ -12,6 +13,8 @@ pct_height_for_age(age = NULL, height = NULL, sex = NULL, ...)
 \item{height}{height in kg. Optional, if specified, will calculate closest percentile and return in list as `percentile`}
 
 \item{sex}{either `male` or `female`}
+
+\item{return_median}{just return the median expected value}
 
 \item{...}{parameters passed to `read_who_table()`}
 }

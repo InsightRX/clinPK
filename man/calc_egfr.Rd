@@ -11,7 +11,7 @@ calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
   unit_out = "mL/min", verbose = TRUE, ...)
 }
 \arguments{
-\item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`}
+\item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`}
 
 \item{sex}{sex}
 
