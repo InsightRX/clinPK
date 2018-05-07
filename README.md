@@ -23,6 +23,7 @@ Equations and tools for clinical pharmacokinetics
 - `calc_ibw()`: Ideal body weight, using various equations for children and adults
 - `calc_lbw()`: Lean body weight
 - `calc_abw()`: Adjusted body weight (for obese patients)
+- `calc_dosing_weight()`: Dosing weight
 - `pct_weight_for_age()`: calculate percentile of weight given age (for kids <= 10 yrs)
 - `pct_height_for_age()`: calculate percentile of height given age (for kids <= 19 yrs)
 - `pct_bmi_for_age()`: calculate percentile of height given age (for kids <= 19 yrs)
@@ -74,6 +75,12 @@ Functions to simulate concentrations for linear PK models.
 | `pk_2cmt_bolus_cmax_ss()` | 2 | bolus | steady state | Cmax |
 | `pk_2cmt_t12()` | 2 | - | - | terminal half-life |
 | `pk_2cmt_t12_interval()` | 2 | - | - | effective half-life in given interval |
+
+## PK steady state equations
+
+- `accumulation_ratio()`: calculate the accumulation ratio for given halflife or elimination rate and dosing interval
+- `fraction_of_ss()`: calculate fraction of steady state reached after certain time or number of doses
+- `time_to_ss()`: calculate time to steady state in time units or number of doses
 
 ## Dose / TDM calculations
 
