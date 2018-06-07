@@ -34,6 +34,7 @@ Equations and tools for clinical pharmacokinetics
 - `calc_egfr_cystatin()`: eGFR calculation from Cystatin C concentrations using various equations (Grubb, Larsson)
 - `calc_creat()`: mean serum creatinine for children and adults (given age and sex)
 - `calc_creat_neo()`: typical serum creatinine for neonates given post-natal age
+- `calc_aki_stage`: detect and calculate stage of acute kidney injury based on serum creatinine history
 - `convert_creat_assay()`: convert between various creatinine assays (Jaffe, IDMS, etc)
 - `convert_creat_unit()`: convert between creatinine units (mmol/L, mg/dL)
 
