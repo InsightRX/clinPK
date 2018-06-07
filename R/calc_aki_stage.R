@@ -46,7 +46,7 @@ calc_aki_stage <- function (
     if(length(egfr) != length(scr)) stop("Serum creatinine values and vector of eGFR values should have same length.")
   }
 
-  if(recursive) {
+  if(recursive && length(scr) > 1) {
     ## Do recursively
     all <- list()
     for(i in seq(scr)) {
@@ -60,19 +60,25 @@ calc_aki_stage <- function (
     }
     return(data.frame(all))
   } else {
+
     ## Detect if AKI
     dat <- data.frame(scr = scr, t = t, deltat = c(0, diff(t)))
+    dat$scr <- ifelse(dat$scr < 0.01, 0.01, dat$scr)
     dat$baseline_incr <- scr / scr[1]
     dat <- dat[order(dat$t), ]
 
     # Detection rules
     t_max <- max(dat$t)
-    tmp1 <- dat[dat$t >= t_max - 48,]
+    tmp1 <- dat[dat$t >= (t_max - 48),]
     rule1 <- (max(tmp1$scr) - min(tmp1$scr)) >= 0.3
-    tmp2 <- dat[dat$t >= t_max - 168,]
+    tmp2 <- dat[dat$t >= (t_max - 168),]
     rule2 <- max(tmp2$baseline_incr) >= 1.5
     # rule3: not implemented (urinary volume)
-    if(rule1 || rule2) aki_detected <- TRUE
+    rule4 <- FALSE
+    if(!is.null(egfr)) {
+      rule4 <- tail(egfr,1) < 35
+    }
+    if(rule1 || rule2 || rule4) aki_detected <- TRUE
 
     ## Get stage
     if(aki_detected) {
