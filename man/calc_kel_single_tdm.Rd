@@ -5,7 +5,7 @@
 \title{Calculate elimination rate when given a single TDM sample}
 \usage{
 calc_kel_single_tdm(dose = 1000, V = 50, t = 10, dv = 10, tau = 12,
-  t_inf = 1, kel_init = 0.1, n_iter = 25)
+  t_inf = 1, kel_init = 0.1, n_iter = 25, learn_rate = 0.2)
 }
 \arguments{
 \item{dose}{dose amount}
@@ -23,6 +23,8 @@ calc_kel_single_tdm(dose = 1000, V = 50, t = 10, dv = 10, tau = 12,
 \item{kel_init}{estimate of elimination rate}
 
 \item{n_iter}{number of iterations to improve estimate of elimination rate}
+
+\item{learn_rate}{default is 0.2}
 }
 \description{
 Using iterative k_el calculation, and based on given Volume
