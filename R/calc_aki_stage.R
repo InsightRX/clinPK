@@ -18,13 +18,13 @@
 #' Stage 3: SCr 3.0 times baseline OR Initiation of RRT, OR, in patients < 18 y.o., decrease in GFR to <35 ml/min per 1.73m2
 #'
 #' @param scr serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.
-#' @param times creatinine sample times in hours
+#' @param t creatinine sample times in hours
 #' @param age age in years
 #' @param egfr eGFR in ml/min/1.73m^2
 #' @param recursive recursive (if `FALSE` will only take last observation into account)
 #' @param verbose verbose (`TRUE` or `FALSE`)
 #' @examples
-#' calc_aki_stage(scr = c(0.7, 0.9, 1.8, 1.5), times = c(0, 40, 100, 130), sex = "male", age = 40)
+#' calc_aki_stage(scr = c(0.7, 0.9, 1.8, 1.5), t = c(0, 40, 100, 130))
 #' @export
 calc_aki_stage <- function (
   scr = NULL,

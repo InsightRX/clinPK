@@ -10,6 +10,8 @@ calc_aki_stage(scr = NULL, t = NULL, age = NULL, egfr = NULL,
 \arguments{
 \item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}
 
+\item{t}{creatinine sample times in hours}
+
 \item{age}{age in years}
 
 \item{egfr}{eGFR in ml/min/1.73m^2}
@@ -17,8 +19,6 @@ calc_aki_stage(scr = NULL, t = NULL, age = NULL, egfr = NULL,
 \item{recursive}{recursive (if `FALSE` will only take last observation into account)}
 
 \item{verbose}{verbose (`TRUE` or `FALSE`)}
-
-\item{times}{creatinine sample times in hours}
 }
 \description{
 Calculate stage of kidney injury, following definition from KDIGO (http://www.kdigo.org/clinical_practice_guidelines/pdf/KDIGO%20AKI%20Guideline.pdf).
@@ -40,5 +40,5 @@ Stage 2: SCr 2.0–2.9 times baseline
 Stage 3: SCr 3.0 times baseline OR Initiation of RRT, OR, in patients < 18 y.o., decrease in GFR to <35 ml/min per 1.73m2
 }
 \examples{
-calc_aki_stage(scr = c(0.7, 0.9, 1.8, 1.5), times = c(0, 40, 100, 130), sex = "male", age = 40)
+calc_aki_stage(scr = c(0.7, 0.9, 1.8, 1.5), t = c(0, 40, 100, 130))
 }
