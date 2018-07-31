@@ -27,6 +27,8 @@
 #' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
 #' @param unit_out `ml/min` (default), `L/hr`, or `mL/hr`
 #' @param preterm is patient preterm?
+#' @param min_value minimum value (`NULL` by default)
+#' @param max_value maximum value (`NULL` by default)
 #' @param verbose verbocity, show guidance and warnings. `TRUE` by default
 #' @param ... arguments passed on
 #' @examples
@@ -57,6 +59,8 @@ calc_egfr <- function (
   relative = NULL,
   unit_out = "mL/min",
   verbose = TRUE,
+  min_value = NULL,
+  max_value = NULL,
   ...
   ) {
     method <- gsub("-", "_", tolower(method))
@@ -359,6 +363,10 @@ calc_egfr <- function (
           crcl[i] <- crcl[i] * 60
         }
       }
+      if(!is.null(min_value))
+        crcl[crcl < min_value] <- min_value
+      if(!is.null(max_value))
+        crcl[crcl > max_value] <- max_value
       return(list(
         value = crcl,
         unit = unit,
