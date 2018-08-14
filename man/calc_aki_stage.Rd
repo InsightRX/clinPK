@@ -4,31 +4,44 @@
 \alias{calc_aki_stage}
 \title{Calculate AKI stage}
 \usage{
-calc_aki_stage(scr = NULL, t = NULL, age = NULL, egfr = NULL,
-  recursive = TRUE, verbose = FALSE)
+calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
+  baseline_scr = NULL, baseline_egfr = NULL, age = NULL, egfr = NULL,
+  egfr_method = "cockcroft_gault", recursive = TRUE, verbose = FALSE, ...)
 }
 \arguments{
 \item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}
 
-\item{t}{creatinine sample times in hours}
+\item{times}{creatinine sample times in hours}
 
-\item{age}{age in years}
+\item{method}{classification method, one of `KDIGO`, `AKIN`, `RIFLE`, `pRIFLE`}
 
-\item{egfr}{eGFR in ml/min/1.73m^2}
+\item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will take median of `scr` values if `NULL`.}
 
-\item{recursive}{recursive (if `FALSE` will only take last observation into account)}
+\item{baseline_egfr}{baseline eGFR, required for `AKIN`, `RIFLE`, and `pRIFLE` classifations. Will take median of `egfr` values if `NULL`.}
+
+\item{age}{age in years, needed when eGFR is used in the classification method}
+
+\item{egfr}{eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.}
+
+\item{egfr_method}{eGFR calculation method, used by `calc_egfr()`}
+
+\item{recursive}{option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)}
 
 \item{verbose}{verbose (`TRUE` or `FALSE`)}
+
+\item{...}{arguments passed on to `calc_egfr()`}
 }
 \description{
-Calculate stage of kidney injury, following definition from KDIGO (http://www.kdigo.org/clinical_practice_guidelines/pdf/KDIGO%20AKI%20Guideline.pdf).
+Calculate AKI class based on serum creatinine values over time, using various
+methods for children (pRIFLE) and adults (RIFLE, kDIGO)
+}
+\details{
 Notes:
 - will only take serum creatinine into account
 - full serum creatinine history (at least up to 7 days prior) has to be provided.
 - `egfr` and `age` are optional arguments, will only be taken into account if supplied, no warning is shown if not supplied.
-}
-\details{
-AKI definition:
+
+KDIGO AKI definition:
 AKI is defined as any of the following (
  - increase in SCr by >= 0.3 mg/dL within 48 hours
  - increase in SCr to >=1.5x baseline (baseline in prior 7 days)
