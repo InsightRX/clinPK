@@ -6,7 +6,8 @@
 \usage{
 calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
   baseline_scr = NULL, baseline_egfr = NULL, age = NULL, egfr = NULL,
-  egfr_method = "cockcroft_gault", recursive = TRUE, verbose = FALSE, ...)
+  egfr_method = "cockcroft_gault", force_numeric = FALSE,
+  recursive = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 \item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}
@@ -25,6 +26,8 @@ calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
 
 \item{egfr_method}{eGFR calculation method, used by `calc_egfr()`}
 
+\item{force_numeric}{keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.}
+
 \item{recursive}{option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)}
 
 \item{verbose}{verbose (`TRUE` or `FALSE`)}
@@ -35,23 +38,11 @@ calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
 Calculate AKI class based on serum creatinine values over time, using various
 methods for children (pRIFLE) and adults (RIFLE, kDIGO)
 }
-\details{
-Notes:
-- will only take serum creatinine into account
-- full serum creatinine history (at least up to 7 days prior) has to be provided.
-- `egfr` and `age` are optional arguments, will only be taken into account if supplied, no warning is shown if not supplied.
-
-KDIGO AKI definition:
-AKI is defined as any of the following (
- - increase in SCr by >= 0.3 mg/dL within 48 hours
- - increase in SCr to >=1.5x baseline (baseline in prior 7 days)
- - urine volume < 0.5 ml/kg/h for 6 hours
-
-AKI Staging:
-Stage 1: SCr 1.5–1.9 times baseline OR >=0.3 mg/dl (>=26.5 mmol/l) increase
-Stage 2: SCr 2.0–2.9 times baseline
-Stage 3: SCr 3.0 times baseline OR Initiation of RRT, OR, in patients < 18 y.o., decrease in GFR to <35 ml/min per 1.73m2
-}
 \examples{
-calc_aki_stage(scr = c(0.7, 0.9, 1.8, 1.5), t = c(0, 40, 100, 130))
+calc_aki_stage(
+  scr = c(0.7, 0.9, 1.8, 1.5),
+  t = c(0, 40, 100, 130),
+  age = 50, weight = 60,
+  height = 170, sex = "female")
+
 }
