@@ -27,10 +27,20 @@ test2a <- calc_aki_stage(
   egfr = c(60, 40, 30, 36, 50),
   age = 21
 )
+test2b <- calc_aki_stage(
+  scr = c(0.5, 0.7, 1.2, 1.6, 1.3),
+  t = c(0, 24, 36, 48, 72),
+  egfr = c(60, 40, 30, 36, 50),
+  age = 21,
+  return_obj = FALSE, force_numeric = TRUE
+)
 assert(test0$stage == "stage 3")
 assert(test1$stage == "stage 2")
 assert(test2$stage == "stage 3")
+assert(test2$time_max_stage == 36)
 assert(test2a$stage == "stage 1")
+assert(test2a$time_max_stage == 48)
+assert(test2b == 1)
 
 test3 <- calc_aki_stage(
   scr = c(.6, .7, .9, 1.5),

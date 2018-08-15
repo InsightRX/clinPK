@@ -13,6 +13,7 @@
 #' @param egfr_method eGFR calculation method, used by `calc_egfr()`
 #' @param force_numeric keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.
 #' @param recursive option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)
+#' @param return_object return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.
 #' @param verbose verbose (`TRUE` or `FALSE`)
 #' @param ... arguments passed on to `calc_egfr()`
 #'
@@ -36,6 +37,7 @@ calc_aki_stage <- function (
   force_numeric = FALSE,
   recursive = TRUE,
   verbose = TRUE,
+  return_object = TRUE,
   ...
 ) {
   aki_detected <- FALSE
@@ -113,8 +115,10 @@ calc_aki_stage <- function (
   ## get max class, convert to character class:
   if(all(is.na(dat$stage))) {
     stage <- NA
+    t_max_stage <- NULL
   } else {
     stage <- max(dat$stage, na.rm = TRUE)
+    t_max_stage <- dat$t[dat$stage == stage & !is.na(dat$stage)][1]
     if(!force_numeric) {
       if(tolower(method) %in% c("rifle", "prifle")) {
         char_stages <- c("R", "I", "F")
@@ -128,12 +132,16 @@ calc_aki_stage <- function (
 
   if(verbose) message("Please note: Urinary output is not taken into account in staging.")
 
-  ## return object
-  obj <- list(
-    stage = stage,
-    data = dat,
-    method = method
-  )
+  if(return_object) {
+    obj <- list(
+      stage = stage,
+      time_max_stage = t_max_stage,
+      data = dat,
+      method = method
+    )
+  } else {
+    obj <- stage
+  }
 
   return(obj)
 }

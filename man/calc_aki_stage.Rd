@@ -7,7 +7,7 @@
 calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
   baseline_scr = NULL, baseline_egfr = NULL, age = NULL, egfr = NULL,
   egfr_method = "cockcroft_gault", force_numeric = FALSE,
-  recursive = TRUE, verbose = TRUE, ...)
+  recursive = TRUE, verbose = TRUE, return_object = TRUE, ...)
 }
 \arguments{
 \item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}
@@ -31,6 +31,8 @@ calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
 \item{recursive}{option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)}
 
 \item{verbose}{verbose (`TRUE` or `FALSE`)}
+
+\item{return_object}{return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.}
 
 \item{...}{arguments passed on to `calc_egfr()`}
 }
