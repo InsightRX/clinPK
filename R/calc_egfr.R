@@ -344,7 +344,7 @@ calc_egfr <- function (
               }
             }
           }
-          crcl[i] <- (k * height) / scr
+          crcl[i] <- (k * height) / scr[i]
           if(!relative) {
             if(is.nil(bsa)) {
               stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")

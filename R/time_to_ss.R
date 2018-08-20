@@ -18,12 +18,6 @@ time_to_ss <- function(
   tau = NULL) {
   if(is.null(kel) && is.null(halflife)) stop("Need either elimination rate `kel` or `halflife`")
   if(is.null(kel)) kel <- log(2) / halflife
-  if(is.null(t)) {
-    if(!is.null(n) || !is.null(tau)) {
-      stop("Either time `t` or number of doses `n` and dosing interval `tau` have to be specified!")
-    }
-    t <- n * tau
-  }
   t2ss <- -log(1 - ss)/kel
   if(in_doses) {
     if(is.null(tau)) {
