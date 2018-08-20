@@ -4,41 +4,47 @@
 \alias{calc_aki_stage}
 \title{Calculate AKI stage}
 \usage{
-calc_aki_stage(scr = NULL, t = NULL, age = NULL, egfr = NULL,
-  recursive = TRUE, verbose = FALSE)
+calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
+  baseline_scr = NULL, baseline_egfr = NULL, age = NULL, egfr = NULL,
+  egfr_method = "cockcroft_gault", force_numeric = FALSE,
+  recursive = TRUE, verbose = TRUE, return_object = TRUE, ...)
 }
 \arguments{
 \item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}
 
-\item{t}{creatinine sample times in hours}
+\item{times}{creatinine sample times in hours}
 
-\item{age}{age in years}
+\item{method}{classification method, one of `KDIGO`, `AKIN`, `RIFLE`, `pRIFLE`}
 
-\item{egfr}{eGFR in ml/min/1.73m^2}
+\item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will take median of `scr` values if `NULL`.}
 
-\item{recursive}{recursive (if `FALSE` will only take last observation into account)}
+\item{baseline_egfr}{baseline eGFR, required for `AKIN`, `RIFLE`, and `pRIFLE` classifations. Will take median of `egfr` values if `NULL`.}
+
+\item{age}{age in years, needed when eGFR is used in the classification method}
+
+\item{egfr}{eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.}
+
+\item{egfr_method}{eGFR calculation method, used by `calc_egfr()`}
+
+\item{force_numeric}{keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.}
+
+\item{recursive}{option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)}
 
 \item{verbose}{verbose (`TRUE` or `FALSE`)}
+
+\item{return_object}{return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.}
+
+\item{...}{arguments passed on to `calc_egfr()`}
 }
 \description{
-Calculate stage of kidney injury, following definition from KDIGO (http://www.kdigo.org/clinical_practice_guidelines/pdf/KDIGO%20AKI%20Guideline.pdf).
-Notes:
-- will only take serum creatinine into account
-- full serum creatinine history (at least up to 7 days prior) has to be provided.
-- `egfr` and `age` are optional arguments, will only be taken into account if supplied, no warning is shown if not supplied.
-}
-\details{
-AKI definition:
-AKI is defined as any of the following (
- - increase in SCr by >= 0.3 mg/dL within 48 hours
- - increase in SCr to >=1.5x baseline (baseline in prior 7 days)
- - urine volume < 0.5 ml/kg/h for 6 hours
-
-AKI Staging:
-Stage 1: SCr 1.5–1.9 times baseline OR >=0.3 mg/dl (>=26.5 mmol/l) increase
-Stage 2: SCr 2.0–2.9 times baseline
-Stage 3: SCr 3.0 times baseline OR Initiation of RRT, OR, in patients < 18 y.o., decrease in GFR to <35 ml/min per 1.73m2
+Calculate AKI class based on serum creatinine values over time, using various
+methods for children (pRIFLE) and adults (RIFLE, kDIGO)
 }
 \examples{
-calc_aki_stage(scr = c(0.7, 0.9, 1.8, 1.5), t = c(0, 40, 100, 130))
+calc_aki_stage(
+  scr = c(0.7, 0.9, 1.8, 1.5),
+  t = c(0, 40, 100, 130),
+  age = 50, weight = 60,
+  height = 170, sex = "female")
+
 }
