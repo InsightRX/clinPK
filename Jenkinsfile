@@ -26,7 +26,7 @@
           """
         }
       }
-      stage('Dependencies - build clinPK') {
+      stage('Build - clinPK') {
         steps {
           echo 'building clinPK'
           sh """
@@ -39,6 +39,7 @@
             R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
             ./slack_notification.sh
             exit 1
+            }
             R CMD check . --no-manual || { export STATUS=failed
             ./slack_notification.sh
             exit 1
