@@ -10,6 +10,7 @@
 #' @param t_inf infusion time
 #' @param kel_init estimate of elimination rate
 #' @param n_iter number of iterations to improve estimate of elimination rate
+#' @param learn_rate default is 0.2
 #' @examples
 #' calc_kel_single_tdm(dose = 1000, t = 18)
 #' @export
@@ -21,7 +22,8 @@ calc_kel_single_tdm <- function (
   tau = 12,
   t_inf = 1,
   kel_init = 0.1,
-  n_iter = 25
+  n_iter = 25,
+  learn_rate = 0.2
 ) {
   t_next_dose <- tau - (t %% tau)
   kel <- kel_init
@@ -32,7 +34,7 @@ calc_kel_single_tdm <- function (
     cpred <- clinPK::pk_1cmt_inf_ss(
       t = t,
       dose = dose, CL = kel * V, V = V, tau = tau, t_inf = t_inf)
-    kel <- (cpred$dv/dv) * kel
+    kel <- kel * (cpred$dv/dv)^(learn_rate)
   }
   return(kel)
 }

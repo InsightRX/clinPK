@@ -86,7 +86,7 @@ calc_ffm <- function (
       if(sex == "male") {
         stop("This equation is only meant for (obese) females.")
       } else {
-        bmi <- calc_bmi(weight = weight, height = height, sex = sex)
+        bmi <- calc_bmi(weight = weight, height = height)
         if(any(bmi < 25)) {
           warning("This equation is only meant for obese females.")
         }
