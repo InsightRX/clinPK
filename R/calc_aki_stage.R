@@ -6,11 +6,11 @@
 #' @param scr serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.
 #' @param times creatinine sample times in hours
 #' @param method classification method, one of `KDIGO`, `AKIN`, `RIFLE`, `pRIFLE`
-#' @param baseline_scr baseline serum creatinine, required for `RIFLE` classifation. Will take median of `scr` values if `NULL`.
+#' @param baseline_scr baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.
 #' @param baseline_egfr baseline eGFR, required for `AKIN`, `RIFLE`, and `pRIFLE` classifations. Will take median of `egfr` values if `NULL`.
 #' @param age age in years, needed when eGFR is used in the classification method
 #' @param egfr eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.
-#' @param egfr_method eGFR calculation method, used by `calc_egfr()`
+#' @param egfr_method eGFR calculation method, used by `calc_egfr()`. If NULL, will pick default based on classification system (`cockroft_gault` for RIFLE / kDIGO, `revised_schwartz` for pRIFLE).
 #' @param force_numeric keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.
 #' @param recursive option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)
 #' @param return_object return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.
@@ -29,11 +29,11 @@ calc_aki_stage <- function (
   scr = NULL,
   times = NULL,
   method = "kDIGO",
-  baseline_scr = NULL,
-  baseline_egfr = NULL,
+  baseline_scr = "median",
+  baseline_egfr = 120,
   age = NULL,
   egfr = NULL,
-  egfr_method = "cockcroft_gault",
+  egfr_method = NULL,
   force_numeric = FALSE,
   recursive = TRUE,
   verbose = TRUE,
@@ -66,10 +66,33 @@ calc_aki_stage <- function (
     stop(paste0("AKI classification method not recognized, please select one from: ",
                 paste(available_methods, collapse = " ")))
   }
+  if(is.null(egfr_method)) {
+    if(tolower(method) == "prifle") {
+      egfr_method <- "schwartz_revised"
+    } else {
+      egfr_method <- "cockroft_gault"
+    }
+  }
 
   if(is.null(baseline_scr)) {
-    baseline_scr <- stats::median(scr)
-    if(verbose) warning("No baseline SCr value specified, using median of supplied values.")
+    if(tolower(method) %in% c("kdigo", "rifle")) { # scr not needed for pRIFLE
+      stop("Need baseline scr value or method.")
+    } else {
+      baseline_scr <- 1 # dummy
+    }
+  }
+  if(class(baseline_scr) == "character") {
+    if(baseline_scr == "median") {
+      baseline_scr <- stats::median(scr)
+      if(verbose) message("No baseline SCr value specified, using *median* of supplied values.")
+    }
+    if(baseline_scr == "first") {
+      baseline_scr <- scr[1]
+      if(verbose) message("No baseline SCr value specified, using *first* of supplied values.")
+    }
+    if(baseline_scr == "expected") {
+      ## need to implement
+    }
   }
 
   ## Differences
