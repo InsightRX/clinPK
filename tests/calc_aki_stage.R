@@ -84,13 +84,13 @@ test6 <- calc_aki_stage(
   egfr_method = "bedside_schwartz"
 )
 test7 <- calc_aki_stage(
-  scr = c(1.3, .7, .9, 1.3),
+  scr = c(1, 1, 1, 1),
   times = as.Date(c("8/1/2018", "8/3/2018", "8/5/2018", "8/12/2018"), "%m/%d/%Y"),
   method = "RIFLE",
   sex = "male",
-  age = 5,
-  weight = 25,
-  height = 120,
+  age = 50,
+  weight = 75,
+  height = 180,
   egfr_method = "cockcroft_gault"
 )
 assert(test3$stage == 2)
