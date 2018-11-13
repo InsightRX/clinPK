@@ -53,6 +53,7 @@ calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
 \description{
 Calculate the estimated glomerulal filtration rate (an estimate of renal function) based on measured serum creatinine using one of the following approaches:
 - Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
+- C-G spinal cord injury
 - Revised Lund-Malmo
 - Modification of Diet in Renal Disease study (MDRD)
 - Schwartz

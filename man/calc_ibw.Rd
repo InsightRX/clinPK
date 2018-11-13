@@ -5,7 +5,8 @@
 \title{Calculate ideal body weight for children and adults}
 \usage{
 calc_ibw(weight = NULL, height = NULL, age = NULL, sex = "male",
-  method_children = "standard", method_adults = "devine", digits = NULL)
+  method_children = "standard", method_adults = "devine",
+  digits = NULL)
 }
 \arguments{
 \item{weight}{weight in kg, can be vector}
