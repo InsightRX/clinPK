@@ -5,8 +5,8 @@
 \title{Calculate AKI stage}
 \usage{
 calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
-  baseline_scr = NULL, baseline_egfr = NULL, age = NULL, egfr = NULL,
-  egfr_method = "cockcroft_gault", force_numeric = FALSE,
+  baseline_scr = "median", baseline_egfr = 120, age = NULL,
+  egfr = NULL, egfr_method = NULL, force_numeric = FALSE,
   recursive = TRUE, verbose = TRUE, return_object = TRUE, ...)
 }
 \arguments{
@@ -16,7 +16,7 @@ calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
 
 \item{method}{classification method, one of `KDIGO`, `AKIN`, `RIFLE`, `pRIFLE`}
 
-\item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will take median of `scr` values if `NULL`.}
+\item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.}
 
 \item{baseline_egfr}{baseline eGFR, required for `AKIN`, `RIFLE`, and `pRIFLE` classifations. Will take median of `egfr` values if `NULL`.}
 
@@ -24,7 +24,7 @@ calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
 
 \item{egfr}{eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.}
 
-\item{egfr_method}{eGFR calculation method, used by `calc_egfr()`}
+\item{egfr_method}{eGFR calculation method, used by `calc_egfr()`. If NULL, will pick default based on classification system (`cockroft_gault` for RIFLE / kDIGO, `revised_schwartz` for pRIFLE).}
 
 \item{force_numeric}{keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.}
 

@@ -4,7 +4,8 @@
 \alias{calc_abw}
 \title{Calculate adjusted body weight (ABW)}
 \usage{
-calc_abw(weight = NULL, ibw = NULL, factor = 0.4, verbose = TRUE, ...)
+calc_abw(weight = NULL, ibw = NULL, factor = 0.4, verbose = TRUE,
+  ...)
 }
 \arguments{
 \item{weight}{actual body weight in kg}

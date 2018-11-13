@@ -2,6 +2,7 @@
 #'
 #' Calculate the estimated glomerulal filtration rate (an estimate of renal function) based on measured serum creatinine using one of the following approaches:
 #' - Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
+#' - C-G spinal cord injury
 #' - Revised Lund-Malmo
 #' - Modification of Diet in Renal Disease study (MDRD)
 #' - Schwartz
@@ -67,7 +68,7 @@ calc_egfr <- function (
     method <- gsub("cockroft", "cockcroft", tolower(method)) # legacy support for typo
     available_methods <- c(
       "cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
-      "cockcroft_gault_adaptive",
+      "cockcroft_gault_adaptive", "cockcroft_gault_sci",
       "malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev",
       "mdrd", "ckd_epi", "schwartz", "schwartz_revised", "bedside_schwartz", "jelliffe", "jelliffe_unstable",
       "wright")
@@ -118,7 +119,8 @@ calc_egfr <- function (
     }
     if(is.nil(relative)) {
       relative <- TRUE # most equations report in /1.73m2
-      if(method == "cockcroft_gault") { # except CG
+      if(method %in% c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
+                       "cockcroft_gault_adaptive", "cockcroft_gault_sci")) { # except CG
         relative <- FALSE
       }
     }
@@ -261,7 +263,7 @@ calc_egfr <- function (
             unit <- paste0(unit_out, "/1.73m^2")
           }
         }
-        if(method %in% c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted", "cockcroft_gault_adaptive")) {
+        if(method %in% c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted", "cockcroft_gault_adaptive", "cockcroft_gault_sci")) {
           if(is.nil(scr[i]) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
             stop("cockcroft-Gault equation requires: scr, sex, weight, and age as input!")
           }
@@ -273,6 +275,9 @@ calc_egfr <- function (
             f_sex <- 0.85
           }
           crcl[i] <- f_sex * (140-age) / scr[i] * (weight/72)
+          if(method == "cockcroft_gault_sci") {
+            crcl[i] <- 2.3 * crcl[i]^0.7
+          }
           if(relative) {
             if(is.nil(bsa)) {
               stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")

@@ -33,6 +33,8 @@ assert("cockcroft-gault ibw", round(calc_egfr(age = 50, sex="male", weight = 150
 assert("cockcroft-gault abw", round(calc_egfr(age = 40, sex="male", weight = 150, height = 180, scr = 1, method = "cockcroft_gault_adjusted", relative = FALSE, factor = 0.3)$value) == 135)
 assert("cockcroft-gault abw", round(calc_egfr(age = 40, sex="male", weight = 150, height = 180, scr = 1, method = "cockcroft_gault_ideal", relative = FALSE)$value) == 104)
 
+assert("cockcroft-gault SCI", round(calc_egfr(age = 40, sex="male", weight = 80, height=180, scr = 1, method = "cockcroft_gault_sci", relative = TRUE)$value) == 54)
+
 assert("CKD-EPI", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, method = "ckd-epi", race="black")$value) == 123)
 assert("MDRD", round(calc_egfr(age = 40, sex="male", weight = 80, height=180, scr = 1, race = "black", method="mdrd")$value) == 106)
 

@@ -5,7 +5,8 @@
 \title{Calculate elimination rate when given two TDM samples}
 \usage{
 calc_kel_double_tdm(dose = 1000, t = c(2, 11.5), dv = c(30, 10),
-  tau = 12, t_inf = 1, steady_state = TRUE, return_parameters = FALSE)
+  tau = 12, t_inf = 1, steady_state = TRUE,
+  return_parameters = FALSE)
 }
 \arguments{
 \item{dose}{dose amount}
