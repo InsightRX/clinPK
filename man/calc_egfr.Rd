@@ -52,17 +52,17 @@ calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
 }
 \description{
 Calculate the estimated glomerulal filtration rate (an estimate of renal function) based on measured serum creatinine using one of the following approaches:
-- Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
-- C-G spinal cord injury
-- Revised Lund-Malmo
-- Modification of Diet in Renal Disease study (MDRD)
-- Schwartz
-- Schwartz revised / bedside
-- Jelliffe
-- Jelliffe (for unstable renal function)
-- Wright
+\itemize{
+  \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
+  \item C-G spinal cord injury
+  \item Revised Lund-Malmo
+  \item Modification of Diet in Renal Disease study (MDRD)
+  \item Schwartz
+  \item Schwartz revised / bedside
+  \item Jelliffe
+  \item Jelliffe for unstable renal function
+  \item Wright
 }
-\details{
 Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
 }
 \examples{
@@ -75,4 +75,17 @@ calc_egfr(sex = "male", age = 50, scr = c(1.1, 0.8),
   weight = 70, height = 170, method = "jelliffe_unstable")
 calc_egfr(sex = "male", age = 50, scr = 1.1,
   weight = 70, bsa = 1.6, method = "malmo_lund_rev", relative = FALSE)
+}
+\references{
+\itemize{
+  \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
+  \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
+  \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
+  \item MDRD: \href{https://www.ncbi.nlm.nih.gov/pubmed/10075613}{Level et al., Annals of Internal Medicine}
+  \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
+  \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
+  \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
+  \item Jelliffe for unstable renal function: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, American Journal of Nephrology (2002)}
+  \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
+}
 }
