@@ -2,10 +2,11 @@
 #'
 #' @param data data.frame with time and dv columns
 #' @param dose dose amount
-#' @param tau dosing frequency
+#' @param tau dosing frequency, default is 24.
 #' @param method `log_linear` or `linear`
 #' @param scale list with scaling for auc and concentration (`conc`)
 #' @param dv_min minimum concentrations, lower observations will be set to this value
+#' @param has_baseline does the included data include a baseline? If `FALSE`, baseline is set to zero.
 #' @examples
 #' data <- data.frame(time = c(0, 2, 4, 6, 8, 12, 16),
 #'                    dv   = c(0, 10, 14, 11, 9, 5, 1.5))
@@ -38,13 +39,14 @@ nca <- function (
     }
     data$dv_log <- log(data$dv)
     baseline <- 0
+    data_fit <- data
     if(has_baseline) {
       baseline <- data$dv[1]
-      data <- data[-1,]
+      data_fit <- data_fit[-1,]
     }
     last_n <- 3
     if (length(data[,1]) > 4) { last_n = 4 }
-    fit <- stats::lm(dv_log ~ time, utils::tail(data, last_n))
+    fit <- stats::lm(dv_log ~ time, utils::tail(data_fit, last_n))
     out <- list(pk = list(), descriptive = list())
     out$pk$kel <- -stats::coef(fit)[["time"]]
     out$pk$t_12 <- log(2) / out$pk$kel
