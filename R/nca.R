@@ -14,10 +14,11 @@
 nca <- function (
     data = NULL,
     dose = 100,
-    tau = 6,
+    tau = 24,
     method = "log_linear",
     scale = list(auc = 1, conc = 1),
-    dv_min = 1e-3
+    dv_min = 1e-3,
+    has_baseline = TRUE
   ) {
   if(is.null(data)) {
     stop("No data supplied to NCA function")
@@ -36,18 +37,23 @@ nca <- function (
       }
     }
     data$dv_log <- log(data$dv)
+    baseline <- 0
+    if(has_baseline) {
+      baseline <- data$dv[1]
+      data <- data[-1,]
+    }
     last_n <- 3
     if (length(data[,1]) > 4) { last_n = 4 }
     fit <- stats::lm(dv_log ~ time, utils::tail(data, last_n))
-    out <- list()
-    out$kel <- -stats::coef(fit)[["time"]]
-    out$t_12 <- log(2) / out$kel
-    out$v <- exp(stats::coef(fit)[[1]] - data$dv_log[1]) / dose
-    out$cl <- (out$kel) * out$v
+    out <- list(pk = list(), descriptive = list())
+    out$pk$kel <- -stats::coef(fit)[["time"]]
+    out$pk$t_12 <- log(2) / out$pk$kel
+    out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline)
+    out$pk$cl <- (out$pk$kel) * out$pk$v
 
     ## get the auc
     tmax_id <- match(max(data$dv), data$dv)[1]
-    out$tmax <- out$time[tmax_id]
+    out$descriptive$tmax <- out$time[tmax_id]
     pre <- data[1:tmax_id,]
     trap <- data[tmax_id:length(data[,1]),]
     if (length(pre[,1]) > 0) {
@@ -62,18 +68,19 @@ nca <- function (
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
       auc_t <- (auc_pre + auc_post)
-      auc_inf <- auc_t + (utils::tail(trap$dv,1)/out$kel)
+      auc_inf <- auc_t + (utils::tail(trap$dv,1)/out$pk$kel)
       if(tau > utils::tail(data$time,1)) {
-        c_at_tau <- utils::tail(trap$dv,1) * exp(-out$kel * (tau-utils::tail(data$time,1)))
-        auc_tau <- auc_inf - (c_at_tau/out$kel)
+        c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
+        auc_tau <- auc_inf - (c_at_tau/out$pk$kel)
       } else {
         auc_tau <- auc_t
       }
-      out$auc_t <- auc_t * scale$auc
-      out$auc_inf <- auc_inf * scale$auc
-      out$auc_tau <- auc_tau * scale$auc
-      out$css <- (auc_t / diff(range(data$time))) * scale$conc  # css,t
-      out$css_tau <- (auc_tau / tau) * scale$conc
+      out$descriptive$auc_t <- auc_t * scale$auc
+      out$descriptive$auc_inf <- auc_inf * scale$auc
+      out$descriptive$auc_tau <- auc_tau * scale$auc
+      out$descriptive$css_t <- (auc_t / diff(range(data$time))) * scale$conc  # css,t
+      out$descriptive$css_tau <- (auc_tau / tau) * scale$conc
+      out$settings <- list(dose = dose, interval = tau)
     }
     return(out)
   }
