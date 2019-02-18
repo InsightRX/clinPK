@@ -4,20 +4,20 @@ library(testit)
 ## NCA
 data <- data.frame(cbind(time = c(0, 1, 2, 4, 6, 8),
                          dv   = c(300, 1400, 1150, 900, 700, 400)))
-t1 <- nca(data)
-assert("NCA estimates are correct (AUCinf)", round(t1$auc_inf) == 9164)
-assert("NCA estimates are correct (AUCt)", round(t1$auc_t) == 6824)
-assert("NCA estimates are correct (css_t)", round(t1$css) == 853)
-assert("NCA estimates are correct (css_tau)", round(t1$css_tau) == 1137)
+t1 <- nca(data, has_baseline = TRUE, tau = 12)
+assert("NCA estimates are correct (AUCinf)", round(t1$descriptive$auc_inf) == 9164)
+assert("NCA estimates are correct (AUCt)", round(t1$descriptive$auc_t) == 6824)
+assert("NCA estimates are correct (css_t)", round(t1$descriptive$css_t) == 853)
+assert("NCA estimates are correct (css_tau)", round(t1$descriptive$css_tau) == 665)
 
 ## NCA with missing data
 data <- data.frame(cbind(time = c(0, 1, 2, 4, 6, 8),
                          dv   = c(300, 1400, NA, 900, NA, 400)))
-t2 <- nca(data)
-assert("NCA estimates are correct (AUCinf)", round(t2$auc_inf) == 8930)
-assert("NCA estimates are correct (AUCt)", round(t2$auc_t) == 6711)
-assert("NCA estimates are correct (css_t)", round(t2$css) == 839)
-assert("NCA estimates are correct (css_tau)", round(t2$css_tau) == 1119)
+t2 <- nca(data, has_baseline = TRUE, tau = 12)
+assert("NCA estimates are correct (AUCinf)", round(t2$descriptive$auc_inf) == 8930)
+assert("NCA estimates are correct (AUCt)", round(t2$descriptive$auc_t) == 6711)
+assert("NCA estimates are correct (css_t)", round(t2$descriptive$css_t) == 839)
+assert("NCA estimates are correct (css_tau)", round(t2$descriptive$css_tau) == 654)
 
 ## BSA
 assert("BSA",

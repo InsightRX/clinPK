@@ -4,21 +4,24 @@
 \alias{nca}
 \title{Perform an NCA based on a NONMEM-style dataset}
 \usage{
-nca(data = NULL, dose = 100, tau = 6, method = "log_linear",
-  scale = list(auc = 1, conc = 1), dv_min = 0.001)
+nca(data = NULL, dose = 100, tau = 24, method = "log_linear",
+  scale = list(auc = 1, conc = 1), dv_min = 0.001,
+  has_baseline = TRUE)
 }
 \arguments{
 \item{data}{data.frame with time and dv columns}
 
 \item{dose}{dose amount}
 
-\item{tau}{dosing frequency}
+\item{tau}{dosing frequency, default is 24.}
 
 \item{method}{`log_linear` or `linear`}
 
 \item{scale}{list with scaling for auc and concentration (`conc`)}
 
 \item{dv_min}{minimum concentrations, lower observations will be set to this value}
+
+\item{has_baseline}{does the included data include a baseline? If `FALSE`, baseline is set to zero.}
 }
 \description{
 Perform an NCA based on a NONMEM-style dataset
