@@ -93,9 +93,16 @@ test7 <- calc_aki_stage(
   height = 180,
   egfr_method = "cockcroft_gault"
 )
+
+test8 <- calc_aki_stage(
+  method = 'prifle',
+  egfr = c(80, 59)
+)
+
 assert(test3$stage == 2)
 assert(is.na(test4$stage))
 assert(test5$stage == "F")
 assert(test6$stage == "I")
 assert(is.na(test7$stage))
+assert(test8$stage == "I")
 
