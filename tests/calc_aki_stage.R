@@ -99,10 +99,21 @@ test8 <- calc_aki_stage(
   egfr = c(80, 59)
 )
 
+test9 <- calc_aki_stage(method = 'prifle', 
+                        egfr = 60, 
+                        baseline_egfr = 100, 
+                        override_prifle_baseline = TRUE)
+test10 <- calc_aki_stage(method = 'prifle', 
+                        egfr = 60, 
+                        baseline_egfr = 100, 
+                        override_prifle_baseline = FALSE)
+
 assert(test3$stage == 2)
 assert(is.na(test4$stage))
 assert(test5$stage == "F")
 assert(test6$stage == "I")
 assert(is.na(test7$stage))
 assert(test8$stage == "I")
+assert(test9$data$baseline_egfr_reldiff == -0.4)
+assert(test10$data$baseline_egfr_reldiff == -0.5)
 
