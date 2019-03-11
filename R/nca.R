@@ -46,6 +46,7 @@ nca <- function (
     }
     last_n <- 3
     if (length(data[,1]) > 4) { last_n = 4 }
+    if (length(data[,1]) == 2 ) { last_n = 2 }
     fit <- stats::lm(dv_log ~ time, utils::tail(data_fit, last_n))
     out <- list(pk = list(), descriptive = list())
     out$pk$kel <- -stats::coef(fit)[["time"]]
@@ -63,7 +64,7 @@ nca <- function (
     } else {
       auc_pre <- 0
     }
-    if (length(pre[,1])>0 & length(trap[,1]) > 2) {
+    if (length(pre[,1])>0 & length(trap[,1]) >= 2) {
       if (method == "log_linear") {
         auc_post <- sum(diff(trap$time) * (diff(trap$dv)) / log(trap$dv[2:length(trap$dv)] / trap$dv[1:(length(trap$dv)-1)]))
       } else {
