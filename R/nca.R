@@ -65,9 +65,12 @@ nca <- function (
     } else {
       auc_pre <- 0
     }
+    do_trapezoid <- function(data) {
+      sum(diff(data$time) * (diff(data$dv)) / log(data$dv[2:length(data$dv)] / data$dv[1:(length(data$dv)-1)]))
+    }
     if (length(pre[,1])>0 & length(trap[,1]) >= 2) {
       if (method == "log_linear") {
-        auc_post <- sum(diff(trap$time) * (diff(trap$dv)) / log(trap$dv[2:length(trap$dv)] / trap$dv[1:(length(trap$dv)-1)]))
+        auc_post <- do_trapezoid(trap)
       } else {
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
@@ -76,11 +79,16 @@ nca <- function (
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!
         c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
         c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
-        trap_full <- data.frame(
+        trap_tmp <- data.frame(
           time = c(t_inf, tau),
           dv = c(c_at_tmax, c_at_tau) 
+        ) 
+        trap_extended <- rbind(
+          trap[,c("time", "dv")],
+          trap_tmp
         )
-        auc_tau <- auc_pre + sum(diff(trap_full$time) * (diff(trap_full$dv)) / log(trap_full$dv[2:length(trap_full$dv)] / trap_full$dv[1:(length(trap_full$dv)-1)]))
+        trap_extended <- trap_extended[order(trap_extended$time), ]
+        auc_tau <- auc_pre + do_trapezoid(trap_extended)
       } else {
         auc_tau <- auc_t
       }
