@@ -19,6 +19,7 @@ nca <- function (
     method = "log_linear",
     scale = list(auc = 1, conc = 1),
     dv_min = 1e-3,
+    t_inf = 0,
     has_baseline = TRUE
   ) {
   if(is.null(data)) {
@@ -71,13 +72,19 @@ nca <- function (
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
       auc_t <- (auc_pre + auc_post)
-      auc_inf <- auc_t + (utils::tail(trap$dv,1)/out$pk$kel)
       if(tau > utils::tail(data$time,1)) {
+        # AUCtau is extrapolated to tau and back-extrapolated to tmax!
         c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
-        auc_tau <- auc_inf - (c_at_tau/out$pk$kel)
+        c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
+        trap_full <- data.frame(
+          time = c(t_inf, tau),
+          dv = c(c_at_tmax, c_at_tau) 
+        )
+        auc_tau <- auc_pre + sum(diff(trap_full$time) * (diff(trap_full$dv)) / log(trap_full$dv[2:length(trap_full$dv)] / trap_full$dv[1:(length(trap_full$dv)-1)]))
       } else {
         auc_tau <- auc_t
       }
+      auc_inf <- auc_tau + c_at_tau / out$pk$kel
       out$descriptive$auc_t <- auc_t * scale$auc
       out$descriptive$auc_inf <- auc_inf * scale$auc
       out$descriptive$auc_tau <- auc_tau * scale$auc
