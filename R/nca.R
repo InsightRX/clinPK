@@ -6,6 +6,7 @@
 #' @param method `log_linear` or `linear`
 #' @param scale list with scaling for auc and concentration (`conc`)
 #' @param dv_min minimum concentrations, lower observations will be set to this value
+#' @param extend perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.
 #' @param has_baseline does the included data include a baseline? If `FALSE`, baseline is set to zero.
 #' @examples
 #' data <- data.frame(time = c(0, 2, 4, 6, 8, 12, 16),
@@ -20,6 +21,7 @@ nca <- function (
     scale = list(auc = 1, conc = 1),
     dv_min = 1e-3,
     t_inf = 0,
+    extend = TRUE,
     has_baseline = TRUE
   ) {
   if(is.null(data)) {
@@ -75,29 +77,50 @@ nca <- function (
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
       auc_t <- (auc_pre + auc_post)
+      c_at_tmax <- data$time[1] 
+      c_at_tau  <- utils::tail(data$time,1)
       if(tau > utils::tail(data$time,1)) {
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!
         c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
-        c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
-        trap_tmp <- data.frame(
-          time = c(t_inf, tau),
-          dv = c(c_at_tmax, c_at_tau) 
-        ) 
-        trap_extended <- rbind(
-          trap[,c("time", "dv")],
-          trap_tmp
-        )
-        trap_extended <- trap_extended[order(trap_extended$time), ]
-        auc_tau <- auc_pre + do_trapezoid(trap_extended)
+        if(extend) { # back-extrapolate to the true Cmax, to include that area too
+            c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
+            trap_tau <- rbind(
+              trap[,c("time", "dv")],
+              data.frame(
+                time = c(t_inf, tau),
+                dv = c(c_at_tmax, c_at_tau) 
+              )
+            )
+            trap_t <- rbind(
+              trap[,c("time", "dv")],
+              data.frame(
+                time = c(t_inf),
+                dv = c(c_at_tmax) 
+              )
+            )
+            trap_tau <- trap_tau[order(trap_tau$time), ]
+            trap_t <- trap_t[order(trap_t$time), ]
+            auc_tau <- auc_pre + do_trapezoid(trap_tau)
+            auc_t   <- auc_pre + do_trapezoid(trap_t) # also recalculate auc_t
+        } else {
+            auc_tau <- auc_pre + do_trapezoid(trap)
+        }
       } else {
         auc_tau <- auc_t
       }
       auc_inf <- auc_tau + c_at_tau / out$pk$kel
-      out$descriptive$auc_t <- auc_t * scale$auc
-      out$descriptive$auc_inf <- auc_inf * scale$auc
-      out$descriptive$auc_tau <- auc_tau * scale$auc
       out$descriptive$css_t <- (auc_t / diff(range(data$time))) * scale$conc  # css,t
       out$descriptive$css_tau <- (auc_tau / tau) * scale$conc
+      out$descriptive$c_min <- c_at_tau
+      if(extend) {
+        out$descriptive$c_max_true <- c_at_tmax
+      } else {
+        out$descriptive$c_max <- c_at_tmax
+      }
+      out$descriptive$auc_inf <- auc_inf * scale$auc
+      out$descriptive$auc_24 <- auc_tau * (24/tau) * scale$auc
+      out$descriptive$auc_tau <- auc_tau * scale$auc
+      out$descriptive$auc_t <- auc_t * scale$auc
       out$settings <- list(dose = dose, interval = tau)
     }
     return(out)
