@@ -109,8 +109,8 @@ nca <- function (
         auc_tau <- auc_t
       }
       auc_inf <- auc_tau + c_at_tau / out$pk$kel
-      out$descriptive$css_t <- (auc_t / diff(range(data$time))) * scale$conc  # css,t
-      out$descriptive$css_tau <- (auc_tau / tau) * scale$conc
+      out$descriptive$cav_t <- (auc_t / diff(range(data$time))) * scale$conc  # cav,t
+      out$descriptive$cav_tau <- (auc_tau / tau) * scale$conc
       out$descriptive$c_min <- c_at_tau
       if(extend) {
         out$descriptive$c_max_true <- c_at_tmax
