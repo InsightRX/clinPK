@@ -68,6 +68,7 @@ nca <- function (
       auc_pre <- 0
     }
     do_trapezoid <- function(data) {
+      data <- data[!duplicated(data$time),]
       sum(diff(data$time) * (diff(data$dv)) / log(data$dv[2:length(data$dv)] / data$dv[1:(length(data$dv)-1)]))
     }
     if (length(pre[,1])>0 & length(trap[,1]) >= 2) {
@@ -83,7 +84,11 @@ nca <- function (
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!
         c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
         if(extend) { # back-extrapolate to the true Cmax, to include that area too
-            c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
+            if(trap$time[1] > t_inf) {
+              c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
+            } else {
+              c_at_tmax <- trap$dv[1]
+            }
             trap_tau <- rbind(
               trap[,c("time", "dv")],
               data.frame(
