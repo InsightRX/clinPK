@@ -7,18 +7,19 @@
 calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
   baseline_scr = "median", baseline_egfr = 120, age = NULL,
   egfr = NULL, egfr_method = NULL, force_numeric = FALSE,
-  recursive = TRUE, verbose = TRUE, return_object = TRUE, ...)
+  override_prifle_baseline = FALSE, recursive = TRUE, verbose = TRUE,
+  return_object = TRUE, ...)
 }
 \arguments{
 \item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}
 
 \item{times}{creatinine sample times in hours}
 
-\item{method}{classification method, one of `KDIGO`, `AKIN`, `RIFLE`, `pRIFLE`}
+\item{method}{classification method, one of `KDIGO`,  `RIFLE`, `pRIFLE`}
 
 \item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.}
 
-\item{baseline_egfr}{baseline eGFR, required for `AKIN`, `RIFLE`, and `pRIFLE` classifations. Will take median of `egfr` values if `NULL`.}
+\item{baseline_egfr}{baseline eGFR, required for `RIFLE` classifations. Will take median of `egfr` values if `NULL`.}
 
 \item{age}{age in years, needed when eGFR is used in the classification method}
 
@@ -27,6 +28,8 @@ calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
 \item{egfr_method}{eGFR calculation method, used by `calc_egfr()`. If NULL, will pick default based on classification system (`cockroft_gault` for RIFLE / kDIGO, `revised_schwartz` for pRIFLE).}
 
 \item{force_numeric}{keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.}
+
+\item{override_prifle_baseline}{by default, `pRIFLE` compares eGFR to 120 ml/min. Override by setting to TRUE.}
 
 \item{recursive}{option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)}
 
