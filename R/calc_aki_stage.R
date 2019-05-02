@@ -123,6 +123,7 @@ calc_aki_stage <- function (
     dat$stage <- rep(NA, length(scr))
   } else {
     dat <- data.frame(stage = rep(NA, max(length(egfr), length(scr))))
+    if(!is.null(times)) dat$t <- times
   }
   ## Differences in eGFR
   dat$egfr <- egfr
