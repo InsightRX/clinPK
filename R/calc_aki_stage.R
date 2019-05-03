@@ -58,7 +58,7 @@ calc_aki_stage <- function (
       egfr_method <- "cockroft_gault"
     }
   }
-  
+
   if(is.null(scr) & !(tolower(method) =='prifle')) stop("No serum creatinine values provided.")
   if(is.null(times) & !(tolower(method) =='prifle')) stop("No sample times (days) provided.")
   if(class(times) == "Date") {
@@ -99,7 +99,7 @@ calc_aki_stage <- function (
     }
   }
   if(tolower(method) %in% ('prifle') & !(override_prifle_baseline)) baseline_egfr <- 120
-  
+
   ## eGFR
   if(is.null(egfr)) {
     if(is.null(scr) & is.null(times)) {
@@ -110,6 +110,7 @@ calc_aki_stage <- function (
       times = times,
       method = egfr_method,
       age = age,
+      verbose = verbose,
       ...
     )$value
     }
