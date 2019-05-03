@@ -346,7 +346,7 @@ calc_egfr <- function (
           }
           if(method %in% c("bedside_schwartz", "schwartz_revised")) {
             k <- 0.413
-            if(age < 1) message("This equation is not meant for patients < 1 years of age.")
+            if(age < 1 && verbose) message("This equation is not meant for patients < 1 years of age.")
           } else {
             ## Original Schwartz equation from 1987:
             k <- 0.55
