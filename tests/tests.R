@@ -239,3 +239,13 @@ assert("Pct weight for age", has_error(pct_weight_for_age(weight = 9, sex="male"
 assert("Pct weight for age", has_error(pct_weight_for_age()))
 assert("Pct bmi for age", pct_bmi_for_age(age = 2, bmi = 16, sex="male")$percentile == 57.7)
 assert("Pct bmi for age", pct_bmi_for_age(age = 6, bmi = 16, sex="female")$percentile == 66.1)
+
+## egfr_cov_reqs
+assert('parses legacy typos', names(egfr_cov_reqs('cockroft-gault')) == 'cockcroft_gault')
+assert('CG returns expected covs', egfr_cov_reqs('cockroft-gault')[[1]] == c("creat", "age", "weight", "sex"))
+assert('schwartz_revised returns expected covs', egfr_cov_reqs('schwartz_revised')[[1]] == c("creat", "age", "sex", "height"))
+
+## check covs available
+assert('returns false for missing', !check_covs_available(c('height'), list(height = NULL), verbose = F))
+assert('returns true for not missing', check_covs_available(c('height'), list(height = 9), verbose = F))
+

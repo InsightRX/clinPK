@@ -10,7 +10,7 @@ egfr_cov_reqs(method)
 \item{method}{egfr calculation method}
 }
 \description{
-Returns parameters needed to calculate eGFR according to the method specified.
+returns a named list, with the name being the eGFR method after being checked for certain typos or misspecifications, and the values being the required covariates.
 }
 \examples{
 egfr_cov_reqs('schwartz_revised')

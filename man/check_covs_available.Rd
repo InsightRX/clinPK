@@ -15,9 +15,9 @@ check_covs_available(cov_reqs = NULL, patient_covs = NULL,
 \item{verbose}{stop and describe missing covariate(s)?}
 }
 \description{
-Returns parameters needed to calculate eGFR according to the method specified.
+returns true if all patient covs specified in required covs are non-null, non-NA and not a 0-character string. See `is.nil` for missing data types checked. Returns TRUE if no covariates are required.
 }
 \examples{
-check_covs_available(egfr_cov_reqs('cockcroft_gault_ideal'), list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
-check_covs_available(egfr_cov_reqs('schwartz'), list(creat = c(0.2, 0.4), weight = 25, height = 80, sex = 'male', age = NULL))
+check_covs_available(egfr_cov_reqs('cockcroft_gault_ideal')[[1]], list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
+check_covs_available(egfr_cov_reqs('schwartz')[[1]], list(creat = c(0.2, 0.4), weight = 25, height = 80, sex = 'male', age = NULL))
 }
