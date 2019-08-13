@@ -32,6 +32,8 @@ err1 <- try(expr = { calc_egfr(scr = .5, weight = 4.5, method = "cockcroft_gault
 assert("cockcroft-gault error", class(err1[1]) == "character") # error message when no weight specified
 assert("cockcroft-gault", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, method = "cockcroft_gault")$value) == 111)
 assert("cockcroft-gault", round(calc_egfr(age = 40, sex="male", weight = 80, height=180, scr = 1, method = "cockcroft_gault", relative = TRUE)$value) == 96)
+assert("unit_conversion", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, scr_unit = 'mg/dl', method = "cockcroft_gault")$value) == 
+         round(calc_egfr(age = 40, sex="male", weight = 80, scr = 88.42, scr_unit = 'micromol/L', method = "cockcroft_gault")$value))
 
 assert("cockcroft-gault ibw", round(calc_egfr(age = 50, sex="male", weight = 150, height = 180, scr = 1, method = "cockcroft_gault_adjusted",relative = FALSE)$value) == 131)
 assert("cockcroft-gault abw", round(calc_egfr(age = 40, sex="male", weight = 150, height = 180, scr = 1, method = "cockcroft_gault_adjusted", relative = FALSE, factor = 0.3)$value) == 135)
