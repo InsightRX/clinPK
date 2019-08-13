@@ -8,8 +8,8 @@ t1 <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = FALSE)
 assert("NCA estimates are correct (AUCinf)", round(t1$descriptive$auc_inf) == 8005)
 assert("NCA estimates are correct (AUCtau)", round(t1$descriptive$auc_tau) == 6824)
 assert("NCA estimates are correct (AUCt)", round(t1$descriptive$auc_t) == 6824)
-assert("NCA estimates are correct (css_t)", round(t1$descriptive$css_t) == 853)
-assert("NCA estimates are correct (css_tau)", round(t1$descriptive$css_tau) == 569)
+assert("NCA estimates are correct (css_t)", round(t1$descriptive$cav_t) == 853)
+assert("NCA estimates are correct (css_tau)", round(t1$descriptive$cav_tau) == 569)
 
 t1a <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = TRUE)
 assert("NCA estimates are correct (AUCinf)", round(t1a$descriptive$auc_tau) == 8714)
@@ -17,11 +17,11 @@ assert("NCA estimates are correct (AUCinf)", round(t1a$descriptive$auc_tau) == 8
 ## NCA with missing data
 data <- data.frame(cbind(time = c(0, 1, 2, 4, 6, 8),
                          dv   = c(300, 1400, NA, 900, NA, 400)))
-t2 <- nca(data, has_baseline = TRUE, tau = 12, extend = TRUE)
+t2 <- nca(data, has_baseline = TRUE, tau = 12, extend = TRUE, t_inf = 0)
 assert("NCA estimates are correct (AUCinf)", round(t2$descriptive$auc_inf) == 10464)
 assert("NCA estimates are correct (AUCt)", round(t2$descriptive$auc_t) == 8245)
-assert("NCA estimates are correct (css_t)", round(t2$descriptive$css_t) == 1031)
-assert("NCA estimates are correct (css_tau)", round(t2$descriptive$css_tau) == 782)
+assert("NCA estimates are correct (css_t)", round(t2$descriptive$cav_t) == 1031)
+assert("NCA estimates are correct (css_tau)", round(t2$descriptive$cav_tau) == 782)
 
 ## BSA
 assert("BSA",
@@ -210,10 +210,10 @@ assert("correct values calculated kel for 2 samples",
 )
 
 ## auc2dose
-assert("auc2dose empty call", has_error(auc2dose()))
+assert("auc2dose empty call", has_error(auc2dose(), silent = T))
 assert("auc2dose ", auc2dose(auc = 500, CL=10, V=100) == 5000)
 assert("auc2dose partial auc", round(auc2dose(auc = 500, CL=10, V=100, t_auc = 7)) == 9932)
-assert("dose2auc empty call", has_error(dose2auc()))
+assert("dose2auc empty call", has_error(dose2auc(), silent = T))
 assert("dose2auc ", dose2auc(dose = 5000, CL=10, V=100) == 500)
 assert("dose2auc partial auc", round(dose2auc(dose = 9932, CL=10, V=100, t_auc = 7)) == 500)
 
@@ -237,8 +237,8 @@ assert("lbs --> kg", round(lbs2kg(lbs = 220.462), 2) == 100)
 assert("Pct weight for age", pct_weight_for_age(age = 1, weight = 9, sex="male")$percentile == 26.5)
 assert("Pct weight for age", pct_weight_for_age(age = 1, weight = 9, sex="female")$percentile == 51.7)
 assert("Pct weight for age", length(names(pct_weight_for_age(age = 1, sex="male"))) > 12)
-assert("Pct weight for age", has_error(pct_weight_for_age(weight = 9, sex="male")))
-assert("Pct weight for age", has_error(pct_weight_for_age()))
+assert("Pct weight for age", has_error(pct_weight_for_age(weight = 9, sex="male"), silent = T))
+assert("Pct weight for age", has_error(pct_weight_for_age(), silent = T))
 assert("Pct bmi for age", pct_bmi_for_age(age = 2, bmi = 16, sex="male")$percentile == 57.7)
 assert("Pct bmi for age", pct_bmi_for_age(age = 6, bmi = 16, sex="female")$percentile == 66.1)
 
