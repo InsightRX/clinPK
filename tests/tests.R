@@ -32,7 +32,7 @@ err1 <- try(expr = { calc_egfr(scr = .5, weight = 4.5, method = "cockcroft_gault
 assert("cockcroft-gault error", class(err1[1]) == "character") # error message when no weight specified
 assert("cockcroft-gault", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, method = "cockcroft_gault")$value) == 111)
 assert("cockcroft-gault", round(calc_egfr(age = 40, sex="male", weight = 80, height=180, scr = 1, method = "cockcroft_gault", relative = TRUE)$value) == 96)
-assert("unit_conversion", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, scr_unit = 'mg/dl', method = "cockcroft_gault")$value) == 
+assert("unit_conversion", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, scr_unit = 'mg/dl', method = "cockcroft_gault")$value) ==
          round(calc_egfr(age = 40, sex="male", weight = 80, scr = 88.42, scr_unit = 'micromol/L', method = "cockcroft_gault")$value))
 
 assert("cockcroft-gault ibw", round(calc_egfr(age = 50, sex="male", weight = 150, height = 180, scr = 1, method = "cockcroft_gault_adjusted",relative = FALSE)$value) == 131)
@@ -210,10 +210,10 @@ assert("correct values calculated kel for 2 samples",
 )
 
 ## auc2dose
-assert("auc2dose empty call", has_error(auc2dose(), silent = T))
+assert("auc2dose empty call", has_error(auc2dose()))
 assert("auc2dose ", auc2dose(auc = 500, CL=10, V=100) == 5000)
 assert("auc2dose partial auc", round(auc2dose(auc = 500, CL=10, V=100, t_auc = 7)) == 9932)
-assert("dose2auc empty call", has_error(dose2auc(), silent = T))
+assert("dose2auc empty call", has_error(dose2auc()))
 assert("dose2auc ", dose2auc(dose = 5000, CL=10, V=100) == 500)
 assert("dose2auc partial auc", round(dose2auc(dose = 9932, CL=10, V=100, t_auc = 7)) == 500)
 
@@ -237,8 +237,8 @@ assert("lbs --> kg", round(lbs2kg(lbs = 220.462), 2) == 100)
 assert("Pct weight for age", pct_weight_for_age(age = 1, weight = 9, sex="male")$percentile == 26.5)
 assert("Pct weight for age", pct_weight_for_age(age = 1, weight = 9, sex="female")$percentile == 51.7)
 assert("Pct weight for age", length(names(pct_weight_for_age(age = 1, sex="male"))) > 12)
-assert("Pct weight for age", has_error(pct_weight_for_age(weight = 9, sex="male"), silent = T))
-assert("Pct weight for age", has_error(pct_weight_for_age(), silent = T))
+assert("Pct weight for age", has_error(pct_weight_for_age(weight = 9, sex="male")))
+assert("Pct weight for age", has_error(pct_weight_for_age()))
 assert("Pct bmi for age", pct_bmi_for_age(age = 2, bmi = 16, sex="male")$percentile == 57.7)
 assert("Pct bmi for age", pct_bmi_for_age(age = 6, bmi = 16, sex="female")$percentile == 66.1)
 
