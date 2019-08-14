@@ -19,5 +19,4 @@ returns true if all patient covs specified in required covs are non-null, non-NA
 }
 \examples{
 check_covs_available(egfr_cov_reqs('cockcroft_gault_ideal')[[1]], list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
-check_covs_available(egfr_cov_reqs('schwartz')[[1]], list(creat = c(0.2, 0.4), weight = 25, height = 80, sex = 'male', age = NULL))
 }
