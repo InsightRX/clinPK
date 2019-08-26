@@ -8,8 +8,8 @@ t1 <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = FALSE)
 assert("NCA estimates are correct (AUCinf)", round(t1$descriptive$auc_inf) == 8005)
 assert("NCA estimates are correct (AUCtau)", round(t1$descriptive$auc_tau) == 6824)
 assert("NCA estimates are correct (AUCt)", round(t1$descriptive$auc_t) == 6824)
-assert("NCA estimates are correct (css_t)", round(t1$descriptive$css_t) == 853)
-assert("NCA estimates are correct (css_tau)", round(t1$descriptive$css_tau) == 569)
+assert("NCA estimates are correct (css_t)", round(t1$descriptive$cav_t) == 853)
+assert("NCA estimates are correct (css_tau)", round(t1$descriptive$cav_tau) == 569)
 
 t1a <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = TRUE)
 assert("NCA estimates are correct (AUCinf)", round(t1a$descriptive$auc_tau) == 8714)
@@ -17,11 +17,11 @@ assert("NCA estimates are correct (AUCinf)", round(t1a$descriptive$auc_tau) == 8
 ## NCA with missing data
 data <- data.frame(cbind(time = c(0, 1, 2, 4, 6, 8),
                          dv   = c(300, 1400, NA, 900, NA, 400)))
-t2 <- nca(data, has_baseline = TRUE, tau = 12, extend = TRUE)
+t2 <- nca(data, has_baseline = TRUE, tau = 12, extend = TRUE, t_inf = 0)
 assert("NCA estimates are correct (AUCinf)", round(t2$descriptive$auc_inf) == 10464)
 assert("NCA estimates are correct (AUCt)", round(t2$descriptive$auc_t) == 8245)
-assert("NCA estimates are correct (css_t)", round(t2$descriptive$css_t) == 1031)
-assert("NCA estimates are correct (css_tau)", round(t2$descriptive$css_tau) == 782)
+assert("NCA estimates are correct (css_t)", round(t2$descriptive$cav_t) == 1031)
+assert("NCA estimates are correct (css_tau)", round(t2$descriptive$cav_tau) == 782)
 
 ## BSA
 assert("BSA",
@@ -32,6 +32,8 @@ err1 <- try(expr = { calc_egfr(scr = .5, weight = 4.5, method = "cockcroft_gault
 assert("cockcroft-gault error", class(err1[1]) == "character") # error message when no weight specified
 assert("cockcroft-gault", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, method = "cockcroft_gault")$value) == 111)
 assert("cockcroft-gault", round(calc_egfr(age = 40, sex="male", weight = 80, height=180, scr = 1, method = "cockcroft_gault", relative = TRUE)$value) == 96)
+assert("unit_conversion", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 1, scr_unit = 'mg/dl', method = "cockcroft_gault")$value) ==
+         round(calc_egfr(age = 40, sex="male", weight = 80, scr = 88.42, scr_unit = 'micromol/L', method = "cockcroft_gault")$value))
 
 assert("cockcroft-gault ibw", round(calc_egfr(age = 50, sex="male", weight = 150, height = 180, scr = 1, method = "cockcroft_gault_adjusted",relative = FALSE)$value) == 131)
 assert("cockcroft-gault abw", round(calc_egfr(age = 40, sex="male", weight = 150, height = 180, scr = 1, method = "cockcroft_gault_adjusted", relative = FALSE, factor = 0.3)$value) == 135)
@@ -239,3 +241,13 @@ assert("Pct weight for age", has_error(pct_weight_for_age(weight = 9, sex="male"
 assert("Pct weight for age", has_error(pct_weight_for_age()))
 assert("Pct bmi for age", pct_bmi_for_age(age = 2, bmi = 16, sex="male")$percentile == 57.7)
 assert("Pct bmi for age", pct_bmi_for_age(age = 6, bmi = 16, sex="female")$percentile == 66.1)
+
+## egfr_cov_reqs
+assert('parses legacy typos', names(egfr_cov_reqs('cockroft-gault')) == 'cockcroft_gault')
+assert('CG returns expected covs', egfr_cov_reqs('cockroft-gault')[[1]] == c("creat", "age", "weight", "sex"))
+assert('schwartz_revised returns expected covs', egfr_cov_reqs('schwartz_revised')[[1]] == c("creat", "age", "sex", "height"))
+
+## check covs available
+assert('returns false for missing', !check_covs_available(c('height'), list(height = NULL), verbose = F))
+assert('returns true for not missing', check_covs_available(c('height'), list(height = 9), verbose = F))
+

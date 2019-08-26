@@ -75,321 +75,216 @@ calc_egfr <- function (
   min_value = NULL,
   max_value = NULL,
   ...
-  ) {
-    method <- gsub("-", "_", tolower(method))
-    method <- gsub("cockroft", "cockcroft", tolower(method)) # legacy support for typo
-    available_methods <- c(
-      "cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
-      "cockcroft_gault_adaptive", "cockcroft_gault_sci",
-      "malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev",
-      "mdrd", "ckd_epi", "schwartz", "schwartz_revised", "bedside_schwartz", "jelliffe", "jelliffe_unstable",
-      "wright")
-    if(!method %in% available_methods) {
-      stop(paste0("Sorry, eGFR calculation method not recognized! Please choose from: ", paste0(available_methods, collapse=" ")))
-    }
-    if(!is.null(scr_unit)) {
-      scr_units_allowed <- c("mg/dl", "micromol/l", "mumol/l", "umol/l")
-      if(!all(tolower(scr_unit) %in% scr_units_allowed)) {
-        stop("Sorry, specified serum Cr unit not recognized!")
-      }
-    }
-    weight_for_egfr <- "Total BW"
-    if(method %in% c("cockcroft_gault_ideal")) {
-      if(is.nil(height) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
-        stop("Cockcroft-Gault using adjusted body weight requires: scr, sex, weight, height, and age as input!")
-      }
-    }
-    if(method %in% c("cockcroft_gault_ideal")) {
+){
+  
+  # Extract required covariates and tidied method name
+  # --------------------------------------------------
+  cov_reqs <- egfr_cov_reqs(method)
+  method <- names(cov_reqs)
+  cov_reqs <- cov_reqs[[1]]
+  
+  # Format output units
+  # ---- Relative eGFR?
+  if (is.nil(relative)) {
+    # By default, assume true, since most equations report in units of /1.73m2.
+    # Cockcroft-Gault and derived formulae do not report in relative units, but
+    # do not require bsa to convert.
+    relative <- ifelse(grepl('cockcroft_gault', method), FALSE, TRUE)
+  }
+  if (!relative & !grepl('cockcroft_gault', method)) {
+    cov_reqs <- unique(c('bsa', cov_reqs))
+  } else if (relative & grepl('cockcroft_gault', method)) {
+    cov_reqs <- unique(c('bsa', cov_reqs))
+  }
+  
+  # Convert units, tidy covariates, calculate intermediates if required
+  # -------------------------------------------------------------------
+  
+  # ---- Calculate BSA
+  if("bsa" %in% cov_reqs & is.nil(bsa)) { 
+    calculate_egfr <- check_covs_available(c('height', 'weight'), 
+                          list(height = height, weight = weight))
+    bsa <- calc_bsa(weight, height, bsa_method)$value
+  }
+  
+  # ---- Convert Creatinine
+  if (is.null(scr_unit)) {
+    if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
+    scr_unit <- "mg/dl"
+  } else if (!(all(tolower(scr_unit) %in% c("mg/dl", "micromol/l", "mumol/l", "umol/l")))) {
+    stop("Sorry, specified serum creatinine unit not recognized!")
+  }
+  if (length(scr_unit) == 1 && length(scr) > 1) {
+    scr_unit <- rep(scr_unit, length(scr))
+  }
+  scr_unit <- tolower(gsub("%2F", "/", scr_unit))
+  scr[scr_unit != "mg/dl"] <- scr[scr_unit != "mg/dl"] / 88.4
+  
+  # ---- Format Sex
+  sex <- ifelse(is.nil(sex), '', tolower(sex))
+  
+  # Confirm Required Covariates Are Present
+  # ---------------------------------------
+  calculate_egfr <- check_covs_available(cov_reqs, 
+                                         list(age = age, 
+                                              sex = sex, 
+                                              creat = scr, 
+                                              weight = weight, 
+                                              height = height,
+                                              bsa = bsa,
+                                              race = race,
+                                              preterm = preterm),
+                                         verbose = TRUE)
+  if (!(calculate_egfr)) {
+    return(FALSE)
+  }
+  
+  # Select Weight for eGFR
+  # ----------------------
+  if (grepl('cockcroft_gault_', method)) {
+    
+    if (grepl('_ideal', method)) {
       weight_for_egfr <- "Ideal BW"
-      weight <- calc_ibw(height = height, age = age, sex = sex) # recalculate wt to ibw
-    }
-    if(method %in% c("cockcroft_gault_adjusted")) {
-      if(is.nil(height) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
-        stop("Cockcroft-Gault using ideal or adjusted body weight requires: scr, sex, weight, height, and age as input!")
-      }
-      ibw <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
-      weight <- calc_abw(weight = weight, ibw = ibw, ...) # recalculate wt to abw, potentially specify factor
+      weight <- calc_ibw(height = height, age = age, sex = sex)
+      
+    } else if (grepl('_adjusted', method)) {
       weight_for_egfr <- "Adjusted BW"
-    }
-    if(method == "cockcroft_gault_adaptive") {
-      if(is.nil(height) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
-        stop("Cockcroft-Gault using adaptive body weight requires: scr, sex, weight, height, and age as input!")
-      }
-      tmp <- calc_dosing_weight(weight = weight, height = height, age = age, sex = sex, verbose = verbose, ...)
+      ibw <- calc_ibw(height = height, age = age, sex = sex)
+      weight <- calc_abw(weight = weight, ibw = ibw, ...)
+      
+    } else if (grepl('_adaptive', method)) {
+      tmp <- calc_dosing_weight(weight = weight, 
+                                height = height, 
+                                age = age, 
+                                sex = sex, 
+                                verbose = verbose, 
+                                ...)
       weight <- tmp$value
       weight_for_egfr <- tmp$type
-    }
-    if(is.null(scr_unit)) {
-      if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
-      scr_unit <- "mg/dl"
-    }
-    if(!is.nil(sex)) {
-      sex <- tolower(sex)
-    }
-    if(is.nil(scr)) {
-      stop("Serum creatinine value required!")
-    }
-    if(is.nil(relative)) {
-      relative <- TRUE # most equations report in /1.73m2
-      if(method %in% c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
-                       "cockcroft_gault_adaptive", "cockcroft_gault_sci")) { # except CG
-        relative <- FALSE
-      }
-    }
-    if(!is.nil(weight) && !is.nil(height)) {
-      if(is.nil(bsa)) {
-        bsa <- calc_bsa(weight, height, "dubois")$value
-      }
-    }
-    unit_out <- tolower(unit_out)
-    scr_unit <- gsub("%2F", "/", scr_unit)
-    unit_out <- gsub("%2F", "/", unit_out)
-    if(length(scr_unit) == 1 && length(scr) > 1) {
-      scr_unit <- rep(scr_unit, length(scr))
-    }
-    if(method %in% available_methods) {
-      crcl <- c()
-      unit <- unit_out
-      for (i in 1:length(scr)) {
-        if(method == "wright") {
-          if(is.nil(scr[i]) || is.nil(sex) || is.nil(age) || is.nil(bsa)) {
-            stop("Wright equation requires: scr, sex, bsa (or weight and height), and age as input!")
-          }
-          if(tolower(scr_unit[i]) == "mg/dl") {
-            scr[i] <- scr[i] * 88.40
-          }
-          crcl[i] = ((6580 - (38.8 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr[i]
-          if(!relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] * (bsa/1.73)
-            }
-          } else {
-            unit <- paste0(unit_out, "/1.73m^2")
-          }
-        }
-        if(method == "jelliffe") {
-          if(is.nil(scr[i]) || is.nil(sex) || is.nil(age) || is.nil(bsa)) {
-            stop("Jelliffe equation requires: scr, sex, bsa (or weight and height), and age as input!")
-          }
-          if(tolower(scr_unit[i]) == "mg/dl") {
-            scr[i] <- scr[i] * 88.40
-          }
-          crcl[i] = ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / (scr[i]*0.0113)
-          if(!relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] * (bsa/1.73)
-            }
-          } else {
-            unit <- paste0(unit_out, "/1.73m^2")
-          }
-        }
-        if(method == "jelliffe_unstable") {
-          if(is.nil(scr[i]) || is.nil(sex) || is.nil(age) || is.nil(weight)) {
-            stop("Jelliffe equation requires: scr, sex, weight, and age as input!")
-          }
-          if(tolower(scr_unit[i]) %in% c("umol/l", "mumol/l", "micromol/l")) {
-            scr[i] <- scr[i] / 88.40
-          }
-          vol <- 0.4 * weight * 10
-          scr1 <- scr[i]
-          scr2 <- scr[i]
-          if(i > 1) {
-            scr1 <- scr[i-1]
-          }
-          scr_av <- mean(c(scr1,scr2))
-          if(is.null(times)) {
-            dt <- 1 # assume 1 day difference
-          } else {
-            if(i > 1) {
-              dt <- times[i] - times[i-1]
-              if(dt <= 0) {
-                dt <- 1
-              }
-            } else {
-              dt <- 1 # doesn't matter, for first obs we're not looking at a previous sample anyhow
-            }
-          }
-          cr_prod <- (29.305-(0.203 * age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
-          crcl[i] <- ((vol * (scr1 - scr2)/dt + cr_prod) * 100) / (1440 * scr_av)
-          if(crcl[i] < 1) { # sanity check
-            crcl[i] <- 1
-            warning("Some eGFR values calculated by Jellife equation for unstable patients were < 1 mL/min. Please check input data.")
-          }
-          if(!relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] * (bsa/1.73)
-            }
-          } else {
-            unit <- paste0(unit_out, "/1.73m^2")
-          }
-        }
-        if(method == "mdrd") {
-          if(is.nil(scr[i]) || is.nil(sex) || is.nil(race) || is.nil(age)) {
-            stop("MDRD equation requires: scr, sex, race, and age as input!")
-          }
-          if(tolower(scr_unit[i]) %in% c("umol/l", "mumol/l", "micromol/l")) {
-            scr[i] <- scr[i] / 88.40
-          }
-          f_sex <- 1
-          f_race <- 1
-          if (sex == "female") { f_sex <- 0.762 }
-          if (race == "black") { f_race <- 1.210 }
-          crcl[i] <- 186 * scr[i]^(-1.154) * f_sex * f_race * age^(-0.203)
-          if(!relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] * (bsa/1.73)
-              unit <- unit
-            }
-          } else {
-            unit <- paste0(unit_out, "/1.73m^2")
-          }
-        }
-        if(method == "ckd_epi") {
-          if(is.nil(scr[i]) || is.nil(sex) || is.nil(race) || is.nil(age)) {
-            stop("MDRD equation requires: scr, sex, race, and age as input!")
-          }
-          if(tolower(scr_unit[i]) %in% c("umol/l", "mumol/l", "micromol/l")) {
-            scr[i] <- scr[i] / 88.40
-          }
-          f_sex <- 1
-          f_race <- 1
-          if (sex == "female") { f_sex <- 1.018 }
-          if (race == "black") { f_race <- 1.159 }
-          crcl[i] <- 141 * min(scr[i], 1)^(-0.329) * max(scr[i], 1)^(-1.209) * 0.993^age * f_sex * f_race
-          if(!relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] * (bsa/1.73)
-              unit <- unit
-            }
-          } else {
-            unit <- paste0(unit_out, "/1.73m^2")
-          }
-        }
-        if(method %in% c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted", "cockcroft_gault_adaptive", "cockcroft_gault_sci")) {
-          if(is.nil(scr[i]) || is.nil(sex) || is.nil(weight) || is.nil(age)) {
-            stop("cockcroft-Gault equation requires: scr, sex, weight, and age as input!")
-          }
-          if(tolower(scr_unit[i]) %in% c("umol/l", "mumol/l", "micromol/l")) {
-            scr[i] <- scr[i] / 88.40
-          }
-          f_sex <- 1
-          if (sex == "female") {
-            f_sex <- 0.85
-          }
-          crcl[i] <- f_sex * (140-age) / scr[i] * (weight/72)
-          if(method == "cockcroft_gault_sci") {
-            crcl[i] <- 2.3 * crcl[i]^0.7
-          }
-          if(relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] / (bsa/1.73)
-              unit <- paste0(unit_out, "/1.73m^2")
-            }
-          }
-        }
-        if(method == "malmo_lund_revised" || method == "lund_malmo_revised" || method == "lund_malmo_rev" || method == "malmo_lund_rev") {
-          if(is.nil(scr) || is.nil(sex) || is.nil(age)) {
-            stop("Revised Lund-Malmo equation requires: scr, sex, and age as input!")
-          }
-          if(tolower(scr_unit[i]) == "mg/dl") {
-            scr[i] <- scr[i] * 88.40
-          }
-          if(sex == "female") {
-            if(scr[i] < 150) {
-              x <- 2.50 + 0.0121 * (150-scr[i])
-            } else {
-              x <- 2.50 - 0.926 * log(scr[i]/150)
-            }
-          } else { # male
-            if(scr[i] < 180) {
-              x <- 2.56 + 0.00968 * (180-scr[i])
-            } else {
-              x <- 2.56 - 0.926 * log(scr[i]/150)
-            }
-          }
-          crcl[i] <- exp(x - 0.0158*age + 0.438*log(age))
-          if(!relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] * (bsa/1.73)
-            }
-          } else {
-            unit <- paste0(unit_out, "/1.73m^2")
-          }
-        }
-        if(method %in% c("schwartz", "schwartz_revised", "bedside_schwartz")) {
-          if(method == "schwartz") {
-            if(is.nil(scr[i]) || is.nil(age) || is.nil(sex) || is.nil(height) || is.nil(preterm)) {
-              stop("Schwartz equation requires: scr, sex, height, preterm, and age as input!")
-            }
-          }
-          if(method %in% c("schwartz_revised", "bedside_schwartz")) {
-            if(is.nil(scr[i]) || is.nil(age) || is.nil(sex) || is.nil(height)) {
-              stop("Revised/Bedside Schwartz equation requires: scr, sex, height, and age as input!")
-            }
-          }
-          if(tolower(scr_unit[i]) %in% c("umol/l", "mumol/l", "micromol/l")) {
-            scr[i] <- scr[i] / 88.40
-          }
-          if(method %in% c("bedside_schwartz", "schwartz_revised")) {
-            k <- 0.413
-            if(age < 1 && verbose) message("This equation is not meant for patients < 1 years of age.")
-          } else {
-            ## Original Schwartz equation from 1987:
-            k <- 0.55
-            if (age < 1) {
-              k <- 0.45
-              if(preterm) {
-                k <- 0.33
-              }
-            } else {
-              if(age > 13 && sex == "male") {
-                k <- 0.7
-              }
-            }
-          }
-          crcl[i] <- (k * height) / scr[i]
-          if(!relative) {
-            if(is.nil(bsa)) {
-              stop("Error: bsa not specified, or weight and height not specified! Can't convert between absolute and relative eGFR!")
-            } else {
-              crcl[i] <- crcl[i] * (bsa/1.73)
-              if(verbose) message("eGFR from Schwartz commonly reported as relative to 1.73m^2 BSA. Consider using 'relative=TRUE' argument.")
-            }
-          } else {
-            unit <- paste0(unit_out, "/1.73m^2")
-          }
-        }
-        if (length(grep("^l/hr", tolower(unit_out))) > 0) {
-          crcl[i] <- crcl[i] * 60 / 1000
-        }
-        if (length(grep("^ml/hr", tolower(unit_out))) > 0) {
-          crcl[i] <- crcl[i] * 60
-        }
-      }
-      if(!is.null(min_value))
-        crcl[crcl < min_value] <- min_value
-      if(!is.null(max_value))
-        crcl[crcl > max_value] <- max_value
-      return(list(
-        value = crcl,
-        unit = unit,
-        weight = weight_for_egfr
-      ))
+      
     } else {
-      return(FALSE)
+      weight_for_egfr <- "Total BW"
     }
+  } else {
+    weight_for_egfr <- "Total BW"
+  }
+  
+  # Calculate eGFR
+  # --------------
+  crcl <- c()
+  if (method == 'wright'){
+    crcl <- ((74.4344 - (0.438914 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr 
+  
+  } else if (method == "jelliffe") {
+    crcl <- ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
+  
+  } else if (method == "jelliffe_unstable") {
+    vol <- 4 * weight
+    
+    # for times, if null or negative or mismatch in times/scr length, assume one day difference
+    # otherwise, ensure times and scrs are sequential.
+    if (is.null(times) | length(scr) != length(times)) {
+      dt <- rep(1, length(scr))
+    } else {
+      scr <- scr[order(times)]
+      times <- sort(times)
+      dt <- c(1, diff(times))
+    }
+    
+    # for first creatinine, use that value. for subsequent creatinines, use average of current and previous values.
+    if (length(scr) == 1) {
+      scr_diff <- 0
+      scr_av <- scr
+    } else {
+      scr_diff <- c(0, diff(scr)) * -1
+      scr_av <- scr + scr_diff/2
+    }
+    
+    # calculate creatinine production
+    cr_prod <- (29.305-(0.203 * age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
+    # calculate crcl
+    crcl <- ((vol * scr_diff/dt + cr_prod) * 100) / (1440 * scr_av)
+  
+  } else if (method == "mdrd") {
+    f_sex <- ifelse(sex == 'female', 0.762, 1)
+    f_race <- ifelse(race == 'black', 1.21, 1)
+    crcl <- 186 * scr^(-1.154) * f_sex * f_race * age^(-0.203)
+  
+  } else if (method == "ckd_epi"){
+    f_sex <- ifelse(sex == 'female', 1.018, 1)
+    f_race <- ifelse(race == 'black', 1.159, 1)
+    crcl <- 141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex * f_race
+    
+  } else if (method == 'cockcroft_gault_sci') {
+    f_sex <- ifelse(sex == 'female', 0.85, 1)
+    crcl <- 2.3 * (f_sex * (140-age) / scr * (weight/72)) ^0.7
+    
+  } else if (grepl('cockcroft_gault', method)) {
+    f_sex <- ifelse(sex == 'female', 0.85, 1)
+    crcl <- f_sex * (140-age) / scr * (weight/72)
+    
+  } else if (grepl('malmo', method) & grepl('lund', method)) {
+    scr_cutoff <- ifelse(sex == 'female', 1.696833, 2.0362)
+    intercept <- ifelse(sex == 'female', 2.5, 2.56)
+    slope <- ifelse(scr >= scr_cutoff, -0.926, 
+                    ifelse(sex == 'female', 1.06964, 0.855712))
+    cr_term <- ifelse(scr < scr_cutoff, scr_cutoff - scr, log(scr/scr_cutoff))
+    x <- intercept + slope * cr_term
+    
+    crcl <- exp(x - 0.0158*age + 0.438*log(age))
+    
+  } else if (method %in% c("bedside_schwartz", "schwartz_revised")) {
+    if(age < 1 && verbose) message("This equation is not meant for patients < 1 years of age.")
+    k <- 0.413
+    crcl <- (k * height) / scr
+    
+  } else if (method == 'schwartz') {
+    k <- ifelse(preterm & age < 1, 0.33,
+                ifelse(age < 1, 0.45,
+                       ifelse(age > 13 & sex == 'male', 0.7,
+                               0.55)))
+    crcl <- (k * height) / scr
+  } else {
+    return(FALSE)
+  }
+  
+  # Format Output
+  # -------------
+  unit <- tolower(unit_out)
+  
+  # --- Convert to relative if required
+  if (!relative & !grepl('cockcroft_gault', method)) {
+    crcl <- crcl * bsa/1.73
+  } else if (relative & !grepl('cockcroft_gault', method)){
+    unit <- paste0(unit, "/1.73m^2")
+  } else if (relative) {
+    unit <- paste0(unit, "/1.73m^2")
+    crcl <- crcl * 1.73/bsa
+  }
+  # --- Convert to /h or to L if required
+  conversion_factor <- 1
+  conversion_factor <- ifelse(grepl('/hr', unit), conversion_factor * 60, conversion_factor)
+  conversion_factor <- ifelse(grepl('^l', unit), conversion_factor / 1000, conversion_factor)
+  crcl <- conversion_factor * crcl
+  
+  # --- Check min/max censoring
+  if(!is.null(min_value)){
+    crcl[crcl < min_value] <- min_value
+  }
+  if(!is.null(max_value)){
+    crcl[crcl > max_value] <- max_value
+  }
+  
+  # Return Output
+  # -------------
+  
+  return(list(
+    value = crcl,
+    age = age,
+    bsa = bsa,
+    sex = sex,
+    scr = scr,
+    unit = unit,
+    weight = weight_for_egfr
+  ))
 }
