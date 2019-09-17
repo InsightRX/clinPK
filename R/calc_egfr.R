@@ -32,6 +32,7 @@
 #' @param min_value minimum value (`NULL` by default)
 #' @param max_value maximum value (`NULL` by default)
 #' @param verbose verbocity, show guidance and warnings. `TRUE` by default
+#' @param fail invoke `stop()` if not all covariates available?
 #' @param ... arguments passed on
 #' @references \itemize{
 #'   \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
@@ -74,6 +75,7 @@ calc_egfr <- function (
   verbose = TRUE,
   min_value = NULL,
   max_value = NULL,
+  fail = TRUE,
   ...
 ){
   
@@ -103,7 +105,10 @@ calc_egfr <- function (
   # ---- Calculate BSA
   if("bsa" %in% cov_reqs & is.nil(bsa)) { 
     calculate_egfr <- check_covs_available(c('height', 'weight'), 
-                          list(height = height, weight = weight))
+                          list(height = height, weight = weight), fail = fail)
+    if(!fail && !calculate_egfr) {
+      return(FALSE)
+    }
     bsa <- calc_bsa(weight, height, bsa_method)$value
   }
   
@@ -134,7 +139,8 @@ calc_egfr <- function (
                                               bsa = bsa,
                                               race = race,
                                               preterm = preterm),
-                                         verbose = TRUE)
+                                         verbose = TRUE, 
+                                         fail = fail)
   if (!(calculate_egfr)) {
     return(FALSE)
   }

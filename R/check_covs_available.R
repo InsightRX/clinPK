@@ -9,7 +9,8 @@
 check_covs_available <- function(
   cov_reqs = NULL,
   patient_covs = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  fail = TRUE
   ) {
 
   if (is.null(patient_covs)){
@@ -30,7 +31,7 @@ check_covs_available <- function(
 
   if (length(covs_missing) == 0) {
     return(TRUE)
-  } else if (verbose) {
+  } else if (verbose && fail) {
     stop(paste0('Sorry, missing covariates: ', paste0(covs_missing, collapse = ', ')))
   } else {
     return(FALSE)
