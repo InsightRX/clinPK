@@ -4,8 +4,14 @@
 \alias{calc_lbw}
 \title{Calculate lean body weight}
 \usage{
-calc_lbw(weight = NULL, bmi = NULL, sex = NULL, height = NULL,
-  method = "green", digits = 1)
+calc_lbw(
+  weight = NULL,
+  bmi = NULL,
+  sex = NULL,
+  height = NULL,
+  method = "green",
+  digits = 1
+)
 }
 \arguments{
 \item{weight}{total body weight in kg}

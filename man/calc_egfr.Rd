@@ -4,12 +4,27 @@
 \alias{calc_egfr}
 \title{Calculate eGFR}
 \usage{
-calc_egfr(method = "cockcroft_gault", sex = NULL, age = NULL,
-  scr = NULL, scr_unit = NULL, race = "other", weight = NULL,
-  height = NULL, bsa = NULL, preterm = FALSE, ckd = FALSE,
-  times = NULL, bsa_method = "dubois", relative = NULL,
-  unit_out = "mL/min", verbose = TRUE, min_value = NULL,
-  max_value = NULL, ...)
+calc_egfr(
+  method = "cockcroft_gault",
+  sex = NULL,
+  age = NULL,
+  scr = NULL,
+  scr_unit = NULL,
+  race = "other",
+  weight = NULL,
+  height = NULL,
+  bsa = NULL,
+  preterm = FALSE,
+  ckd = FALSE,
+  times = NULL,
+  bsa_method = "dubois",
+  relative = NULL,
+  unit_out = "mL/min",
+  verbose = TRUE,
+  min_value = NULL,
+  max_value = NULL,
+  ...
+)
 }
 \arguments{
 \item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`}

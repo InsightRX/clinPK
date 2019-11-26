@@ -5,8 +5,7 @@
 \title{Time to steady state
 In either time units or number of doses}
 \usage{
-time_to_ss(kel = NULL, halflife = NULL, ss = 0.9, in_doses = FALSE,
-  tau = NULL)
+time_to_ss(kel = NULL, halflife = NULL, ss = 0.9, in_doses = FALSE, tau = NULL)
 }
 \arguments{
 \item{kel}{drug elimination rate}

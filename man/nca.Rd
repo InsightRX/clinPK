@@ -4,9 +4,17 @@
 \alias{nca}
 \title{Perform an NCA based on a NONMEM-style dataset}
 \usage{
-nca(data = NULL, dose = 100, tau = 24, method = "log_linear",
-  scale = list(auc = 1, conc = 1), dv_min = 0.001, t_inf = NULL,
-  extend = TRUE, has_baseline = TRUE)
+nca(
+  data = NULL,
+  dose = 100,
+  tau = 24,
+  method = "log_linear",
+  scale = list(auc = 1, conc = 1),
+  dv_min = 0.001,
+  t_inf = NULL,
+  extend = TRUE,
+  has_baseline = TRUE
+)
 }
 \arguments{
 \item{data}{data.frame with time and dv columns}

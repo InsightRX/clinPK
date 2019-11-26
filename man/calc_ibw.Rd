@@ -4,9 +4,15 @@
 \alias{calc_ibw}
 \title{Calculate ideal body weight for children and adults}
 \usage{
-calc_ibw(weight = NULL, height = NULL, age = NULL, sex = "male",
-  method_children = "standard", method_adults = "devine",
-  digits = NULL)
+calc_ibw(
+  weight = NULL,
+  height = NULL,
+  age = NULL,
+  sex = "male",
+  method_children = "standard",
+  method_adults = "devine",
+  digits = NULL
+)
 }
 \arguments{
 \item{weight}{weight in kg, can be vector}
@@ -38,7 +44,7 @@ Equations:
     IBW (male) = 39 + (2.27 x height in inches over 5 feet)
     IBW (female) = 42.2 + (2.27 x height in inches over 5 feet)
 
-Methods not implemented yet:
+  Methods not implemented yet:
   McLaren: IBW =
     - step1:   x = 50th percentile height for given age
     - step2: IBW = 50th percentile weight for x on weight-for-height scale

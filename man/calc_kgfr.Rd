@@ -4,9 +4,20 @@
 \alias{calc_kgfr}
 \title{Calculate kinetic GFR}
 \usage{
-calc_kgfr(scr1 = NULL, scr2 = NULL, scr_unit = "mg/dl",
-  time_delay = NULL, weight = NULL, vd = NULL, egfr = NULL,
-  egfr_method = NULL, sex = NULL, age = NULL, height = NULL, ...)
+calc_kgfr(
+  scr1 = NULL,
+  scr2 = NULL,
+  scr_unit = "mg/dl",
+  time_delay = NULL,
+  weight = NULL,
+  vd = NULL,
+  egfr = NULL,
+  egfr_method = NULL,
+  sex = NULL,
+  age = NULL,
+  height = NULL,
+  ...
+)
 }
 \arguments{
 \item{scr1}{baseline scr}

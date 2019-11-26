@@ -4,8 +4,15 @@
 \alias{calc_ffm}
 \title{Calculate fat-free mass}
 \usage{
-calc_ffm(weight = NULL, bmi = NULL, sex = NULL, height = NULL,
-  age = NULL, method = "janmahasatian", digits = 1)
+calc_ffm(
+  weight = NULL,
+  bmi = NULL,
+  sex = NULL,
+  height = NULL,
+  age = NULL,
+  method = "janmahasatian",
+  digits = 1
+)
 }
 \arguments{
 \item{weight}{total body weight in kg}

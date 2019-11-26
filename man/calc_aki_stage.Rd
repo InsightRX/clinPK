@@ -4,11 +4,22 @@
 \alias{calc_aki_stage}
 \title{Calculate AKI stage}
 \usage{
-calc_aki_stage(scr = NULL, times = NULL, method = "kDIGO",
-  baseline_scr = "median", baseline_egfr = 120, age = NULL,
-  egfr = NULL, egfr_method = NULL, force_numeric = FALSE,
-  override_prifle_baseline = FALSE, recursive = TRUE, verbose = TRUE,
-  return_object = TRUE, ...)
+calc_aki_stage(
+  scr = NULL,
+  times = NULL,
+  method = "kDIGO",
+  baseline_scr = "median",
+  baseline_egfr = 120,
+  age = NULL,
+  egfr = NULL,
+  egfr_method = NULL,
+  force_numeric = FALSE,
+  override_prifle_baseline = FALSE,
+  recursive = TRUE,
+  verbose = TRUE,
+  return_object = TRUE,
+  ...
+)
 }
 \arguments{
 \item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}

@@ -4,8 +4,17 @@
 \alias{pk_2cmt_inf}
 \title{Concentration predictions for 1-compartmental PK model, single or multiple infusions}
 \usage{
-pk_2cmt_inf(t = c(0:24), dose = 100, tau = 12, t_inf = 1, CL = 3,
-  V = 30, Q = 2, V2 = 20, ruv = NULL)
+pk_2cmt_inf(
+  t = c(0:24),
+  dose = 100,
+  tau = 12,
+  t_inf = 1,
+  CL = 3,
+  V = 30,
+  Q = 2,
+  V2 = 20,
+  ruv = NULL
+)
 }
 \arguments{
 \item{t}{vector of time}

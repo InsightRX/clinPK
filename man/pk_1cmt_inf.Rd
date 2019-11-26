@@ -4,8 +4,15 @@
 \alias{pk_1cmt_inf}
 \title{Concentration predictions for 1-compartmental PK model after single or multiple bolus doses}
 \usage{
-pk_1cmt_inf(t = c(0:24), dose = 100, tau = 12, t_inf = 2, CL = 3,
-  V = 30, ruv = NULL)
+pk_1cmt_inf(
+  t = c(0:24),
+  dose = 100,
+  tau = 12,
+  t_inf = 2,
+  CL = 3,
+  V = 30,
+  ruv = NULL
+)
 }
 \arguments{
 \item{t}{vector of time}

@@ -4,8 +4,12 @@
 \alias{calc_egfr_cystatin}
 \title{Calculate eGFR based on Cystatin C measurements}
 \usage{
-calc_egfr_cystatin(cystatin = NULL, cystatin_unit = "mg/L",
-  method = "grubb", unit_out = "mL/min")
+calc_egfr_cystatin(
+  cystatin = NULL,
+  cystatin_unit = "mg/L",
+  method = "grubb",
+  unit_out = "mL/min"
+)
 }
 \arguments{
 \item{cystatin}{serum cystatin concentration (mg/L)}

@@ -4,8 +4,7 @@
 \alias{fraction_of_ss}
 \title{Calculate fraction of steady state at particular time after start of dosing}
 \usage{
-fraction_of_ss(kel = NULL, halflife = NULL, t = NULL, n = NULL,
-  tau = NULL)
+fraction_of_ss(kel = NULL, halflife = NULL, t = NULL, n = NULL, tau = NULL)
 }
 \arguments{
 \item{kel}{drug elimination rate}
