@@ -15,4 +15,4 @@ Description: Calculates equations commonly used in clinical
 Imports: testit, curl
 License: MIT + file LICENSE
 LazyData: TRUE
-RoxygenNote: 6.1.0
+RoxygenNote: 7.0.1

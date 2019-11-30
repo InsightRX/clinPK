@@ -4,8 +4,7 @@
 \alias{check_covs_available}
 \title{Returns parameters needed to calculate eGFR according to the method specified.}
 \usage{
-check_covs_available(cov_reqs = NULL, patient_covs = NULL,
-  verbose = TRUE)
+check_covs_available(cov_reqs = NULL, patient_covs = NULL, verbose = TRUE)
 }
 \arguments{
 \item{cov_reqs}{vector of covariates required for calculating derived covariatiate}

@@ -4,8 +4,13 @@
 \alias{pct_weight_for_age}
 \title{Percentile weight for age for children}
 \usage{
-pct_weight_for_age(age = NULL, weight = NULL, sex = NULL,
-  return_median = FALSE, ...)
+pct_weight_for_age(
+  age = NULL,
+  weight = NULL,
+  sex = NULL,
+  return_median = FALSE,
+  ...
+)
 }
 \arguments{
 \item{age}{age in years}

@@ -4,8 +4,7 @@
 \alias{pk_2cmt_t12_interval}
 \title{Calculate average half-life for 2-compartment model during a specific interval}
 \usage{
-pk_2cmt_t12_interval(CL = 3, V = 30, Q = 2, V2 = 20, tau = 12,
-  t_inf = NULL)
+pk_2cmt_t12_interval(CL = 3, V = 30, Q = 2, V2 = 20, tau = 12, t_inf = NULL)
 }
 \arguments{
 \item{CL}{clearance}

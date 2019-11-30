@@ -4,8 +4,16 @@
 \alias{pk_1cmt_oral}
 \title{Concentration predictions for 1-compartmental oral PK model after single or multiple bolus doses}
 \usage{
-pk_1cmt_oral(t = c(0:24), dose = 100, tau = 12, KA = 1, CL = 3,
-  V = 30, F = 1, ruv = NULL)
+pk_1cmt_oral(
+  t = c(0:24),
+  dose = 100,
+  tau = 12,
+  KA = 1,
+  CL = 3,
+  V = 30,
+  F = 1,
+  ruv = NULL
+)
 }
 \arguments{
 \item{t}{vector of time}

@@ -4,8 +4,7 @@
 \alias{conc2mol}
 \title{Convert concentration to molar}
 \usage{
-conc2mol(conc = NULL, unit_conc = NULL, mol_weight = NULL,
-  unit_mol = NULL)
+conc2mol(conc = NULL, unit_conc = NULL, mol_weight = NULL, unit_mol = NULL)
 }
 \arguments{
 \item{conc}{concentration in e.g. g/L}

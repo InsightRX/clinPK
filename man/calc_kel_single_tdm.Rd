@@ -4,9 +4,17 @@
 \alias{calc_kel_single_tdm}
 \title{Calculate elimination rate when given a single TDM sample}
 \usage{
-calc_kel_single_tdm(dose = 1000, V = 50, t = 10, dv = 10,
-  tau = 12, t_inf = 1, kel_init = 0.1, n_iter = 25,
-  learn_rate = 0.2)
+calc_kel_single_tdm(
+  dose = 1000,
+  V = 50,
+  t = 10,
+  dv = 10,
+  tau = 12,
+  t_inf = 1,
+  kel_init = 0.1,
+  n_iter = 25,
+  learn_rate = 0.2
+)
 }
 \arguments{
 \item{dose}{dose amount}

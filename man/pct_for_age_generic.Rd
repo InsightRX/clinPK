@@ -4,8 +4,13 @@
 \alias{pct_for_age_generic}
 \title{Percentile height or weight for age for children}
 \usage{
-pct_for_age_generic(age = NULL, value = NULL, sex = NULL,
-  variable = "weight", ...)
+pct_for_age_generic(
+  age = NULL,
+  value = NULL,
+  sex = NULL,
+  variable = "weight",
+  ...
+)
 }
 \arguments{
 \item{age}{age in years}
