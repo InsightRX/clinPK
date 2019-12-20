@@ -267,12 +267,25 @@ calc_egfr <- function (
   conversion_factor <- ifelse(grepl('^l', unit), conversion_factor / 1000, conversion_factor)
   crcl <- conversion_factor * crcl
   
-  # --- Check min/max censoring
+# --- Check min/max censoring
+  capped <- list()
   if(!is.null(min_value)){
-    crcl[crcl < min_value] <- min_value
+    idx <- crcl < min_value
+    if(any(idx)) {
+      crcl[idx] <- min_value
+      capped$min_value <- min_value
+      capped$n <- sum(idx)
+      if(verbose) message(paste0(capped$min, " values were capped to minimum value of ", min_value))
+    }
   }
   if(!is.null(max_value)){
-    crcl[crcl > max_value] <- max_value
+    idx <- crcl > max_value
+    if(any(idx)) {
+      crcl[idx] <- max_value
+      capped$max_value <- max_value
+      capped$n <- sum(idx)
+      if(verbose) message(paste0(capped$max, " values were capped to maximum value of ", max_value))
+    }
   }
   
   # Return Output
@@ -285,6 +298,7 @@ calc_egfr <- function (
     sex = sex,
     scr = scr,
     unit = unit,
-    weight = weight_for_egfr
+    weight = weight_for_egfr,
+    capped = capped
   ))
 }
