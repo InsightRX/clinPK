@@ -274,8 +274,8 @@ calc_egfr <- function (
     if(any(idx)) {
       crcl[idx] <- min_value
       capped$min_value <- min_value
-      capped$n <- sum(idx)
-      if(verbose) message(paste0(capped$min, " values were capped to minimum value of ", min_value))
+      capped$min_n <- sum(idx)
+      if(verbose) message(paste0(capped$min_n, " values were capped to minimum value of ", min_value))
     }
   }
   if(!is.null(max_value)){
@@ -283,8 +283,8 @@ calc_egfr <- function (
     if(any(idx)) {
       crcl[idx] <- max_value
       capped$max_value <- max_value
-      capped$n <- sum(idx)
-      if(verbose) message(paste0(capped$max, " values were capped to maximum value of ", max_value))
+      capped$max_n <- sum(idx)
+      if(verbose) message(paste0(capped$max_n, " values were capped to maximum value of ", max_value))
     }
   }
 

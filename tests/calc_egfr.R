@@ -57,7 +57,7 @@ tmp1 <- calc_egfr(age = 40, sex="male", weight = 80, scr = .2,
                 method = "cockcroft_gault", max_value = 150)
 assert("cap applied", tmp1$value == 150)
 assert("cap info added: cap", tmp1$capped$max_value == 150)
-assert("cap info added: n caps applied", tmp1$capped$n == 1)
+assert("cap info added: n caps applied", tmp1$capped$max_n == 1)
 
 assert("eGFR < lower cap", round(calc_egfr(age = 40, sex="male", weight = 80, scr = 3,
                                      method = "cockcroft_gault")$value) == 37)
@@ -65,4 +65,4 @@ tmp2 <- calc_egfr(age = 40, sex="male", weight = 80, scr = 3,
                  method = "cockcroft_gault", min_value = 50)
 assert("cap info added: cap", tmp2$capped$min_value == 50)
 assert("cap info added: no max cap", is.null(tmp2$capped$max_value))
-assert("cap info added: n caps applied", tmp2$capped$n == 1)
+assert("cap info added: n caps applied", tmp2$capped$min_n == 1)
