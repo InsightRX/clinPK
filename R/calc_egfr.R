@@ -29,8 +29,8 @@
 #' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
 #' @param unit_out `ml/min` (default), `L/hr`, or `mL/hr`
 #' @param preterm is patient preterm?
-#' @param min_value minimum value (`NULL` by default)
-#' @param max_value maximum value (`NULL` by default)
+#' @param min_value minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
+#' @param max_value maximum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
 #' @param verbose verbocity, show guidance and warnings. `TRUE` by default
 #' @param ... arguments passed on
 #' @references \itemize{
@@ -76,13 +76,13 @@ calc_egfr <- function (
   max_value = NULL,
   ...
 ){
-  
+
   # Extract required covariates and tidied method name
   # --------------------------------------------------
   cov_reqs <- egfr_cov_reqs(method)
   method <- names(cov_reqs)
   cov_reqs <- cov_reqs[[1]]
-  
+
   # Format output units
   # ---- Relative eGFR?
   if (is.nil(relative)) {
@@ -96,17 +96,17 @@ calc_egfr <- function (
   } else if (relative & grepl('cockcroft_gault', method)) {
     cov_reqs <- unique(c('bsa', cov_reqs))
   }
-  
+
   # Convert units, tidy covariates, calculate intermediates if required
   # -------------------------------------------------------------------
-  
+
   # ---- Calculate BSA
-  if("bsa" %in% cov_reqs & is.nil(bsa)) { 
-    calculate_egfr <- check_covs_available(c('height', 'weight'), 
+  if("bsa" %in% cov_reqs & is.nil(bsa)) {
+    calculate_egfr <- check_covs_available(c('height', 'weight'),
                           list(height = height, weight = weight))
     bsa <- calc_bsa(weight, height, bsa_method)$value
   }
-  
+
   # ---- Convert Creatinine
   if (is.null(scr_unit)) {
     if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
@@ -119,17 +119,17 @@ calc_egfr <- function (
   }
   scr_unit <- tolower(gsub("%2F", "/", scr_unit))
   scr[scr_unit != "mg/dl"] <- scr[scr_unit != "mg/dl"] / 88.4
-  
+
   # ---- Format Sex
   sex <- ifelse(is.nil(sex), '', tolower(sex))
-  
+
   # Confirm Required Covariates Are Present
   # ---------------------------------------
-  calculate_egfr <- check_covs_available(cov_reqs, 
-                                         list(age = age, 
-                                              sex = sex, 
-                                              creat = scr, 
-                                              weight = weight, 
+  calculate_egfr <- check_covs_available(cov_reqs,
+                                         list(age = age,
+                                              sex = sex,
+                                              creat = scr,
+                                              weight = weight,
                                               height = height,
                                               bsa = bsa,
                                               race = race,
@@ -138,49 +138,49 @@ calc_egfr <- function (
   if (!(calculate_egfr)) {
     return(FALSE)
   }
-  
+
   # Select Weight for eGFR
   # ----------------------
   if (grepl('cockcroft_gault_', method)) {
-    
+
     if (grepl('_ideal', method)) {
       weight_for_egfr <- "Ideal BW"
       weight <- calc_ibw(height = height, age = age, sex = sex)
-      
+
     } else if (grepl('_adjusted', method)) {
       weight_for_egfr <- "Adjusted BW"
       ibw <- calc_ibw(height = height, age = age, sex = sex)
       weight <- calc_abw(weight = weight, ibw = ibw, ...)
-      
+
     } else if (grepl('_adaptive', method)) {
-      tmp <- calc_dosing_weight(weight = weight, 
-                                height = height, 
-                                age = age, 
-                                sex = sex, 
-                                verbose = verbose, 
+      tmp <- calc_dosing_weight(weight = weight,
+                                height = height,
+                                age = age,
+                                sex = sex,
+                                verbose = verbose,
                                 ...)
       weight <- tmp$value
       weight_for_egfr <- tmp$type
-      
+
     } else {
       weight_for_egfr <- "Total BW"
     }
   } else {
     weight_for_egfr <- "Total BW"
   }
-  
+
   # Calculate eGFR
   # --------------
   crcl <- c()
   if (method == 'wright'){
-    crcl <- ((74.4344 - (0.438914 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr 
-  
+    crcl <- ((74.4344 - (0.438914 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr
+
   } else if (method == "jelliffe") {
     crcl <- ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
-  
+
   } else if (method == "jelliffe_unstable") {
     vol <- 4 * weight
-    
+
     # for times, if null or negative or mismatch in times/scr length, assume one day difference
     # otherwise, ensure times and scrs are sequential.
     if (is.null(times) | length(scr) != length(times)) {
@@ -190,7 +190,7 @@ calc_egfr <- function (
       times <- sort(times)
       dt <- c(1, diff(times))
     }
-    
+
     # for first creatinine, use that value. for subsequent creatinines, use average of current and previous values.
     if (length(scr) == 1) {
       scr_diff <- 0
@@ -199,45 +199,45 @@ calc_egfr <- function (
       scr_diff <- c(0, diff(scr)) * -1
       scr_av <- scr + scr_diff/2
     }
-    
+
     # calculate creatinine production
     cr_prod <- (29.305-(0.203 * age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
     # calculate crcl
     crcl <- ((vol * scr_diff/dt + cr_prod) * 100) / (1440 * scr_av)
-  
+
   } else if (method == "mdrd") {
     f_sex <- ifelse(sex == 'female', 0.762, 1)
     f_race <- ifelse(race == 'black', 1.21, 1)
     crcl <- 186 * scr^(-1.154) * f_sex * f_race * age^(-0.203)
-  
+
   } else if (method == "ckd_epi"){
     f_sex <- ifelse(sex == 'female', 1.018, 1)
     f_race <- ifelse(race == 'black', 1.159, 1)
     crcl <- 141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex * f_race
-    
+
   } else if (method == 'cockcroft_gault_sci') {
     f_sex <- ifelse(sex == 'female', 0.85, 1)
     crcl <- 2.3 * (f_sex * (140-age) / scr * (weight/72)) ^0.7
-    
+
   } else if (grepl('cockcroft_gault', method)) {
     f_sex <- ifelse(sex == 'female', 0.85, 1)
     crcl <- f_sex * (140-age) / scr * (weight/72)
-    
+
   } else if (grepl('malmo', method) & grepl('lund', method)) {
     scr_cutoff <- ifelse(sex == 'female', 1.696833, 2.0362)
     intercept <- ifelse(sex == 'female', 2.5, 2.56)
-    slope <- ifelse(scr >= scr_cutoff, -0.926, 
+    slope <- ifelse(scr >= scr_cutoff, -0.926,
                     ifelse(sex == 'female', 1.06964, 0.855712))
     cr_term <- ifelse(scr < scr_cutoff, scr_cutoff - scr, log(scr/scr_cutoff))
     x <- intercept + slope * cr_term
-    
+
     crcl <- exp(x - 0.0158*age + 0.438*log(age))
-    
+
   } else if (method %in% c("bedside_schwartz", "schwartz_revised")) {
     if(age < 1 && verbose) message("This equation is not meant for patients < 1 years of age.")
     k <- 0.413
     crcl <- (k * height) / scr
-    
+
   } else if (method == 'schwartz') {
     k <- ifelse(preterm & age < 1, 0.33,
                 ifelse(age < 1, 0.45,
@@ -247,11 +247,11 @@ calc_egfr <- function (
   } else {
     return(FALSE)
   }
-  
+
   # Format Output
   # -------------
   unit <- tolower(unit_out)
-  
+
   # --- Convert to relative if required
   if (!relative & !grepl('cockcroft_gault', method)) {
     crcl <- crcl * bsa/1.73
@@ -266,7 +266,7 @@ calc_egfr <- function (
   conversion_factor <- ifelse(grepl('/hr', unit), conversion_factor * 60, conversion_factor)
   conversion_factor <- ifelse(grepl('^l', unit), conversion_factor / 1000, conversion_factor)
   crcl <- conversion_factor * crcl
-  
+
 # --- Check min/max censoring
   capped <- list()
   if(!is.null(min_value)){
@@ -287,10 +287,10 @@ calc_egfr <- function (
       if(verbose) message(paste0(capped$max, " values were capped to maximum value of ", max_value))
     }
   }
-  
+
   # Return Output
   # -------------
-  
+
   return(list(
     value = crcl,
     age = age,

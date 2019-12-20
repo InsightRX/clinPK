@@ -59,9 +59,9 @@ calc_egfr(
 
 \item{verbose}{verbocity, show guidance and warnings. `TRUE` by default}
 
-\item{min_value}{minimum value (`NULL` by default)}
+\item{min_value}{minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.}
 
-\item{max_value}{maximum value (`NULL` by default)}
+\item{max_value}{maximum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.}
 
 \item{...}{arguments passed on}
 }

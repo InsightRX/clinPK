@@ -17,5 +17,7 @@ check_covs_available(cov_reqs = NULL, patient_covs = NULL, verbose = TRUE)
 returns true if all patient covs specified in required covs are non-null, non-NA and not a 0-character string. See `is.nil` for missing data types checked. Returns TRUE if no covariates are required.
 }
 \examples{
-check_covs_available(egfr_cov_reqs('cockcroft_gault_ideal')[[1]], list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
+check_covs_available(
+  egfr_cov_reqs('cockcroft_gault_ideal')[[1]],
+  list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
 }
