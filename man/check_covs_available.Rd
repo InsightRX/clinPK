@@ -4,7 +4,12 @@
 \alias{check_covs_available}
 \title{Returns parameters needed to calculate eGFR according to the method specified.}
 \usage{
-check_covs_available(cov_reqs = NULL, patient_covs = NULL, verbose = TRUE)
+check_covs_available(
+  cov_reqs = NULL,
+  patient_covs = NULL,
+  verbose = TRUE,
+  fail = TRUE
+)
 }
 \arguments{
 \item{cov_reqs}{vector of covariates required for calculating derived covariatiate}
@@ -12,6 +17,8 @@ check_covs_available(cov_reqs = NULL, patient_covs = NULL, verbose = TRUE)
 \item{patient_covs}{named list of covariates}
 
 \item{verbose}{stop and describe missing covariate(s)?}
+
+\item{fail}{invoke `stop()` if not all covariates available?}
 }
 \description{
 returns true if all patient covs specified in required covs are non-null, non-NA and not a 0-character string. See `is.nil` for missing data types checked. Returns TRUE if no covariates are required.

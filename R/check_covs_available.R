@@ -3,6 +3,7 @@
 #' @param cov_reqs vector of covariates required for calculating derived covariatiate
 #' @param patient_covs named list of covariates
 #' @param verbose stop and describe missing covariate(s)?
+#' @param fail invoke `stop()` if not all covariates available?
 #' @examples
 #' check_covs_available(
 #'   egfr_cov_reqs('cockcroft_gault_ideal')[[1]],
@@ -11,7 +12,8 @@
 check_covs_available <- function(
   cov_reqs = NULL,
   patient_covs = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  fail = TRUE
   ) {
 
   if (is.null(patient_covs)){
@@ -32,7 +34,7 @@ check_covs_available <- function(
 
   if (length(covs_missing) == 0) {
     return(TRUE)
-  } else if (verbose) {
+  } else if (verbose && fail) {
     stop(paste0('Sorry, missing covariates: ', paste0(covs_missing, collapse = ', ')))
   } else {
     return(FALSE)
