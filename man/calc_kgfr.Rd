@@ -51,8 +51,10 @@ kGFR, in ml/min
 Calculate the kinetic GFR based on a patients first two serum creatinine measurements. Kinetic GFR may be more predictive of future AKI for patients whose serum creatinine is changing quickly. Briefly, an increase in SCr over the course of a day indicates an effective GFR lower than the most recent SCr measurement may indicate if steadystate is assumed, while a decrease in SCr over a short time indicates a higher effective GFR than the most recent SCr would indicate. There are several ways of approximating maximum theoretical creatinine accumulation rate; here the method used by Pianta et al., (PLoS ONE, 2015) has been implemented.
 }
 \examples{
-calc_kgfr(weight = 100, scr1 = 150, scr2 = 200, scr_unit = 'umol/l', time_delay = 24, egfr = 30)
-calc_kgfr(weight = 70, scr1 = 350, scr2 = 300, scr_unit = 'umol/l', time_delay = 24, egfr_method = 'mdrd', age = 70, sex = 'male')
+calc_kgfr(weight = 100, scr1 = 150, scr2 = 200, scr_unit = 'umol/l',
+         time_delay = 24, egfr = 30)
+calc_kgfr(weight = 70, scr1 = 350, scr2 = 300, scr_unit = 'umol/l',
+          time_delay = 24, egfr_method = 'mdrd', age = 70, sex = 'male')
 }
 \references{
 \href{https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0125669}{Pianta et al., PLoS ONE (2015)}

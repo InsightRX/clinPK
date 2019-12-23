@@ -3,8 +3,11 @@
 #' @param cov_reqs vector of covariates required for calculating derived covariatiate
 #' @param patient_covs named list of covariates
 #' @param verbose stop and describe missing covariate(s)?
+#' @param fail invoke `stop()` if not all covariates available?
 #' @examples
-#' check_covs_available(egfr_cov_reqs('cockcroft_gault_ideal')[[1]], list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
+#' check_covs_available(
+#'   egfr_cov_reqs('cockcroft_gault_ideal')[[1]],
+#'   list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
 #' @export
 check_covs_available <- function(
   cov_reqs = NULL,
