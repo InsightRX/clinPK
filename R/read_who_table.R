@@ -42,18 +42,13 @@ read_who_table <- function(
       close(con)
       cat("done.")
       dat <- c()
-      cnam <- strsplit(tmp[1], "\t")
+      cnam <- strsplit(tmp[1], "\t")[[1]]
       tmp <- tmp[-1]
       for(i in seq(tmp)) {
         dat <- rbind(dat, as.num(unlist(strsplit(tmp[i], "\t"))))
       }
       dat <- data.frame(dat)
       colnames(dat) <- cnam
-      dat <- dat[-1,]
-      
-      for(i in seq(dat[1,])) {
-        dat[,i] <- as.num(dat[,i])
-      }
     }
     dat[,1] <- dat[,1]/unit # convert to years
     colnames(dat)[1] <- "age"
