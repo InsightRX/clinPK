@@ -32,8 +32,8 @@ read_who_table <- function(
     who_file <- paste0(type, '_', str_sex, '_', postfix,'.txt')
     if(!download) {
       # use tables supplied with package (also from WHO)
-      dat <- data.frame(read.table(file=paste0(system.file(package='clinPK'),'/', who_file), sep = "\t"))
-      colnames(dat) <- as.character(unlist(dat[1,]))
+      dat <- data.frame(read.table(file=paste0(system.file(package='clinPK'),'/', who_file), 
+                                   sep = "\t", header = TRUE))
     } else {
       cat("Downloading data from WHO...")
       con <- curl::curl(paste0(who_url, "/", who_file))
@@ -49,10 +49,11 @@ read_who_table <- function(
       }
       dat <- data.frame(dat)
       colnames(dat) <- cnam
-    }
-    dat <- dat[-1,]
-    for(i in seq(dat[1,])) {
-      dat[,i] <- as.num(dat[,i])
+      dat <- dat[-1,]
+      
+      for(i in seq(dat[1,])) {
+        dat[,i] <- as.num(dat[,i])
+      }
     }
     dat[,1] <- dat[,1]/unit # convert to years
     colnames(dat)[1] <- "age"
