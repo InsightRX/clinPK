@@ -38,7 +38,7 @@ pct_for_age_generic <- function(age = NULL, value = NULL, sex = NULL, variable="
     }
   }
   dat <- read_who_table(sex=sex, age=age, type=type, download=FALSE)
-  tmp <- dat[order(abs(age - dat[,1])),][1,-(1:4)]
+  tmp <- dat[which.min(abs(age - dat$age)),-(1:4)]
   pct <- as.list(tmp)
   if(!is.null(value)) {
     p <- c()
