@@ -16,19 +16,18 @@ read_who_table <- function(
     stop("Age required!")
   }
   if(type %in% c("wfa", "lhfa", "hfa", "wfl", "bmi", "bfa")) {
-    str_sex <- "boys"
-    if(tolower(sex) == "female") {
-      str_sex <- "girls"
-    }
+    
+    str_sex <- ifelse(tolower(sex) == "female", "girls", "boys")
+
     if(age < 5.1) {
       unit <- 365 # table in days
       postfix <- 'p_exp'
-    }
-    if(age >= 5.1) {
+    } else {
       unit <- 12 # table in months
       postfix <- 'perc_WHO2007_exp'
       rm_sd <- TRUE
     }
+    
     who_file <- paste0(type, '_', str_sex, '_', postfix,'.txt')
     if(!download) {
       # use tables supplied with package (also from WHO)
