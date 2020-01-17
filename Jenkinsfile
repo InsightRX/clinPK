@@ -17,8 +17,7 @@
             if [ -d "json2test" ]; then
               sudo rm -R json2test
             fi
-            echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.rstudio.com'; options(repos = r);" > ~/.Rprofile
-            Rscript -e "install.packages('testthat')"
+            Rscript -e "install.packages('testthat', lib = '/usr/lib/R/site-library')"
             git clone git@github.com:InsightRX/json2test.git
             cd json2test
             chmod +x slack_notification.sh
