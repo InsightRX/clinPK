@@ -17,11 +17,10 @@
             if [ -d "json2test" ]; then
               sudo rm -R json2test
             fi
-            echo "r <- getOption('repos'); r['CRAN'] <- 'http://cran.rstudio.com'; options(repos = r);" > ~/.Rprofile
-            script -e "install.packages('testthat', lib = '/usr/lib/R/site-library')"
             git clone git@github.com:InsightRX/json2test.git
             cd json2test
             chmod +x slack_notification.sh
+            sudo Rscript -e "install.packages('testthat', lib='/usr/lib/R/site-library', repos='https://cran.rstudio.com')"
             R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
             ./slack_notification.sh
             exit 1
