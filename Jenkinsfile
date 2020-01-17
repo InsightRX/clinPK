@@ -17,6 +17,7 @@
             if [ -d "json2test" ]; then
               sudo rm -R json2test
             fi
+            Rscript -e "install.packages('testthat')"
             git clone git@github.com:InsightRX/json2test.git
             cd json2test
             chmod +x slack_notification.sh
