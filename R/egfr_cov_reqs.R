@@ -1,10 +1,11 @@
 #' Returns parameters needed to calculate eGFR according to the method specified.
 #' @description returns a named list, with the name being the eGFR method after being checked for certain typos or misspecifications, and the values being the required covariates.
 #' @param method egfr calculation method
+#' @param relative if egfr calculations should be relative or not
 #' @examples 
 #' egfr_cov_reqs('schwartz_revised')
 #' @export
-egfr_cov_reqs <- function(method){
+egfr_cov_reqs <- function(method, relative = NULL){
   # Format input
   if (is.nil(method)) {
     stop(paste('egfr method unspecified'))
@@ -50,6 +51,20 @@ egfr_cov_reqs <- function(method){
   } else {
     stop('required covariates unknown')
   }
+  
+  # ---- Relative eGFR?
+  if (is.nil(relative)) {
+    # By default, assume true, since most equations report in units of /1.73m2.
+    # Cockcroft-Gault and derived formulae do not report in relative units, but
+    # do not require bsa to convert.
+    relative <- ifelse(grepl('cockcroft_gault', method), FALSE, TRUE)
+  }
+  if (!relative & !grepl('cockcroft_gault', method)) {
+    covs[[1]] <- unique(c('bsa', covs[[1]]))
+  } else if (relative & grepl('cockcroft_gault', method)) {
+    covs[[1]] <- unique(c('bsa', covs[[1]]))
+  }
+  
   names(covs) <- method
   return(covs)
 }
