@@ -4,10 +4,12 @@
 \alias{egfr_cov_reqs}
 \title{Returns parameters needed to calculate eGFR according to the method specified.}
 \usage{
-egfr_cov_reqs(method)
+egfr_cov_reqs(method, relative = NULL)
 }
 \arguments{
 \item{method}{egfr calculation method}
+
+\item{relative}{if egfr calculations should be relative or not}
 }
 \description{
 returns a named list, with the name being the eGFR method after being checked for certain typos or misspecifications, and the values being the required covariates.
