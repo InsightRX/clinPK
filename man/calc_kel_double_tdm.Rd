@@ -10,6 +10,7 @@ calc_kel_double_tdm(
   dv = c(30, 10),
   tau = 12,
   t_inf = 1,
+  V = NULL,
   steady_state = TRUE,
   return_parameters = FALSE
 )
@@ -25,6 +26,8 @@ calc_kel_double_tdm(
 
 \item{t_inf}{infusion time}
 
+\item{V}{if specified, use that (empiric) value and don't estimate from data. Default `NULL`.}
+
 \item{steady_state}{samples taken at steady state? Only influences AUCtau.}
 
 \item{return_parameters}{return all parameters instead of only kel?}
@@ -34,4 +37,5 @@ Calculate elimination rate when given two TDM samples
 }
 \examples{
 calc_kel_double_tdm(dose = 1000, t = c(3, 18), dv = c(30, 10))
+
 }

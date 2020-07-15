@@ -1,7 +1,7 @@
 Package: clinPK
 Type: Package
 Title: Clinical Pharmacokinetics Toolkit
-Version: 0.9.32
+Version: 0.9.33
 Date: 2020-07-15
 Author: Ron Keizer
 Maintainer: Ron Keizer <ronkeizer@gmail.com>
@@ -15,4 +15,4 @@ Description: Calculates equations commonly used in clinical
 Imports: testit, curl
 License: MIT + file LICENSE
 LazyData: TRUE
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
