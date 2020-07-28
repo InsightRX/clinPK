@@ -53,7 +53,16 @@ calc_kel_double_tdm <- function (
       cmin = cmin,
       AUCtau = AUCtau,
       AUCss = AUCss,
-      AUCss24 = AUCss * (24/tau)
+      AUCss24 = AUCss * (24/tau),
+      input = list(
+        dose = dose,
+        t = t,
+        dv = dv,
+        tau = tau, 
+        t_inf = t_inf,
+        V = V,
+        steady_state = steady_state
+      )
     ))
   }
   return(kel)

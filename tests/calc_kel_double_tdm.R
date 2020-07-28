@@ -46,3 +46,4 @@ assert("kel correct, not ss, V", round(kel2$V,2) == 26.53)
 assert("kel correct, ss, V", round(kel3$V,2) == 37.62)
 assert("kel correct, ss, AUC24ss", round(kel4$AUCss24,2) == 392.89)
 
+assert("input data returned", all(c("dose", "tau", "dv", "t_inf", "steady_state") %in% names(kel4$input)))
