@@ -35,7 +35,7 @@ test2b <- calc_aki_stage(
   return_obj = FALSE, force_numeric = TRUE
 )
 assert(test0$stage == "stage 3")
-assert(test1$stage == "stage 2")
+assert(test1$stage == "stage 1")
 assert(test2$stage == "stage 3")
 assert(test2$time_max_stage == 36)
 assert(test2a$stage == "stage 1")
@@ -99,16 +99,16 @@ test8 <- calc_aki_stage(
   egfr = c(80, 59)
 )
 
-test9 <- calc_aki_stage(method = 'prifle', 
-                        egfr = 60, 
-                        baseline_egfr = 100, 
+test9 <- calc_aki_stage(method = 'prifle',
+                        egfr = 60,
+                        baseline_egfr = 100,
                         override_prifle_baseline = TRUE)
-test10 <- calc_aki_stage(method = 'prifle', 
-                        egfr = 60, 
-                        baseline_egfr = 100, 
+test10 <- calc_aki_stage(method = 'prifle',
+                        egfr = 60,
+                        baseline_egfr = 100,
                         override_prifle_baseline = FALSE)
 
-assert(test3$stage == 2)
+assert(test3$stage == 1)
 assert(is.na(test4$stage))
 assert(test5$stage == "F")
 assert(test6$stage == "I")
