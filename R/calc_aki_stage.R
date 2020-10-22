@@ -148,7 +148,7 @@ calc_aki_stage <- function (
   if(tolower(method) == "kdigo") {
     dat$stage[dat$scr / baseline_scr >= 1.5 | dat$baseline_scr_diff >= 0.3] <- 1
     dat$stage[dat$scr / baseline_scr >= 2 ] <- 2
-    dat$stage[dat$scr / baseline_scr >= 3 | dat$baseline_scr_diff >= 4 | (dat$egfr < 35 & age < 18)] <- 3
+    dat$stage[dat$scr / baseline_scr >= 3 | dat$scr >= 4 | (dat$egfr < 35 & age < 18)] <- 3
   }
 
   ## get max class, convert to character class:
