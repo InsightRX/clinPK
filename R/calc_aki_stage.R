@@ -111,6 +111,7 @@ calc_aki_stage <- function (
       method = egfr_method,
       age = age,
       verbose = verbose,
+      relative = TRUE,
       ...
     )$value
     }
