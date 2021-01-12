@@ -90,6 +90,7 @@ nca <- function (
     if(class(weights) == "function") { # transform f(y) to vector of weights
       weights <- do.call("weights", args = list(data_fit$dv))
     }
+    last_n <- NULL
     if(!is.null(fit_samples)) {
       data_fit <- data_fit[fit_samples,]
     } else {
@@ -183,7 +184,8 @@ nca <- function (
       out$descriptive$auc_24 <- auc_tau * (24/tau) * scale$auc
       out$descriptive$auc_tau <- auc_tau * scale$auc
       out$descriptive$auc_t <- auc_t * scale$auc
-      out$settings <- list(dose = dose, interval = tau)
+      out$settings <- list(dose = dose, interval = tau,
+                           last_n = last_n, weights = weights)
     }
     return(out)
   }
