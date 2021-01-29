@@ -125,13 +125,9 @@ nca <- function (
     } else {
       auc_pre <- 0
     }
-    do_trapezoid <- function(data) {
-      data <- data[!duplicated(data$time),]
-      sum(diff(data$time) * (diff(data$dv)) / log(data$dv[2:length(data$dv)] / data$dv[1:(length(data$dv)-1)]))
-    }
     if (length(pre[,1])>0 & length(trap[,1]) >= 2) {
       if (method == "log_linear") {
-        auc_post <- do_trapezoid(trap)
+        auc_post <- nca_trapezoid(trap)
       } else {
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
@@ -163,10 +159,10 @@ nca <- function (
             )
             trap_tau <- trap_tau[order(trap_tau$time), ]
             trap_t <- trap_t[order(trap_t$time), ]
-            auc_tau <- auc_pre + do_trapezoid(trap_tau)
-            auc_t   <- auc_pre + do_trapezoid(trap_t) # also recalculate auc_t
+            auc_tau <- auc_pre + nca_trapezoid(trap_tau)
+            auc_t   <- auc_pre + nca_trapezoid(trap_t) # also recalculate auc_t
         } else {
-            auc_tau <- auc_pre + do_trapezoid(trap)
+            auc_tau <- auc_pre + nca_trapezoid(trap)
         }
       } else {
         auc_tau <- auc_t
@@ -187,6 +183,7 @@ nca <- function (
       out$settings <- list(dose = dose, interval = tau,
                            last_n = last_n, weights = weights)
     }
+    class(out) <- c("nca_output", "list")
     return(out)
   }
 }

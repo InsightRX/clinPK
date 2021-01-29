@@ -31,3 +31,9 @@ assert("NCA estimates are correct (AUCt)", round(t2$descriptive$auc_t) == 8245)
 assert("NCA estimates are correct (css_t)", round(t2$descriptive$cav_t) == 1031)
 assert("NCA estimates are correct (css_tau)", round(t2$descriptive$cav_tau) == 782)
 
+## NCA with same DV at 2 different timepoints:
+dat1 <- data.frame(time = c(0, 0.5, 1, 2, 4), dv = c(0, 10, 5, 5, 1))
+dat2 <- data.frame(time = c(0, 0.5, 1, 2, 4), dv = c(0, 10, 5.001, 5, 1))
+res1 <- nca(dat1, t_inf = 0.5)
+res2 <- nca(dat2, t_inf = 0.5)
+assert("output nearly similar to case in limit", (abs(res1$descriptive$auc_24 - res2$descriptive$auc_24)/ res1$descriptive$auc_24) < 0.0001)

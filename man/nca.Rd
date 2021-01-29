@@ -33,9 +33,12 @@ nca(
 
 \item{t_inf}{infusion time, defaults to 0}
 
-\item{fit_samples}{vector of sample indexes used in fit to calculate elimination rate, e.g. `c(3,4,5)`}
+\item{fit_samples}{vector of sample indexes used in fit to calculate elimination
+rate, e.g. `c(3,4,5)`. If not specified (default), it will evaluate which of the last n
+samples shows the largest adjusted R^2 when log-transformed data is fitted using linear
+regression, and use those samples in the estimation of the elimination rate.}
 
-\item{weights}{vector of weights to be used in fit. Needs to be same size as data used in fit.}
+\item{weights}{vector of weights to be used in linear regression (same size as specified concentration data), or function with concentration as argument.}
 
 \item{extend}{perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.}
 
