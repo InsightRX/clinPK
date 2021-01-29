@@ -11,7 +11,7 @@ res1 <- clinPK:::nca_trapezoid(dat1)
 res2 <- clinPK:::nca_trapezoid(dat2)
 
 ## test regular case
-assert("Correct AUC", round(res0,4) == 15.8350)
+assert("Correct AUC", round(res0,4) == 17.7838)
 
 ## test case with same DV on two different timepoints
 assert("output nearly similar to case in limit", (abs(res1 - res2)/ res1) < 0.0001)
