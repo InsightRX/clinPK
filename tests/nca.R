@@ -32,8 +32,15 @@ assert("NCA estimates are correct (css_t)", round(t2$descriptive$cav_t) == 1031)
 assert("NCA estimates are correct (css_tau)", round(t2$descriptive$cav_tau) == 782)
 
 ## NCA with same DV at 2 different timepoints:
-dat1 <- data.frame(time = c(0, 0.5, 1, 2, 4), dv = c(0, 10, 5, 5, 1))
-dat2 <- data.frame(time = c(0, 0.5, 1, 2, 4), dv = c(0, 10, 5.001, 5, 1))
+dat1 <- data.frame(time = c(0, 0.5, 1, 2.5, 4), dv = c(0, 10, 5, 5, 1))
+dat2 <- data.frame(time = c(0, 0.5, 1, 2.5, 4), dv = c(0, 10, 5.001, 5, 1))
 res1 <- nca(dat1, t_inf = 0.5)
 res2 <- nca(dat2, t_inf = 0.5)
 assert("output nearly similar to case in limit", (abs(res1$descriptive$auc_24 - res2$descriptive$auc_24)/ res1$descriptive$auc_24) < 0.0001)
+
+## NCA with same DV at 3 different timepoints:
+dat3 <- data.frame(time = c(0, 0.5, 1, 2.5, 4, 8), dv = c(0, 10, 5, 5, 5, 1))
+dat4 <- data.frame(time = c(0, 0.5, 1, 2.5, 4, 8), dv = c(0, 10, 5.001, 5, 4.999, 1))
+res3 <- nca(dat3, t_inf = 0.5)
+res4 <- nca(dat4, t_inf = 0.5)
+assert("output nearly similar to case in limit", (abs(res3$descriptive$auc_24 - res4$descriptive$auc_24)/ res3$descriptive$auc_24) < 0.0001)

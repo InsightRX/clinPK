@@ -8,7 +8,8 @@ nca_trapezoid <- function(data) {
   denom <- log(data$dv[2:length(data$dv)] / data$dv[1:(length(data$dv)-1)])
   if(any(denom == 0)) {
     idx <- denom != 0
-    sum(enum[idx] / denom[idx]) + data$dv[!idx]
+    data$dt <- c(diff(data$time), 0)
+    sum(enum[idx] / denom[idx]) + sum(data$dv[!idx] * data$dt[!idx])
   } else {
     sum(enum / denom)
   }
