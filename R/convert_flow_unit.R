@@ -1,23 +1,49 @@
 #' Convert flow (e.g. clearance) from / to units
 #'
-#' @param value dose
-#' @param from from dose unit
-#' @param to from dose unit
-#' @param weight for allowing per kg conversion
+#' @param value flow value
+#' @param from from flow unit, e.g. `L/hr`
+#' @param to to flow unit, e.g. `mL/min`
+#' @param weight for performing per weight (kg) conversion
+#' 
+#' @examples 
+#' 
+#' ## single values
+#' convert_flow_unit(60, "L/hr", "ml/min")
+#' convert_flow_unit(1, "L/hr/kg", "ml/min", weight = 80)
+#' 
+#' ## vectorized
+#' convert_flow_unit(
+#'   c(10, 20, 30), 
+#'   from = c("L/hr", "mL/min", "L/hr"), 
+#'   to = c("ml/min/kg", "L/hr", "L/hr/kg"), 
+#'   weight = c(70, 80, 90))
+#'   
+#' @export
 convert_flow_unit <- function(
   value = NULL,
   from = "l",
   to = "ml",
   weight = NULL) {
-  
-  from <- irxtools::str_replace_all(tolower(from), "/", "_")
-  to <- irxtools::str_replace_all(tolower(to), "/", "_")
-  
-  find_factor <- function(full_unit, units = NULL, prefix = "^") {
-    units[[names(units)[unlist(lapply(names(units), function(x) { length(grep(paste0(prefix, x), full_unit, value=F))>0 }))]]]
+
+  ## Input checks:
+  if(is.null(from)) {
+    stop("`from` argument not specified.")
   }
-  
-  ## catch volume units
+  if(is.null(to)) {
+    stop("`to` argument not specified.")
+  }
+  if(length(from) != 1 && length(from) != length(value)) {
+    stop("`from` argument should be either a single value or a vector of the same length as the `value` argument.")
+  }
+  if(length(to) != 1 && length(to) != length(value)) {
+    stop("`to` argument should be either a single value or a vector of the same length as the `value` argument.")
+  }
+
+  ## Clean up the from/to units:
+  from <- gsub("\\/", "_", tolower(from))
+  to <- gsub("\\/", "_", tolower(to))
+
+  ## Definition of the units:  
   volume_units <- list(
     "ml" = 1/1000,
     "dl" = 1/10,
@@ -27,21 +53,53 @@ convert_flow_unit <- function(
     "hr" = 1,
     "day" = 24)
   
-  from_volume_factor <- find_factor(from, units = volume_units, "^")
-  to_volume_factor <- find_factor(to, units = volume_units, "^")
+  ## Calculate volume conversion factors
+  tryCatch({ 
+    from_volume_factor <- as.numeric(vapply(from, FUN = function(x) {
+      find_factor(x, units = volume_units, "^") # volume is always at the start, hence ^
+    }, 1))
+  }, error = function(e) { stop("Volume unit not recognized in `from` argument.") })
   
-  from_time_factor <- 1/find_factor(from, units = time_units, "_")
-  to_time_factor <- 1/find_factor(to, units = time_units, "_")
+  tryCatch({ 
+    to_volume_factor <- as.numeric(vapply(to, FUN = function(x) {
+      find_factor(x, units = volume_units, "^") # volume is always at the start, hence ^
+    }, 1))
+  }, error = function(e) { stop("Volume unit not recognized in `to` argument.") })
+
+  ## Calculate per time conversion factors
+  tryCatch({ 
+    from_time_factor <- 1/as.numeric(vapply(from, FUN = function(x) {
+      find_factor(x, units = time_units, "_") # time is never at the start, always after "/" or "_"
+    }, 1))
+  }, error = function(e) { stop("Time unit not recognized in `from` argument.") })
   
-  from_weight <- length(grep("_kg", from, value=F))>0
-  to_weight <- length(grep("_kg", to, value = F))>0
-  if((from_weight || to_weight) && insightrxr:::is.nil(weight)) {
-    stop("Weight required for weight-based conversion of flow rates.")
+  tryCatch({ 
+    to_time_factor <- 1/as.numeric(vapply(to, FUN = function(x) {
+      find_factor(x, units = time_units, "_") # time is never at the start, always after "/" or "_"
+    }, 1))
+  }, error = function(e) { stop("Time unit not recognized in `to` argument.") })
+  
+  ## Calculate weight conversion factors
+  from_weight <- as.logical(vapply(from, function(x) { length(grep("_kg", x, value=F))>0 }, TRUE))
+  to_weight <- as.logical(vapply(to, function(x) { length(grep("_kg", x, value=F))>0 }, TRUE))
+  if((any(from_weight) || any(to_weight))) {
+    if(is.null(weight)) stop("Weight required for weight-based conversion of flow rates.")
+    if(length(weight) != 1 && length(weight) != length(value)) {
+      stop("`weight` argument should be either a single value or a vector of the same length as the `value` argument.")
+    }
   }
   
-  from_weight_factor <- ifelse(from_weight, 1/weight, 1)
-  to_weight_factor <- ifelse(to_weight, 1/weight, 1)
+  from_weight_factor <- ifelse(from_weight, weight, 1)
+  to_weight_factor <- ifelse(to_weight, weight, 1)
+
+  ## Combine factors and return  
+  value * 
+    (from_volume_factor * from_weight_factor * from_time_factor) /
+    (to_volume_factor * to_time_factor * to_weight_factor)
   
-  (value * from_volume_factor * from_weight_factor * from_time_factor) / (to_volume_factor * to_time_factor * to_weight_factor)
-  
+}
+
+#' Helper function to grab the conversion factor from an input unit and given list
+find_factor <- function(full_unit, units = NULL, prefix = "^") {
+  units[[names(units)[unlist(lapply(names(units), function(x) { length(grep(paste0(prefix, x), full_unit, value=F))>0 }))]]]
 }

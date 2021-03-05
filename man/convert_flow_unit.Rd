@@ -7,14 +7,28 @@
 convert_flow_unit(value = NULL, from = "l", to = "ml", weight = NULL)
 }
 \arguments{
-\item{value}{dose}
+\item{value}{flow value}
 
-\item{from}{from dose unit}
+\item{from}{from flow unit, e.g. `L/hr`}
 
-\item{to}{from dose unit}
+\item{to}{to flow unit, e.g. `mL/min`}
 
-\item{weight}{for allowing per kg conversion}
+\item{weight}{for performing per weight (kg) conversion}
 }
 \description{
 Convert flow (e.g. clearance) from / to units
+}
+\examples{
+
+## single values
+convert_flow_unit(60, "L/hr", "ml/min")
+convert_flow_unit(1, "L/hr/kg", "ml/min", weight = 80)
+
+## vectorized
+convert_flow_unit(
+  c(10, 20, 30), 
+  from = c("L/hr", "mL/min", "L/hr"), 
+  to = c("ml/min/kg", "L/hr", "L/hr/kg"), 
+  weight = c(70, 80, 90))
+  
 }
