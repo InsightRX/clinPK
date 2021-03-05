@@ -9,14 +9,23 @@ convert_flow_unit(value = NULL, from = "l", to = "ml", weight = NULL)
 \arguments{
 \item{value}{flow value}
 
-\item{from}{from flow unit, e.g. `L/hr`}
+\item{from}{from flow unit, e.g. `L/hr`.}
 
 \item{to}{to flow unit, e.g. `mL/min`}
 
 \item{weight}{for performing per weight (kg) conversion}
 }
 \description{
-Convert flow (e.g. clearance) from / to units
+Flow units are expected to be specified as a combination
+of volume per time units, potentially specified per kg
+body weight, e.g. "mL/min", or "L/hr/kg".
+}
+\details{
+Accepted volume units are "L", "dL", and "mL".
+Accepted time units are "min", "hr", and "day". 
+The only accepted weight unit is "kg".
+
+The function is not case-sensitive.
 }
 \examples{
 

@@ -1,7 +1,17 @@
 #' Convert flow (e.g. clearance) from / to units
-#'
+#' 
+#' Flow units are expected to be specified as a combination
+#' of volume per time units, potentially specified per kg
+#' body weight, e.g. "mL/min", or "L/hr/kg".
+#' 
+#' Accepted volume units are "L", "dL", and "mL".
+#' Accepted time units are "min", "hr", and "day". 
+#' The only accepted weight unit is "kg".
+#' 
+#' The function is not case-sensitive.
+#' 
 #' @param value flow value
-#' @param from from flow unit, e.g. `L/hr`
+#' @param from from flow unit, e.g. `L/hr`. 
 #' @param to to flow unit, e.g. `mL/min`
 #' @param weight for performing per weight (kg) conversion
 #' 
@@ -100,6 +110,10 @@ convert_flow_unit <- function(
 }
 
 #' Helper function to grab the conversion factor from an input unit and given list
+#' 
+#' @param full_unit full unit, e.g. "mL/min/kg"
+#' @param units unit specification list, e.g. `list("ml" = 1/1000, "dl" = 1/10, "l" = 1)`
+#' @param prefix prefix used in matching units, e.g. "^" only matches at start of string while "_" matches units specified as "/"
 find_factor <- function(full_unit, units = NULL, prefix = "^") {
-  units[[names(units)[unlist(lapply(names(units), function(x) { length(grep(paste0(prefix, x), full_unit, value=F))>0 }))]]]
+  unlist(units[vapply(names(units), function(x) { grepl(paste0(prefix, x), full_unit) }, FUN.VALUE = logical(1))], use.names = FALSE)  
 }
