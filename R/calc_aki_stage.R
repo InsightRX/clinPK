@@ -79,6 +79,9 @@ calc_aki_stage <- function (
   }
 
   scr <- remove_lt_gt(scr)   # handle case where scr is "<0.2"
+  if (inherits(scr, "character")) {
+    stop("Could not coerce SCr values to numeric")
+  }
   if(is.null(baseline_scr)) {
     if(tolower(method) %in% c("kdigo", "rifle")) { # scr not needed for pRIFLE
       stop("Need baseline scr value or method.")

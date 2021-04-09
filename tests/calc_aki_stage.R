@@ -129,3 +129,17 @@ assert(
   "Characters in scr are converted to numeric",
   all.equal(test_char_scr$data$scr, c(0.2, 1.5))
 )
+
+assert(
+  "calc_aki_stage errors if can't coerce scr to numeric",
+  has_error(
+    calc_aki_stage(
+      method = "kDIGO",
+      scr = c("a#$%#0.2", "1.5"),
+      t = c(0, 24),
+      egfr = c(50, 30),
+      baseline_scr = 0.3
+    ),
+    silent = TRUE
+  )
+)
