@@ -3,7 +3,9 @@
 #' Calculate AKI class based on serum creatinine values over time, using various
 #' methods for children (pRIFLE) and adults (RIFLE, kDIGO)
 #'
-#' @param scr serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.
+#' @param scr serum creatinine in mg/dL. Use `convert_creat()` to convert from
+#'   mmol/L. Values below the detection limit ("<0.2") will be converted to
+#'   numeric (0.2)
 #' @param times creatinine sample times in hours
 #' @param method classification method, one of `KDIGO`,  `RIFLE`, `pRIFLE`
 #' @param baseline_scr baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.
@@ -76,7 +78,10 @@ calc_aki_stage <- function (
     if(length(egfr) != length(scr) & !(tolower(method) =='prifle')) stop("Serum creatinine values and vector of eGFR values should have same length.")
   }
 
-
+  scr <- remove_lt_gt(scr)   # handle case where scr is "<0.2"
+  if (inherits(scr, "character")) {
+    stop("Could not coerce SCr values to numeric")
+  }
   if(is.null(baseline_scr)) {
     if(tolower(method) %in% c("kdigo", "rifle")) { # scr not needed for pRIFLE
       stop("Need baseline scr value or method.")

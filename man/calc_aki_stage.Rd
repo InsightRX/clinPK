@@ -22,7 +22,9 @@ calc_aki_stage(
 )
 }
 \arguments{
-\item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from mmol/L.}
+\item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from
+mmol/L. Values below the detection limit ("<0.2") will be converted to
+numeric (0.2)}
 
 \item{times}{creatinine sample times in hours}
 
