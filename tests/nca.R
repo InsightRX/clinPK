@@ -22,6 +22,10 @@ assert("NCA estimates half life different", round(t1b$pk$t_12,2) == 4.03)
 t1c <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = TRUE )
 assert("Uses last 5 samples", t1c$settings$last_n == 5)
 
+## NCA with fit_samples argument supplied
+t1d <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = TRUE, fit_samples = c(2:5))
+assert("Uses 4 samples", t1d$settings$last_n == 4)
+
 ## NCA with missing data
 data <- data.frame(cbind(time = c(0, 1, 2, 4, 6, 8),
                          dv   = c(300, 1400, NA, 900, NA, 400)))
