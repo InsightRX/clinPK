@@ -7,7 +7,7 @@
 calc_aki_stage(
   scr = NULL,
   times = NULL,
-  method = "kDIGO",
+  method = "kdigo",
   baseline_scr = "median",
   baseline_egfr = 120,
   age = NULL,
