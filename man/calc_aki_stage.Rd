@@ -28,7 +28,7 @@ numeric (0.2)}
 
 \item{times}{creatinine sample times in hours}
 
-\item{method}{classification method, one of `KDIGO`,  `RIFLE`, `pRIFLE`}
+\item{method}{classification method, one of `KDIGO`, `RIFLE`, `pRIFLE` (case insensitive)}
 
 \item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.}
 
