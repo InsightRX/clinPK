@@ -90,9 +90,10 @@ nca <- function (
     if(class(weights) == "function") { # transform f(y) to vector of weights
       weights <- do.call("weights", args = list(data_fit$dv))
     }
-    last_n <- NULL
+    
     if(!is.null(fit_samples)) {
       data_fit <- data_fit[fit_samples,]
+      last_n <- nrow(data_fit)
     } else {
       if(has_baseline) {
         data_fit <- data_fit[-1,]
