@@ -20,7 +20,8 @@
             git clone git@github.com:InsightRX/json2test.git
             cd json2test
             chmod +x slack_notification.sh
-            sudo Rscript -e "install.packages('testthat', lib='/usr/lib/R/site-library', repos='https://cran.rstudio.com')"
+            sudo Rscript -e "if(require('testit', character.only = TRUE)) remove.packages('testit'); install.packages('testit', lib='/usr/lib/R/site-library', repos='http://cran.us.r-project.org', dependencies = TRUE)"
+            sudo Rscript -e "install.packages(c('tibble', 'dplyr', 'testthat'), lib='/usr/lib/R/site-library', repos='https://cran.rstudio.com')"
             R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
             ./slack_notification.sh
             exit 1
