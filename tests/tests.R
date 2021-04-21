@@ -1,28 +1,6 @@
 library(clinPK)
 library(testit)
 
-## NCA
-data <- data.frame(cbind(time = c(0, 1, 2, 4, 6, 8),
-                         dv   = c(300, 1400, 1150, 900, 700, 400)))
-t1 <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = FALSE)
-assert("NCA estimates are correct (AUCinf)", round(t1$descriptive$auc_inf) == 8005)
-assert("NCA estimates are correct (AUCtau)", round(t1$descriptive$auc_tau) == 6824)
-assert("NCA estimates are correct (AUCt)", round(t1$descriptive$auc_t) == 6824)
-assert("NCA estimates are correct (css_t)", round(t1$descriptive$cav_t) == 853)
-assert("NCA estimates are correct (css_tau)", round(t1$descriptive$cav_tau) == 569)
-
-t1a <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = TRUE)
-assert("NCA estimates are correct (AUCinf)", round(t1a$descriptive$auc_tau) == 8714)
-
-## NCA with missing data
-data <- data.frame(cbind(time = c(0, 1, 2, 4, 6, 8),
-                         dv   = c(300, 1400, NA, 900, NA, 400)))
-t2 <- nca(data, has_baseline = TRUE, tau = 12, extend = TRUE, t_inf = 0)
-assert("NCA estimates are correct (AUCinf)", round(t2$descriptive$auc_inf) == 10464)
-assert("NCA estimates are correct (AUCt)", round(t2$descriptive$auc_t) == 8245)
-assert("NCA estimates are correct (css_t)", round(t2$descriptive$cav_t) == 1031)
-assert("NCA estimates are correct (css_tau)", round(t2$descriptive$cav_tau) == 782)
-
 ## BSA
 assert("BSA",
        round(calc_bsa(80, 180)$value,2) == 2.00)
