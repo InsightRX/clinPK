@@ -5,11 +5,11 @@ library(testit)
 assert(
   "missing sex or missing age throws error", {
   has_error(
-    pct_for_age_generic(age = 17, value = 167),
+    clinPK:::pct_for_age_generic(age = 17, value = 167),
     silent = TRUE
   )
   has_error(
-    pct_for_age_generic(sex = "female", value = 167),
+    clinPK:::pct_for_age_generic(sex = "female", value = 167),
     silent = TRUE
   )
 })
@@ -17,7 +17,7 @@ assert(
 assert(
   "Age out of bounds returns NULL", {
     is.null(
-      pct_for_age_generic(
+      clinPK:::pct_for_age_generic(
         age = 21, 
         sex = "female", 
         value = 167, 
@@ -25,7 +25,7 @@ assert(
       )
     )
     is.null(
-      pct_for_age_generic(
+      clinPK:::pct_for_age_generic(
         age = 21, 
         sex = "female", 
         value = 167, 
@@ -36,13 +36,13 @@ assert(
 
 assert(
   "Correct percentiles: height", {
-  pct1 <- pct_for_age_generic(
+  pct1 <- clinPK:::pct_for_age_generic(
     age = 4, 
     sex = "female", 
     value = 100, 
     variable = "height"
   )
-  pct2 <- pct_for_age_generic(
+  pct2 <- clinPK:::pct_for_age_generic(
     age = 6, 
     sex = "male", 
     value = 120, 
@@ -54,13 +54,13 @@ assert(
 
 assert(
   "Correct percentiles: weight", {
-    pct1 <- pct_for_age_generic(
+    pct1 <- clinPK:::pct_for_age_generic(
       age = 4, 
       sex = "female", 
       value = 15, 
       variable = "weight"
     )
-    pct2 <- pct_for_age_generic(
+    pct2 <- clinPK:::pct_for_age_generic(
       age = 6, 
       sex = "male", 
       value = 25, 
@@ -71,32 +71,32 @@ assert(
 })
 
 assert(
-  "Correct percentiles: weight", {
-    pct1 <- pct_for_age_generic(
+  "Correct percentiles: bmi", {
+    pct1 <- clinPK:::pct_for_age_generic(
       age = 4, 
       sex = "male", 
       value = 17, 
       variable = "bmi"
     )
-    pct2 <- pct_for_age_generic(
+    pct2 <- clinPK:::pct_for_age_generic(
       age = 6, 
       sex = "female", 
       value = 17, 
       variable = "bmi"
     )
     pct1$percentile == 88.9
-    pct2$percentile == 83.9
+    pct2$percentile == 83.8
 })
 
 assert(
   "extreme percentiles capped to min and max", {
-    pct1 <- pct_for_age_generic(
+    pct1 <- clinPK:::pct_for_age_generic(
       age = 4, 
       sex = "male", 
       value = 1, 
       variable = "weight"
     )
-    pct2 <- pct_for_age_generic(
+    pct2 <- clinPK:::pct_for_age_generic(
       age = 4, 
       sex = "male", 
       value = 100, 
