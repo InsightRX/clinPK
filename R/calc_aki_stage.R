@@ -148,7 +148,8 @@ calc_aki_stage <- function (
       if(method == "rifle") dat$stage[dat$baseline_scr_reldiff > 2.0] <- 2
       dat$stage[dat$baseline_egfr_reldiff < -0.75 | dat$egfr < 35] <- 3
       if(method == "rifle") dat$stage[dat$baseline_scr_reldiff > 3.0] <- 3
-      if(method == "rifle") dat$stage[dat$scr > 4.0 && max(diff(dat$scr) > 0.5)] <- 3
+      if(method == "rifle") dat$stage[dat$scr >= 4.0] <- 3
+      if(method == "rifle") dat$stage[dat$baseline_scr_diff >= 0.5] <- 3
   }
 
   if(method == "kdigo") {
