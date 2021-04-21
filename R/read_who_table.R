@@ -11,7 +11,8 @@ read_who_table <- function(
   age = NULL,
   type = "wfa",
   who_url = "http://www.who.int/entity/childgrowth/standards",
-  download = FALSE) {
+  download = FALSE
+) {
   if(is.null(age)) {
     stop("Age required!")
   }
