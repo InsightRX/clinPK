@@ -66,3 +66,4 @@ tmp2 <- calc_egfr(age = 40, sex="male", weight = 80, scr = 3,
 assert("cap info added: cap", tmp2$capped$min_value == 50)
 assert("cap info added: no max cap", is.null(tmp2$capped$max_value))
 assert("cap info added: n caps applied", tmp2$capped$min_n == 1)
+

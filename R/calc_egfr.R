@@ -79,11 +79,6 @@ calc_egfr <- function (
   ...
 ){
 
-  # Extract required covariates and tidied method name
-  # --------------------------------------------------
-  cov_reqs <- egfr_cov_reqs(method)
-  method <- names(cov_reqs)
-  cov_reqs <- cov_reqs[[1]]
 
   # Format output units
   # ---- Relative eGFR?
@@ -93,11 +88,12 @@ calc_egfr <- function (
     # do not require bsa to convert.
     relative <- ifelse(grepl('cockcroft_gault', method), FALSE, TRUE)
   }
-  if (!relative & !grepl('cockcroft_gault', method)) {
-    cov_reqs <- unique(c('bsa', cov_reqs))
-  } else if (relative & grepl('cockcroft_gault', method)) {
-    cov_reqs <- unique(c('bsa', cov_reqs))
-  }
+  
+  # Extract required covariates and tidied method name
+  # --------------------------------------------------
+  cov_reqs <- egfr_cov_reqs(method, relative)
+  method <- names(cov_reqs)
+  cov_reqs <- cov_reqs[[1]]
 
   # Convert units, tidy covariates, calculate intermediates if required
   # -------------------------------------------------------------------

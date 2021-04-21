@@ -11,6 +11,7 @@ pk_1cmt_inf_dose_for_range(
   parameters = list(),
   interval = 24,
   t_inf = 1,
+  optimize_interval = TRUE,
   round_interval = TRUE
 )
 }
@@ -26,6 +27,8 @@ pk_1cmt_inf_dose_for_range(
 \item{interval}{dosing interval}
 
 \item{t_inf}{infusion time}
+
+\item{optimize_interval}{find optimal interval (to stay within `conc_range`?}
 
 \item{round_interval}{round interval to nearest nominal interval?}
 }
