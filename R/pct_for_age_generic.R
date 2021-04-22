@@ -9,36 +9,28 @@
 #' @param variable weight or height?
 #' @param ... parameters passed to `read_who_table()`
 pct_for_age_generic <- function(age = NULL, value = NULL, sex = NULL, variable="weight", ...) {
-  if(is.null(age) || is.null(sex)) {
+  if (is.null(age) || is.null(sex)) {
     stop("Age and sex are required!")
   }
-  if(variable == "height") {
-    if(age > 19) {
-      message("Sorry, height data currently only available for age <= 19 years.")
-      return(NULL)
-    }
+  if (variable == "height" & age > 19) {
+    message("Sorry, height data currently only available for age <= 19 years.")
+    return(NULL)
   }
-  if(variable == "weight") {
-    if(age > 10) {
-      message("Sorry, currently only available for age <= 10 years.")
-      return(NULL)
-    }
+  if (variable == "weight" & age > 10) {
+    message("Sorry, currently only available for age <= 10 years.")
+    return(NULL)
   }
-  type <- "wfa"
-  if(variable == "height") {
-    type = "lhfa"
-    if(age >= 5.1) {
-      type = "hfa" # naming inconsistyency from WHO
-    }
+  
+  if (variable == "height") {
+    type = ifelse(age >= 5.1, "hfa", "lhfa")
+  } else if (variable == "bmi") {
+    type = ifelse(age >= 5.1, "bmi", "bfa")
+  } else {
+    type <- "wfa"
   }
-  if(variable == "bmi") {
-    type <- "bfa"
-    if(age >= 5.1) {
-      type <- "bmi"
-    }
-  }
+  
   dat <- read_who_table(sex=sex, age=age, type=type, download=FALSE)
-  tmp <- dat[order(abs(age - dat[,1])),][1,-(1:4)]
+  tmp <- dat[which.min(abs(age - dat$age)),-(1:4)]
   pct <- as.list(tmp)
   if(!is.null(value)) {
     p <- c()
