@@ -141,18 +141,18 @@ calc_aki_stage <- function (
   dat$baseline_egfr_diff <- (dat$egfr - baseline_egfr)
   dat$baseline_egfr_reldiff <- dat$baseline_egfr_diff / baseline_egfr
 
-  if(method %in% c("rifle", "prifle")) {
+  if(method == "prifle") {
       dat$stage[dat$baseline_egfr_reldiff < -0.25] <- 1
-      if(method == "rifle") dat$stage[dat$baseline_scr_reldiff > 1.5] <- 1
       dat$stage[dat$baseline_egfr_reldiff < -0.5] <- 2
-      if(method == "rifle") dat$stage[dat$baseline_scr_reldiff > 2.0] <- 2
       dat$stage[dat$baseline_egfr_reldiff < -0.75 | dat$egfr < 35] <- 3
-      if(method == "rifle") dat$stage[dat$baseline_scr_reldiff > 3.0] <- 3
-      if(method == "rifle") dat$stage[dat$scr >= 4.0] <- 3
-      if(method == "rifle") dat$stage[dat$baseline_scr_diff >= 0.5] <- 3
-  }
-
-  if(method == "kdigo") {
+  
+  } else if (method == "rifle") {
+    dat$stage[dat$baseline_egfr_reldiff < -0.25 | dat$baseline_scr_reldiff >= 1.5] <- 1
+    dat$stage[dat$baseline_egfr_reldiff < -0.50 | dat$baseline_scr_reldiff >= 2.0] <- 2
+    dat$stage[dat$baseline_egfr_reldiff < -0.75 | dat$baseline_scr_reldiff >= 3.0] <- 3
+    dat$stage[dat$baseline_scr_diff >= 0.5 | dat$scr >= 4.0] <- 3
+    
+  } else if (method == "kdigo") {
     dat$stage[dat$baseline_scr_reldiff > 1.5 | dat$baseline_scr_diff > 0.3] <- 1
     dat$stage[dat$baseline_scr_reldiff > 2.0 | dat$baseline_scr_diff > 0.5] <- 2
     dat$stage[dat$baseline_scr_reldiff > 3.0 | dat$scr >= 4.0 | (dat$egfr < 35 & age < 18)] <- 3
