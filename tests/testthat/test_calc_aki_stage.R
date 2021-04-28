@@ -4,32 +4,37 @@ test_that("AKI stage is calculated correctly", {
     t = c(0),
     egfr = 30,
     age = 15,
-    verbose = F
+    verbose = FALSE
   )
   test1 <- calc_aki_stage(
     scr = c(0.7, 0.8, 1.2, 1.6, 1),
     t = c(0, 24, 36, 48, 72),
     egfr = c(60, 40, 30, 36, 50),
-    method = "KDIGO"
+    method = "KDIGO",
+    verbose = FALSE
   )
   test2 <- calc_aki_stage(
     scr = c(0.5, 0.7, 1.2, 1.6, 1.3),
     t = c(0, 24, 36, 48, 72),
     egfr = c(60, 40, 30, 36, 50),
-    age = 17
+    age = 17,
+    verbose = FALSE
   )
   test2a <- calc_aki_stage(
     scr = c(0.5, 0.7, 1.2, 1.6, 1.3),
     t = c(0, 24, 36, 48, 72),
     egfr = c(60, 40, 30, 36, 50),
-    age = 21
+    age = 21,
+    verbose = FALSE
   )
   test2b <- calc_aki_stage(
     scr = c(0.5, 0.7, 1.2, 1.6, 1.3),
     t = c(0, 24, 36, 48, 72),
     egfr = c(60, 40, 30, 36, 50),
     age = 21,
-    return_obj = FALSE, force_numeric = TRUE
+    return_obj = FALSE,
+    force_numeric = TRUE,
+    verbose = FALSE
   )
   expect_true(test0$stage == "stage 3")
   expect_true(test1$stage == "stage 2")
@@ -50,7 +55,8 @@ test_that("AKI stage is calculated correctly with other methods", {
     weight = 80,
     height = 180,
     method = "KDIGO",
-    force_numeric = TRUE
+    force_numeric = TRUE,
+    verbose = FALSE
   )
   test4 <- calc_aki_stage(
     scr = c(.6, .7, .9, .7),
@@ -60,7 +66,8 @@ test_that("AKI stage is calculated correctly with other methods", {
     weight = 80,
     height = 180,
     method = "KDIGO",
-    force_numeric = TRUE
+    force_numeric = TRUE,
+    verbose = FALSE
   )
   test5 <- calc_aki_stage(
     scr = c(.6, .7, .9, 1.5),
@@ -70,7 +77,8 @@ test_that("AKI stage is calculated correctly with other methods", {
     age = 5,
     weight = 25,
     height = 120,
-    egfr_method = "bedside_schwartz"
+    egfr_method = "bedside_schwartz",
+    verbose = FALSE
   )
   test6 <- calc_aki_stage(
     scr = c(.6, .7, .9, 1.3),
@@ -81,7 +89,8 @@ test_that("AKI stage is calculated correctly with other methods", {
     age = 5,
     weight = 25,
     height = 120,
-    egfr_method = "bedside_schwartz"
+    egfr_method = "bedside_schwartz",
+    verbose = FALSE
   )
   test7 <- calc_aki_stage(
     scr = c(1, 1, 1, 1),
@@ -91,22 +100,30 @@ test_that("AKI stage is calculated correctly with other methods", {
     age = 50,
     weight = 75,
     height = 180,
-    egfr_method = "cockcroft_gault"
+    egfr_method = "cockcroft_gault",
+    verbose = FALSE
   )
 
   test8 <- calc_aki_stage(
     method = 'prifle',
-    egfr = c(80, 59)
+    egfr = c(80, 59),
+    verbose = FALSE
   )
 
-  test9 <- calc_aki_stage(method = 'prifle',
-                          egfr = 60,
-                          baseline_egfr = 100,
-                          override_prifle_baseline = TRUE)
-  test10 <- calc_aki_stage(method = 'prifle',
-                           egfr = 60,
-                           baseline_egfr = 100,
-                           override_prifle_baseline = FALSE)
+  test9 <- calc_aki_stage(
+    method = 'prifle',
+    egfr = 60,
+    baseline_egfr = 100,
+    override_prifle_baseline = TRUE,
+    verbose = FALSE
+  )
+  test10 <- calc_aki_stage(
+    method = 'prifle',
+    egfr = 60,
+    baseline_egfr = 100,
+    override_prifle_baseline = FALSE,
+    verbose = FALSE
+  )
 
   expect_true(test3$stage == 2)
   expect_true(is.na(test4$stage))
@@ -124,7 +141,8 @@ test_that("Characters in scr are converted to numeric", {
     scr = c("<0.2", "1.5"),
     t = c(0, 24),
     egfr = c(50, 30),
-    baseline_scr = 0.3
+    baseline_scr = 0.3,
+    verbose = FALSE
   )
   expect_true(all.equal(test_char_scr$data$scr, c(0.2, 1.5)))
 })
@@ -136,7 +154,8 @@ test_that("calc_aki_stage errors if can't coerce scr to numeric", {
       scr = c("a#$%#0.2", "1.5"),
       t = c(0, 24),
       egfr = c(50, 30),
-      baseline_scr = 0.3
+      baseline_scr = 0.3,
+      verbose = FALSE
     )
   )
 })

@@ -61,7 +61,9 @@ test_that("NCA estimates with missing data are correct", {
     time = c(0, 1, 2, 4, 6, 8),
     dv   = c(300, 1400, NA, 900, NA, 400)
   )
-  t2 <- nca(data, has_baseline = TRUE, tau = 12, extend = TRUE, t_inf = 0)
+  t2 <- suppressMessages(
+    nca(data, has_baseline = TRUE, tau = 12, extend = TRUE, t_inf = 0)
+  )
   expect_equal(round(t2$descriptive$auc_inf), 10464)
   expect_equal(round(t2$descriptive$auc_t), 8245)
   expect_equal(round(t2$descriptive$cav_t), 1031)

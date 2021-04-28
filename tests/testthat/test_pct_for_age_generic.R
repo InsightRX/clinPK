@@ -5,19 +5,23 @@ test_that("missing sex or missing age throws error", {
 
 test_that("Age out of bounds returns NULL", {
   expect_null(
-    pct_for_age_generic(
-      age = 21,
-      sex = "female",
-      value = 167,
-      variable = "height"
+    suppressMessages(
+      pct_for_age_generic(
+        age = 21,
+        sex = "female",
+        value = 167,
+        variable = "height"
+      )
     )
   )
   expect_null(
-    pct_for_age_generic(
-      age = 21,
-      sex = "female",
-      value = 167,
-      variable = "weight"
+    suppressMessages(
+      pct_for_age_generic(
+        age = 21,
+        sex = "female",
+        value = 167,
+        variable = "weight"
+      )
     )
   )
 })
@@ -74,17 +78,21 @@ test_that("Correct percentiles: bmi", {
 })
 
 test_that("extreme percentiles capped to min and max", {
-  pct1 <- pct_for_age_generic(
-    age = 4,
-    sex = "male",
-    value = 1,
-    variable = "weight"
+  expect_message(
+    pct1 <- pct_for_age_generic(
+      age = 4,
+      sex = "male",
+      value = 1,
+      variable = "weight"
+    )
   )
-  pct2 <- pct_for_age_generic(
-    age = 4,
-    sex = "male",
-    value = 100,
-    variable = "weight"
+  expect_message(
+    pct2 <- pct_for_age_generic(
+      age = 4,
+      sex = "male",
+      value = 100,
+      variable = "weight"
+    )
   )
   expect_equal(pct1$percentile, 0.1)
   expect_equal(pct2$percentile, 99.9)
