@@ -36,13 +36,13 @@ test_that("AKI stage is calculated correctly", {
     force_numeric = TRUE,
     verbose = FALSE
   )
-  expect_true(test0$stage == "stage 3")
-  expect_true(test1$stage == "stage 2")
-  expect_true(test2$stage == "stage 3")
-  expect_true(test2$time_max_stage == 36)
-  expect_true(test2a$stage == "stage 1")
-  expect_true(test2a$time_max_stage == 48)
-  expect_true(test2b == 1)
+  expect_equal(test0$stage, "stage 3")
+  expect_equal(test1$stage, "stage 2")
+  expect_equal(test2$stage, "stage 3")
+  expect_equal(test2$time_max_stage, 36)
+  expect_equal(test2a$stage, "stage 1")
+  expect_equal(test2a$time_max_stage, 48)
+  expect_equal(test2b, 1)
 })
 
 
@@ -125,14 +125,14 @@ test_that("AKI stage is calculated correctly with other methods", {
     verbose = FALSE
   )
 
-  expect_true(test3$stage == 2)
+  expect_equal(test3$stage, 2)
   expect_true(is.na(test4$stage))
-  expect_true(test5$stage == "F")
-  expect_true(test6$stage == "I")
+  expect_equal(test5$stage, "F")
+  expect_equal(test6$stage, "I")
   expect_true(is.na(test7$stage))
-  expect_true(test8$stage == "I")
-  expect_true(test9$data$baseline_egfr_reldiff == -0.4)
-  expect_true(test10$data$baseline_egfr_reldiff == -0.5)
+  expect_equal(test8$stage, "I")
+  expect_equal(test9$data$baseline_egfr_reldiff, -0.4)
+  expect_equal(test10$data$baseline_egfr_reldiff, -0.5)
 })
 
 test_that("Characters in scr are converted to numeric", {
@@ -144,7 +144,7 @@ test_that("Characters in scr are converted to numeric", {
     baseline_scr = 0.3,
     verbose = FALSE
   )
-  expect_true(all.equal(test_char_scr$data$scr, c(0.2, 1.5)))
+  expect_equal(test_char_scr$data$scr, c(0.2, 1.5))
 })
 
 test_that("calc_aki_stage errors if can't coerce scr to numeric", {
