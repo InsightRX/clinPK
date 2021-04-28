@@ -7,11 +7,11 @@
     stages{
       stage('Install dependencies') {
         steps {
-          echo 'building json2test'
+          echo 'installing dependencies'
           sh """
             #!/bin/bash
             set -ex
-            sudo Rscript -e "install.packages(c('curl', 'testthat'), repos='https://cran.rstudio.com')"
+            sudo Rscript -e "install.packages(c('curl', 'tibble', 'testthat'), repos='https://cran.rstudio.com')"
             R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
             exit 1
             }
