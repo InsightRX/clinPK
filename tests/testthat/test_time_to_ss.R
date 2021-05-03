@@ -23,3 +23,7 @@ test_that("time_to_ss returns time based on kel if provided", {
   expect_equal(time_to_ss(kel = 0.05), 46.051702)
   expect_equal(time_to_ss(kel = 0.05), time_to_ss(kel = 0.05, halflife = 1000))
 })
+
+test_that("time_to_ss errors if ss >= 1", {
+  expect_error(time_to_ss(halflife = 12, ss = 1))
+})
