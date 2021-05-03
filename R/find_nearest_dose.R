@@ -8,6 +8,9 @@
 #' find_nearest_dose(573, increment = 50)
 #' @export
 find_nearest_dose <- function(dose = NULL, increment = 250, type = "round") {
+  if (!type %in% c("round", "floor", "ceiling")) {
+    stop("`type` must be one of 'round', 'floor', or 'ceiling'.")
+  }
   if(!is.null(dose)) {
     if(type %in% c("round", "floor", "ceiling")) {
       if(type == "round") {
