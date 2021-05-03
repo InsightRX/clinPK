@@ -19,3 +19,7 @@ test_that("find_nearest_dose uses floor/ceiling", {
 test_that("find_nearest_dose errors if type isn't in round, floor, or ceiling", {
   expect_error(find_nearest_dose(500, type = "trunc"))
 })
+
+test_that("find_nearest_dose errors if increment is NULL", {
+  expect_error(find_nearest_dose(100, increment = NULL))
+})
