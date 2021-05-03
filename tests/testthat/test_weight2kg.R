@@ -23,3 +23,14 @@ test_that("ounces are converted to kg", {
   expect_equal(weight2kg(64, "ounces"), 1.8143675)
   expect_equal(weight2kg(64, "ounce"), 1.8143675)
 })
+
+test_that("vectorized input works", {
+  expect_equal(
+    weight2kg(c(64, 65, 120), "oz"),
+    c(1.8143675, 1.8427170, 3.4019391)
+  )
+  expect_equal(
+    weight2kg(c(9, 10), 'lbs'),
+    c(4.0823362, 4.5359291)
+  )
+})
