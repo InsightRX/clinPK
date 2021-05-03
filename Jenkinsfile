@@ -5,25 +5,14 @@
       label 'r-slave'
     }
     stages{
-      stage('Dependencies - build json2test') {
+      stage('Install dependencies') {
         steps {
-          echo 'building json2test'
+          echo 'installing dependencies'
           sh """
             #!/bin/bash
             set -ex
-            pwd
-            sudo chmod 777 ~/workspace
-            cd ~/workspace
-            if [ -d "json2test" ]; then
-              sudo rm -R json2test
-            fi
-            git clone git@github.com:InsightRX/json2test.git
-            cd json2test
-            chmod +x slack_notification.sh
-            sudo Rscript -e "if(require('testit', character.only = TRUE)) remove.packages('testit'); install.packages('testit', lib='/usr/lib/R/site-library', repos='https://cran.rstudio.com', dependencies = TRUE)"
-            sudo Rscript -e "install.packages(c('tibble', 'dplyr', 'testthat'), lib='/usr/lib/R/site-library', repos='https://cran.rstudio.com')"
+            sudo Rscript -e "install.packages(c('curl', 'tibble', 'testthat'), repos='https://cran.rstudio.com')"
             R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
-            ./slack_notification.sh
             exit 1
             }
           """
