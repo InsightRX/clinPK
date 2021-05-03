@@ -7,7 +7,6 @@ test_that("find_nearest_dose rounds dose/increment", {
   res2 <- find_nearest_dose(250, 100, type = "round")
   expect_equal(res1, 200)
   expect_equal(res2, 200)
-  expect_equal(res1, res2) # round-to-even makes these equivalent
 })
 
 test_that("find_nearest_dose uses floor/ceiling", {
