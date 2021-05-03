@@ -12,17 +12,14 @@ find_nearest_dose <- function(dose = NULL, increment = 250, type = "round") {
     stop("`type` must be one of 'round', 'floor', or 'ceiling'.")
   }
   if(!is.null(dose)) {
-    if(type %in% c("round", "floor", "ceiling")) {
-      if(type == "round") {
-        return(round(dose / increment) * increment)
-      }
-      if(type == "floor") {
-        return(floor(dose / increment) * increment)
-      }
-      if(type == "ceiling") {
-        return(ceiling(dose / increment) * increment)
-      }
-    }
+    return(
+      switch(
+        type,
+        round = round(dose / increment) * increment,
+        floor = floor(dose / increment) * increment,
+        ceiling = ceiling(dose / increment) * increment
+      )
+    )
   } else {
     stop("Dose value required!")
   }
