@@ -18,12 +18,10 @@ find_nearest_dose <- function(dose = NULL, increment = 250, type = "round") {
     stop("`type` must be one of 'round', 'floor', or 'ceiling'.")
   }
 
-  return(
-    switch(
-      type,
-      round = round(dose / increment) * increment,
-      floor = floor(dose / increment) * increment,
-      ceiling = ceiling(dose / increment) * increment
-    )
+  switch(
+    type,
+    round = round(dose / increment) * increment,
+    floor = floor(dose / increment) * increment,
+    ceiling = ceiling(dose / increment) * increment
   )
 }
