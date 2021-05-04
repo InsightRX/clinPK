@@ -8,12 +8,16 @@
 #' find_nearest_dose(573, increment = 50)
 #' @export
 find_nearest_dose <- function(dose = NULL, increment = 250, type = "round") {
-  stopifnot(
-    "Dose value required!" = !is.null(dose),
-    "increment cannot be NULL" = !is.null(increment),
-    "`type` must be one of 'round', 'floor', or 'ceiling'." =
-      type %in% c("round", "floor", "ceiling")
-  )
+  if (is.null(dose)) {
+    stop("Dose value required!")
+  }
+  if (is.null(increment)) {
+    stop("increment cannot be NULL")
+  }
+  if (!type %in% c("round", "floor", "ceiling")) {
+    stop("`type` must be one of 'round', 'floor', or 'ceiling'.")
+  }
+
   return(
     switch(
       type,

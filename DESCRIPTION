@@ -1,7 +1,7 @@
 Package: clinPK
 Type: Package
 Title: Clinical Pharmacokinetics Toolkit
-Version: 0.9.57
+Version: 0.9.58
 Date: 2021-05-03
 Author: Ron Keizer
 Maintainer: Ron Keizer <ronkeizer@gmail.com>
