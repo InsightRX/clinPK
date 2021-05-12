@@ -33,7 +33,7 @@ calc_aki_stage <- function (
   times = NULL,
   method = "kdigo",
   baseline_scr = "median",
-  baseline_egfr = 120,
+  baseline_egfr = NULL,
   age = NULL,
   egfr = NULL,
   egfr_method = NULL,
