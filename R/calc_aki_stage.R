@@ -117,6 +117,7 @@ calc_aki_stage <- function (
       method = egfr_method,
       age = age,
       verbose = verbose,
+      relative = TRUE, # KDIGO requires relative eGFR value in Stage 3 condition; all other criteria use eGFR relative to baseline
       ...
     )$value
     }
