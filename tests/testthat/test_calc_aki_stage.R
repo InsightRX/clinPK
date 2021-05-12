@@ -37,7 +37,7 @@ test_that("AKI stage is calculated correctly", {
     verbose = FALSE
   )
   expect_equal(test0$stage, "stage 3")
-  expect_equal(test1$stage, "stage 2")
+  expect_equal(test1$stage, "stage 1")
   expect_equal(test2$stage, "stage 3")
   expect_equal(test2$time_max_stage, 36)
   expect_equal(test2a$stage, "stage 1")
@@ -125,7 +125,7 @@ test_that("AKI stage is calculated correctly with other methods", {
     verbose = FALSE
   )
 
-  expect_equal(test3$stage, 2)
+  expect_equal(test3$stage, 1)
   expect_true(is.na(test4$stage))
   expect_equal(test5$stage, "F")
   expect_equal(test6$stage, "I")
