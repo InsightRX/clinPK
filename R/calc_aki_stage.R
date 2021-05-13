@@ -15,7 +15,6 @@
 #' @param egfr eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.
 #' @param egfr_method eGFR calculation method, used by `calc_egfr()`. If NULL, will pick default based on classification system (`cockroft_gault` for RIFLE / kDIGO, `revised_schwartz` for pRIFLE).
 #' @param force_numeric keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.
-#' @param recursive option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)
 #' @param return_object return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.
 #' @param verbose verbose (`TRUE` or `FALSE`)
 #' @param ... arguments passed on to `calc_egfr()`
@@ -45,7 +44,6 @@ calc_aki_stage <- function (
   egfr_method = NULL,
   force_numeric = FALSE,
   override_prifle_baseline = FALSE,
-  recursive = TRUE,
   verbose = TRUE,
   return_object = TRUE,
   ...

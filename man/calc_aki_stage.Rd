@@ -15,7 +15,6 @@ calc_aki_stage(
   egfr_method = NULL,
   force_numeric = FALSE,
   override_prifle_baseline = FALSE,
-  recursive = TRUE,
   verbose = TRUE,
   return_object = TRUE,
   ...
@@ -43,8 +42,6 @@ numeric (0.2)}
 \item{force_numeric}{keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.}
 
 \item{override_prifle_baseline}{by default, `pRIFLE` compares eGFR to 120 ml/min. Override by setting to TRUE.}
-
-\item{recursive}{option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)}
 
 \item{verbose}{verbose (`TRUE` or `FALSE`)}
 
