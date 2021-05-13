@@ -15,10 +15,15 @@
 #' @param egfr eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.
 #' @param egfr_method eGFR calculation method, used by `calc_egfr()`. If NULL, will pick default based on classification system (`cockroft_gault` for RIFLE / kDIGO, `revised_schwartz` for pRIFLE).
 #' @param force_numeric keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.
-#' @param recursive option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)
 #' @param return_object return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.
 #' @param verbose verbose (`TRUE` or `FALSE`)
 #' @param ... arguments passed on to `calc_egfr()`
+#' @references \itemize{
+#'   \item \href{https://pubmed.ncbi.nlm.nih.gov/17396113/}{pRIFLE}: Ackan-Arikan et al. "Modified RIFLE criteria in critically ill children with acute kidney injury." Kidney Int. (2007)
+#'   \item \href{https://pubmed.ncbi.nlm.nih.gov/15312219/}{RIFLE}: Bellomo et al. "Acute renal failure - definition, outcome measures, animal models, fluid therapy and information technology needs: the Second International Consensus Conference of the Acute Dialysis Quality Initiative (ADQI) Group." Critical Care. (2004)
+#'   \item \href{https://pubmed.ncbi.nlm.nih.gov/22890468/}{KDIGO}: Khwaja. "KDIGO clinical practice guidelines for acute kidney injury." Nephron Clinical Practice. (2012)
+#'   \item \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4238883/}{pRIFLE baseline eGFR}: Soler et al. "pRIFLE (Pediatric Risk, Injury, Failure, Loss, End Stage Renal Disease) score identifies Acute Kidney Injury and predicts mortality in critically ill children : a prospective study." Pediatric Critical Care Medicine. (2014)
+#' }
 #'
 #' @examples
 #' calc_aki_stage(
@@ -33,13 +38,12 @@ calc_aki_stage <- function (
   times = NULL,
   method = "kdigo",
   baseline_scr = "median",
-  baseline_egfr = 120,
+  baseline_egfr = NULL,
   age = NULL,
   egfr = NULL,
   egfr_method = NULL,
   force_numeric = FALSE,
   override_prifle_baseline = FALSE,
-  recursive = TRUE,
   verbose = TRUE,
   return_object = TRUE,
   ...

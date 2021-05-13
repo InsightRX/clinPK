@@ -9,13 +9,12 @@ calc_aki_stage(
   times = NULL,
   method = "kdigo",
   baseline_scr = "median",
-  baseline_egfr = 120,
+  baseline_egfr = NULL,
   age = NULL,
   egfr = NULL,
   egfr_method = NULL,
   force_numeric = FALSE,
   override_prifle_baseline = FALSE,
-  recursive = TRUE,
   verbose = TRUE,
   return_object = TRUE,
   ...
@@ -44,8 +43,6 @@ numeric (0.2)}
 
 \item{override_prifle_baseline}{by default, `pRIFLE` compares eGFR to 120 ml/min. Override by setting to TRUE.}
 
-\item{recursive}{option for KDIGO classification method only. Use recursive calculation (if `FALSE` will only take last observation into account)}
-
 \item{verbose}{verbose (`TRUE` or `FALSE`)}
 
 \item{return_object}{return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.}
@@ -63,4 +60,12 @@ calc_aki_stage(
   age = 50, weight = 60,
   height = 170, sex = "female")
 
+}
+\references{
+\itemize{
+  \item \href{https://pubmed.ncbi.nlm.nih.gov/17396113/}{pRIFLE}: Ackan-Arikan et al. "Modified RIFLE criteria in critically ill children with acute kidney injury." Kidney Int. (2007)
+  \item \href{https://pubmed.ncbi.nlm.nih.gov/15312219/}{RIFLE}: Bellomo et al. "Acute renal failure - definition, outcome measures, animal models, fluid therapy and information technology needs: the Second International Consensus Conference of the Acute Dialysis Quality Initiative (ADQI) Group." Critical Care. (2004)
+  \item \href{https://pubmed.ncbi.nlm.nih.gov/22890468/}{KDIGO}: Khwaja. "KDIGO clinical practice guidelines for acute kidney injury." Nephron Clinical Practice. (2012)
+  \item \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4238883/}{pRIFLE baseline eGFR}: Soler et al. "pRIFLE (Pediatric Risk, Injury, Failure, Loss, End Stage Renal Disease) score identifies Acute Kidney Injury and predicts mortality in critically ill children : a prospective study." Pediatric Critical Care Medicine. (2014)
+}
 }
