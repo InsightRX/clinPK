@@ -1,17 +1,22 @@
-#' Internal function to read WHO growth tables from package or download from WHO
+#' Read WHO growth tables
+#'
+#' Provides a data frame of the WHO growth table for a given age, sex, and type
+#' of measurement.
+#'
+#' This function uses files included in `system.file(package = "clinPK")`.
+#' Previously this function also gave the option to download the tables from
+#' WHO, but the original URL ("http://www.who.int/entity/childgrowth/standards")
+#' no longer exists as of 2021-05-19.
 #'
 #' @param sex, either `male` or `female`
 #' @param age age in years
 #' @param type table type, choose from `wfa` (weight for age), `lhfa` (length for age)
-#' @param who_url base URL for WHO growth tables
-#' @param download download current tables from WHO?
 #' @export
+#' @md
 read_who_table <- function(
   sex = NULL,
   age = NULL,
-  type = "wfa",
-  who_url = "http://www.who.int/entity/childgrowth/standards",
-  download = FALSE
+  type = "wfa"
 ) {
   if(is.null(age)) {
     stop("Age required!")
@@ -30,26 +35,14 @@ read_who_table <- function(
     }
     
     who_file <- paste0(type, '_', str_sex, '_', postfix,'.txt')
-    if(!download) {
-      # use tables supplied with package (also from WHO)
-      dat <- data.frame(read.table(file=paste0(system.file(package='clinPK'),'/', who_file), 
-                                   sep = "\t", header = TRUE))
-    } else {
-      cat("Downloading data from WHO...")
-      con <- curl::curl(paste0(who_url, "/", who_file))
-      open(con)
-      tmp <- readLines(con)
-      close(con)
-      cat("done.")
-      dat <- c()
-      cnam <- strsplit(tmp[1], "\t")[[1]]
-      tmp <- tmp[-1]
-      for(i in seq(tmp)) {
-        dat <- rbind(dat, as.num(unlist(strsplit(tmp[i], "\t"))))
-      }
-      dat <- data.frame(dat)
-      colnames(dat) <- cnam
-    }
+    # use tables supplied with package (from WHO)
+    dat <- data.frame(
+      read.table(
+        file = paste0(system.file(package = 'clinPK'), '/', who_file),
+        sep = "\t",
+        header = TRUE
+      )
+    )
     dat[,1] <- dat[,1]/unit # convert to years
     colnames(dat)[1] <- "age"
     if("StDev" %in% names(dat)) {
