@@ -1,42 +1,46 @@
 #!groovy
 
-  pipeline {
-    agent {
-      label 'r-slave'
-    }
-    stages{
-      stage('Install dependencies') {
-        steps {
-          echo 'installing dependencies'
-          sh """
-            #!/bin/bash
-            set -ex
-            sudo Rscript -e "install.packages(c('curl', 'tibble', 'testthat'), repos='https://cran.rstudio.com')"
-            R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
-            exit 1
-            }
-          """
-        }
+pipeline {
+  agent {
+    label 'docker-runner'
+  }
+  stages{
+    stage('Run docker container') {
+      environment {
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY_ID')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
       }
-      stage('Build - clinPK') {
-        steps {
-          echo 'building clinPK'
-          sh """
-            R CMD build --no-manual --no-build-vignettes .
-            find . -type f -name 'clinPK_*.tar.gz' | xargs R CMD check --no-manual --no-build-vignettes
-            rm -rf clinPK_*.tar.gz
-          """
-        }
+      steps {
+        echo "Running irx-r-base container"
+        sh """
+        \$(aws ecr get-login --no-include-email --region us-west-2 &> /dev/null)
+        docker run -d --name ${BUILD_TAG} 579831337053.dkr.ecr.us-west-2.amazonaws.com/irx-r-base:4
+        """
       }
     }
-    post {
-      failure {
-        sh "chmod +x slack_notification.sh"
-        sh "/bin/bash slack_notification.sh"
+    stage('Build & test clinPK') {
+      steps {
+        echo 'Installing and checking clinPK'
+        sh """
+        docker cp . ${BUILD_TAG}:/src/clinPK
+        docker exec -i ${BUILD_TAG} Rscript -e "devtools::check('clinPK')"
+        """
+      }
+    }
+  }
+  post {
+    always {
+      sh """
+      docker rm -f ${BUILD_TAG} &>/dev/null && echo 'Removed container'
+      """
+    }
+    failure {
+      sh "chmod +x slack_notification.sh"
+      sh "./slack_notification.sh"
     }
   }
   environment {
-      KHALEESI_SLACK_TOKEN = credentials('KHALEESI_SLACK_TOKEN')
-      JENKINS_SLACKBOT = credentials('JENKINS_SLACKBOT')
+    KHALEESI_SLACK_TOKEN = credentials('KHALEESI_SLACK_TOKEN')
+    JENKINS_SLACKBOT = credentials('JENKINS_SLACKBOT')
   }
 }
