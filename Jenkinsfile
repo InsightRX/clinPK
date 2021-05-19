@@ -23,11 +23,11 @@
           echo 'building clinPK'
           sh """
             cd /$workspace
-            if [ -d "clinPK2" ]; then
-              sudo rm -R clinPK2
+            if [ -d "clinPK" ]; then
+              sudo rm -R clinPK
             fi
-            git clone git@github.com:InsightRX/clinPK2.git
-            cd clinPK2
+            git clone git@github.com:InsightRX/clinPK.git
+            cd clinPK
             git checkout $GIT_BRANCH
             chmod +x slack_notification.sh
             R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
