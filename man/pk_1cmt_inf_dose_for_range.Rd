@@ -4,9 +4,16 @@
 \alias{pk_1cmt_inf_dose_for_range}
 \title{Calculate dose based on a given AUC24, Cmax, and Cmin, assuming 1-compartment model}
 \usage{
-pk_1cmt_inf_dose_for_range(target = 500, type = "auc", conc_range = c(10,
-  40), parameters = list(), interval = 24, t_inf = 1,
-  round_interval = TRUE)
+pk_1cmt_inf_dose_for_range(
+  target = 500,
+  type = "auc",
+  conc_range = c(10, 40),
+  parameters = list(),
+  interval = 24,
+  t_inf = 1,
+  optimize_interval = TRUE,
+  round_interval = TRUE
+)
 }
 \arguments{
 \item{target}{numeric value of target}
@@ -20,6 +27,8 @@ pk_1cmt_inf_dose_for_range(target = 500, type = "auc", conc_range = c(10,
 \item{interval}{dosing interval}
 
 \item{t_inf}{infusion time}
+
+\item{optimize_interval}{find optimal interval (to stay within `conc_range`?}
 
 \item{round_interval}{round interval to nearest nominal interval?}
 }

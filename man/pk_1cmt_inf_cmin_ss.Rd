@@ -4,8 +4,14 @@
 \alias{pk_1cmt_inf_cmin_ss}
 \title{Cmin (trough) for linear 1-compartment PK model at steady state}
 \usage{
-pk_1cmt_inf_cmin_ss(dose = 100, tau = 12, CL = 3, V = 30, t_inf = 2,
-  ruv = NULL)
+pk_1cmt_inf_cmin_ss(
+  dose = 100,
+  tau = 12,
+  CL = 3,
+  V = 30,
+  t_inf = 2,
+  ruv = NULL
+)
 }
 \arguments{
 \item{dose}{dose}

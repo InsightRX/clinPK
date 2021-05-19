@@ -4,21 +4,77 @@
 \alias{nca}
 \title{Perform an NCA based on a NONMEM-style dataset}
 \usage{
-nca(data = NULL, dose = 100, tau = 6, method = "log_linear",
-  scale = list(auc = 1, conc = 1), dv_min = 0.001)
+nca(
+  data = NULL,
+  dose = 100,
+  tau = 24,
+  method = "log_linear",
+  scale = list(auc = 1, conc = 1),
+  dv_min = 0.001,
+  t_inf = NULL,
+  fit_samples = NULL,
+  weights = NULL,
+  extend = TRUE,
+  has_baseline = TRUE
+)
 }
 \arguments{
 \item{data}{data.frame with time and dv columns}
 
 \item{dose}{dose amount}
 
-\item{tau}{dosing frequency}
+\item{tau}{dosing frequency, default is 24.}
 
 \item{method}{`log_linear` or `linear`}
 
 \item{scale}{list with scaling for auc and concentration (`conc`)}
 
 \item{dv_min}{minimum concentrations, lower observations will be set to this value}
+
+\item{t_inf}{infusion time, defaults to 0}
+
+\item{fit_samples}{vector of sample indexes used in fit to calculate elimination
+rate, e.g. `c(3,4,5)`. If not specified (default), it will evaluate which of the last n
+samples shows the largest adjusted R^2 when log-transformed data is fitted using linear
+regression, and use those samples in the estimation of the elimination rate.}
+
+\item{weights}{vector of weights to be used in linear regression (same size as specified concentration data), or function with concentration as argument.}
+
+\item{extend}{perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.}
+
+\item{has_baseline}{does the included data include a baseline? If `FALSE`, baseline is set to zero.}
+}
+\value{
+Returns a list of three lists:
+ \describe{
+  \item{\code{pk}}{Lists pk parameters.
+  \itemize{
+  \item{\code{kel}: elimination constant}
+  \item{\code{t_12}: half-life}
+  \item{\code{v}: distribution volume}
+  \item{\code{cl}: clearance}
+  }
+  }
+  \item{\code{descriptive}}{Lists exposure parameters.
+  \itemize{
+  \item{\code{cav_t}: the average concentration between the first observation and the last observation without extrapolating to tau}
+  \item{\code{cav_tau}: the average concentration from 0 to tau}
+  \item{\code{cmin}: the extrapolated concentration at \code{time = tau}}
+  \item{\code{c_max_true}: only available if \code{extend = TRUE}, the extrapolated peak concentration}
+  \item{\code{c_max}: only available if \code{extend = FALSE}, the observed maximum concentration}
+  \item{\code{auc_inf}: the extrapolated AUC as time goes to infinity}
+  \item{\code{auc_24}: the extrapolated AUC after 24 hours, provided no further doses are administered}
+  \item{\code{auc_tau}: the extrapolated AUC at the end of the dosing interval}
+  \item{\code{auc_t}: the AUC at the time of the last observation}
+  }
+  }
+  \item{\code{settings}}{Lists dosing information.
+  \itemize{
+  \item{\code{dose}: dose quantity}
+  \item{\code{tau}: dosing interval}
+  }
+  }
+  }
 }
 \description{
 Perform an NCA based on a NONMEM-style dataset
@@ -26,5 +82,5 @@ Perform an NCA based on a NONMEM-style dataset
 \examples{
 data <- data.frame(time = c(0, 2, 4, 6, 8, 12, 16),
                    dv   = c(0, 10, 14, 11, 9, 5, 1.5))
-nca(data)
+nca(data, t_inf = 2)
 }

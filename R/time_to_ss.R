@@ -17,6 +17,7 @@ time_to_ss <- function(
   in_doses = FALSE,
   tau = NULL) {
   if(is.null(kel) && is.null(halflife)) stop("Need either elimination rate `kel` or `halflife`")
+  if (ss >= 1) stop("`ss` must be less than 1")
   if(is.null(kel)) kel <- log(2) / halflife
   t2ss <- -log(1 - ss)/kel
   if(in_doses) {

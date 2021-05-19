@@ -5,8 +5,14 @@
 \title{Calculate dose to achieve steady state trough
 for 2-compartmental PK model bolus dosing at steady state}
 \usage{
-pk_2cmt_bolus_dose_from_cmin(cmin = 1, tau = 12, CL = 3, V = 30,
-  Q = 2, V2 = 20)
+pk_2cmt_bolus_dose_from_cmin(
+  cmin = 1,
+  tau = 12,
+  CL = 3,
+  V = 30,
+  Q = 2,
+  V2 = 20
+)
 }
 \arguments{
 \item{cmin}{desired trough concentration}

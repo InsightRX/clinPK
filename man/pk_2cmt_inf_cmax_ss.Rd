@@ -4,8 +4,16 @@
 \alias{pk_2cmt_inf_cmax_ss}
 \title{Cmax (trough) for 2-compartmental PK model, bolus dosing at steady state}
 \usage{
-pk_2cmt_inf_cmax_ss(dose = 100, tau = 12, t_inf = 1, CL = 3, V = 30,
-  Q = 2, V2 = 20, ruv = NULL)
+pk_2cmt_inf_cmax_ss(
+  dose = 100,
+  tau = 12,
+  t_inf = 1,
+  CL = 3,
+  V = 30,
+  Q = 2,
+  V2 = 20,
+  ruv = NULL
+)
 }
 \arguments{
 \item{dose}{dose}

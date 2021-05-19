@@ -4,8 +4,15 @@
 \alias{pk_1cmt_inf_ss}
 \title{Concentration predictions for 2-compartmental PK model with infusion dosing at steady state}
 \usage{
-pk_1cmt_inf_ss(t = c(0:24), dose = 100, t_inf = 1, tau = 12, CL = 3,
-  V = 30, ruv = NULL)
+pk_1cmt_inf_ss(
+  t = c(0:24),
+  dose = 100,
+  t_inf = 1,
+  tau = 12,
+  CL = 3,
+  V = 30,
+  ruv = NULL
+)
 }
 \arguments{
 \item{t}{vector of time}

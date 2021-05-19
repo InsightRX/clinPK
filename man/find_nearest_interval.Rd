@@ -4,8 +4,11 @@
 \alias{find_nearest_interval}
 \title{Generic function to calculate the interval nearest to a possible dosing interval}
 \usage{
-find_nearest_interval(interval = NULL, possible = c(4, 6, 8, 12, 24, 36,
-  48), type = "absolute")
+find_nearest_interval(
+  interval = NULL,
+  possible = c(4, 6, 8, 12, 24, 36, 48),
+  type = "absolute"
+)
 }
 \arguments{
 \item{interval}{dose value}

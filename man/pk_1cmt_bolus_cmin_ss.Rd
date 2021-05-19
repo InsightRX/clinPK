@@ -4,8 +4,7 @@
 \alias{pk_1cmt_bolus_cmin_ss}
 \title{Cmin (trough) for linear 1-compartment PK model at steady state, bolus dosing}
 \usage{
-pk_1cmt_bolus_cmin_ss(dose = 100, tau = 12, CL = 3, V = 30,
-  ruv = NULL)
+pk_1cmt_bolus_cmin_ss(dose = 100, tau = 12, CL = 3, V = 30, ruv = NULL)
 }
 \arguments{
 \item{dose}{dose}

@@ -5,8 +5,15 @@
 \title{Calculate dose to achieve steady state Cmax
 for 2-compartmental PK model with infusion dosing at steady state}
 \usage{
-pk_2cmt_inf_dose_from_cmax(cmax = 1, tau = 12, t_inf = 1, CL = 3,
-  V = 30, Q = 2, V2 = 20)
+pk_2cmt_inf_dose_from_cmax(
+  cmax = 1,
+  tau = 12,
+  t_inf = 1,
+  CL = 3,
+  V = 30,
+  Q = 2,
+  V2 = 20
+)
 }
 \arguments{
 \item{cmax}{desired trough concentration}

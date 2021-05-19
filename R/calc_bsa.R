@@ -36,7 +36,7 @@ calc_bsa <- function (
         bsa <- 0.0235 * height^0.42246 * weight^0.51456
       }
       if(method == "boyd") {
-        bsa <- 0.0003207 * height^0.3 * (weight/1000)^(0.7285-(0.0188*log(weight/1000)))
+        bsa <- 0.0003207 * height^0.3 * (weight*1000)^(0.7285-(0.0188*log10(weight*1000)))
       }
       return(list(
         value = bsa,

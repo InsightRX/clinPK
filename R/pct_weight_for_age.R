@@ -16,7 +16,11 @@ pct_weight_for_age <- function(age = NULL, weight = NULL, sex = NULL, return_med
     stop("Age required.")
   }
   if(length(age) == 1) {
-    pct <- pct_for_age_generic(age = age, value = weight, sex = sex, variable = "weight", ...)
+    if (return_median) {
+      pct <- pct_for_age_generic(age = age, sex = sex, variable = "weight", ...)
+    } else {
+      pct <- pct_for_age_generic(age = age, value = weight, sex = sex, variable = "weight", ...)
+    }
   } else {
     if(is.null(weight)) {
       tmp <- lapply(age, pct_weight_for_age, sex = sex)

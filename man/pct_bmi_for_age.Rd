@@ -4,8 +4,14 @@
 \alias{pct_bmi_for_age}
 \title{Percentile BMI for age for children}
 \usage{
-pct_bmi_for_age(age = NULL, bmi = NULL, sex = NULL, height = NULL,
-  return_median = FALSE, ...)
+pct_bmi_for_age(
+  age = NULL,
+  bmi = NULL,
+  sex = NULL,
+  height = NULL,
+  return_median = FALSE,
+  ...
+)
 }
 \arguments{
 \item{age}{age in years}

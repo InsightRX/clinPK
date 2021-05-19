@@ -4,9 +4,13 @@
 \alias{read_who_table}
 \title{Internal function to read WHO growth tables from package or download from WHO}
 \usage{
-read_who_table(sex = NULL, age = NULL, type = "wfa",
+read_who_table(
+  sex = NULL,
+  age = NULL,
+  type = "wfa",
   who_url = "http://www.who.int/entity/childgrowth/standards",
-  download = FALSE)
+  download = FALSE
+)
 }
 \arguments{
 \item{sex, }{either `male` or `female`}

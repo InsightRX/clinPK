@@ -4,8 +4,7 @@
 \alias{pk_1cmt_bolus_ss}
 \title{Concentration predictions for 1-compartmental PK model with bolus dosing at steady state}
 \usage{
-pk_1cmt_bolus_ss(t = c(0:24), dose = 100, tau = 12, CL = 3, V = 30,
-  ruv = NULL)
+pk_1cmt_bolus_ss(t = c(0:24), dose = 100, tau = 12, CL = 3, V = 30, ruv = NULL)
 }
 \arguments{
 \item{t}{vector of time}
