@@ -1,14 +1,14 @@
 Package: clinPK
 Type: Package
 Title: Clinical Pharmacokinetics Toolkit
-Version: 0.9.65
-Date: 2021-05-13
-Authors@R: c(
-    person("Ron", "Keizer", email = "ron@insight-rx.com", role = "aut"),
-    person("Jasmine", "Hughes", email = "jasmine@insight-rx.com", role = "aut"),
-    person("Dominic", "Tong", email = "dominic@insight-rx.com", role = "aut"),
-    person("Kara", "Woo", email = "kara@insight-rx.com", role = c("aut", "cre"))
-    )
+Version: 0.9.66
+Date: 2021-05-19
+Authors@R: c( person("Ron", "Keizer", email = "ron@insight-rx.com",
+        role = "aut"), person("Jasmine", "Hughes", email =
+        "jasmine@insight-rx.com", role = "aut"), person("Dominic",
+        "Tong", email = "dominic@insight-rx.com", role = "aut"),
+        person("Kara", "Woo", email = "kara@insight-rx.com", role =
+        c("aut", "cre")) )
 Description: Calculates equations commonly used in clinical
         pharmacokinetics and clinical pharmacology, such as equations
         for dose individualization, compartmental pharmacokinetics,

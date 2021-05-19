@@ -22,24 +22,21 @@
         steps {
           echo 'building clinPK'
           sh """
-            cd /$workspace
-            if [ -d "clinPK" ]; then
-              sudo rm -R clinPK
-            fi
-            git clone git@github.com:InsightRX/clinPK.git
-            cd clinPK
-            git checkout $GIT_BRANCH
-            chmod +x slack_notification.sh
-            R CMD INSTALL . --library=/usr/lib/R/site-library || { export STATUS=failed
-            ./slack_notification.sh
-            exit 1
-            }
-            R CMD check . --no-manual || { export STATUS=failed
-            ./slack_notification.sh
-            exit 1
-            }
+            R CMD build --no-manual --no-build-vignettes .
+            find . -type f -name 'insightrxr_*.tar.gz' | xargs R CMD check --no-manual --no-build-vignettes
+            rm -rf insightrxr_*.tar.gz
           """
         }
       }
     }
+    post {
+      failure {
+        sh "chmod +x slack_notification.sh"
+        sh "/bin/bash slack_notification.sh"
+    }
   }
+  environment {
+      KHALEESI_SLACK_TOKEN = credentials('KHALEESI_SLACK_TOKEN')
+      JENKINS_SLACKBOT = credentials('JENKINS_SLACKBOT')
+  }
+}
