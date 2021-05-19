@@ -23,8 +23,8 @@
           echo 'building clinPK'
           sh """
             R CMD build --no-manual --no-build-vignettes .
-            find . -type f -name 'insightrxr_*.tar.gz' | xargs R CMD check --no-manual --no-build-vignettes
-            rm -rf insightrxr_*.tar.gz
+            find . -type f -name 'clinPK_*.tar.gz' | xargs R CMD check --no-manual --no-build-vignettes
+            rm -rf clinPK_*.tar.gz
           """
         }
       }
