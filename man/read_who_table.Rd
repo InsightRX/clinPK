@@ -2,27 +2,24 @@
 % Please edit documentation in R/read_who_table.R
 \name{read_who_table}
 \alias{read_who_table}
-\title{Internal function to read WHO growth tables from package or download from WHO}
+\title{Read WHO growth tables}
 \usage{
-read_who_table(
-  sex = NULL,
-  age = NULL,
-  type = "wfa",
-  who_url = "http://www.who.int/entity/childgrowth/standards",
-  download = FALSE
-)
+read_who_table(sex = NULL, age = NULL, type = "wfa")
 }
 \arguments{
-\item{sex, }{either `male` or `female`}
+\item{sex, }{either \code{male} or \code{female}}
 
 \item{age}{age in years}
 
-\item{type}{table type, choose from `wfa` (weight for age), `lhfa` (length for age)}
-
-\item{who_url}{base URL for WHO growth tables}
-
-\item{download}{download current tables from WHO?}
+\item{type}{table type, choose from \code{wfa} (weight for age), \code{lhfa} (length for age)}
 }
 \description{
-Internal function to read WHO growth tables from package or download from WHO
+Provides a data frame of the WHO growth table for a given age, sex, and type
+of measurement.
+}
+\details{
+This function uses files included in \code{system.file(package = "clinPK")}.
+Previously this function also gave the option to download the tables from
+WHO, but the original URL ("http://www.who.int/entity/childgrowth/standards")
+no longer exists as of 2021-05-19.
 }

@@ -1,7 +1,7 @@
 Package: clinPK
 Type: Package
 Title: Clinical Pharmacokinetics Toolkit
-Version: 0.10.2
+Version: 0.10.4
 Date: 2021-05-19
 Authors@R: c(person("Ron", "Keizer", email = "ron@insight-rx.com", role
         = "aut"), person("Jasmine", "Hughes", email =
@@ -16,7 +16,6 @@ Description: Calculates equations commonly used in clinical
         chemistry, and conversion of common clinical parameters. Where
         possible and relevant, it provides multiple published and
         peer-reviewed equations within the respective R function.
-Imports: curl
 License: MIT + file LICENSE
 LazyData: TRUE
 RoxygenNote: 7.1.1
