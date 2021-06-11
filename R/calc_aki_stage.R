@@ -67,11 +67,18 @@ calc_aki_stage <- function (
       egfr_method <- "cockroft_gault"
     }
   }
+  
+  ## Make sure values are ordered by time
+  if(!is.null(times)) {
+    idx   <- order(times)
+    times <- times[idx]
+    scr   <- scr[idx]
+    egfr  <- egfr[idx]
+  }
 
   if(is.null(scr) && method !='prifle') stop("No serum creatinine values provided.")
   if(is.null(times) && method !='prifle') stop("No sample times (days) provided.")
   if(class(times) == "Date") {
-    times <- times[order(times)]
     times <- as.numeric(difftime(times, min(times), units = "days"))
   }
   if((!class(times[1]) %in% c("numeric","integer")) && method !='prifle') {
@@ -98,40 +105,12 @@ calc_aki_stage <- function (
   }
   # pRIFLE does not require SCr
   if(class(baseline_scr) == "character" && method !='prifle') {
-    if(baseline_scr == "median_before_treatment") {
-      if(is.null(first_dose_time)) {
-        baseline_scr <- stats::median(scr, na.rm = TRUE)
-        if(verbose) message("To calculate median baseline before treatment start need time of first dose. Using median over whole treatment period.")
-      } else {
-        if(any(times <= first_dose_time)) {
-          baseline_scr <- stats::median(scr[times <= first_dose_time], na.rm = TRUE)
-          if(verbose) message("No baseline SCr value specified, using *median* of supplied values before first dose.")
-        } else {
-          if(any(times < 48)) {
-            baseline_scr <- stats::median(scr[times < 48], na.rm = TRUE)
-            if(verbose) message("No baseline before first dose, using *median* of supplied values in first 48 hours.")
-          } else {
-            baseline_scr <- stats::median(scr, na.rm = TRUE)
-            if(verbose) message("No baseline in first 48 hours, using *median* of supplied values.")
-          }
-        }
-      }
-    }
-    if(baseline_scr == "median") {
-      baseline_scr <- stats::median(scr)
-      if(verbose) message("No baseline SCr value specified, using *median* of supplied values.")
-    }
-    if(baseline_scr == "first" && method !='prifle') {
-      baseline_scr <- scr[1]
-      if(verbose) message("No baseline SCr value specified, using *first* of supplied values.")
-    }
-    if(baseline_scr == "lowest") {
-      baseline_scr <- min(scr)
-      if(verbose) message("No baseline SCr value specified, using *lowest* of supplied values.")
-    }
-    if(baseline_scr == "expected" && method !='prifle') {
-      ## need to implement
-    }
+    baseline_scr <- calc_baseline_scr(baseline_scr, 
+                                      scr,
+                                      times,
+                                      method,
+                                      first_dose_time,
+                                      verbose)
   }
   if(method %in% ('prifle') && !(override_prifle_baseline)) baseline_egfr <- 120
 
