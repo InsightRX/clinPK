@@ -100,18 +100,18 @@ calc_aki_stage <- function (
   if(class(baseline_scr) == "character" && method !='prifle') {
     if(baseline_scr == "median_before_treatment") {
       if(is.null(first_dose_time)) {
-        baseline_scr <- stats::median(scr)
+        baseline_scr <- stats::median(scr, na.rm = TRUE)
         if(verbose) message("To calculate median baseline before treatment start need time of first dose. Using median over whole treatment period.")
       } else {
         if(any(times <= first_dose_time)) {
-          baseline_scr <- stats::median(scr[times <= first_dose_time])
+          baseline_scr <- stats::median(scr[times <= first_dose_time], na.rm = TRUE)
           if(verbose) message("No baseline SCr value specified, using *median* of supplied values before first dose.")
         } else {
           if(any(times < 48)) {
-            baseline_scr <- stats::median(scr[times < 48])
+            baseline_scr <- stats::median(scr[times < 48], na.rm = TRUE)
             if(verbose) message("No baseline before first dose, using *median* of supplied values in first 48 hours.")
           } else {
-            baseline_scr <- stats::median(scr)
+            baseline_scr <- stats::median(scr, na.rm = TRUE)
             if(verbose) message("No baseline in first 48 hours, using *median* of supplied values.")
           }
         }
