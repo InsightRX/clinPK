@@ -30,7 +30,7 @@ numeric (0.2)}
 
 \item{method}{classification method, one of `KDIGO`, `RIFLE`, `pRIFLE` (case insensitive)}
 
-\item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.}
+\item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median`, `median_before_treatment`, `lowest`, or `expected`. The latter will use the expected value based on sex and age.}
 
 \item{baseline_egfr}{baseline eGFR, required for `RIFLE` classifations. Will take median of `egfr` values if `NULL`.}
 

@@ -8,7 +8,7 @@
 #'   numeric (0.2)
 #' @param times creatinine sample times in hours
 #' @param method classification method, one of `KDIGO`, `RIFLE`, `pRIFLE` (case insensitive)
-#' @param baseline_scr baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.
+#' @param baseline_scr baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median`, `median_before_treatment`, `lowest`, or `expected`. The latter will use the expected value based on sex and age.
 #' @param baseline_egfr baseline eGFR, required for `RIFLE` classifations. Will take median of `egfr` values if `NULL`.
 #' @param first_dose_time time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in `median_before_treatment` approach.
 #' @param override_prifle_baseline by default, `pRIFLE` compares eGFR to 120 ml/min. Override by setting to TRUE.
