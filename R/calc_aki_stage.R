@@ -10,6 +10,7 @@
 #' @param method classification method, one of `KDIGO`, `RIFLE`, `pRIFLE` (case insensitive)
 #' @param baseline_scr baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median` or `expected`. The latter will use the expected value based on sex and age.
 #' @param baseline_egfr baseline eGFR, required for `RIFLE` classifations. Will take median of `egfr` values if `NULL`.
+#' @param first_dose_time time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in `median_before_treatment` approach.
 #' @param override_prifle_baseline by default, `pRIFLE` compares eGFR to 120 ml/min. Override by setting to TRUE.
 #' @param age age in years, needed when eGFR is used in the classification method
 #' @param egfr eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.
@@ -39,6 +40,7 @@ calc_aki_stage <- function (
   method = "kdigo",
   baseline_scr = "median",
   baseline_egfr = NULL,
+  first_dose_time = NULL,
   age = NULL,
   egfr = NULL,
   egfr_method = NULL,
@@ -96,6 +98,25 @@ calc_aki_stage <- function (
   }
   # pRIFLE does not require SCr
   if(class(baseline_scr) == "character" && method !='prifle') {
+    if(baseline_scr == "median_before_treatment") {
+      if(is.null(first_dose_time)) {
+        baseline_scr <- stats::median(scr)
+        if(verbose) message("To calculate median baseline before treatment start need time of first dose. Using median over whole treatment period.")
+      } else {
+        if(any(times <= first_dose_time)) {
+          baseline_scr <- stats::median(scr[times <= first_dose_time])
+          if(verbose) message("No baseline SCr value specified, using *median* of supplied values before first dose.")
+        } else {
+          if(any(times < 48)) {
+            baseline_scr <- stats::median(scr[times < 48])
+            if(verbose) message("No baseline before first dose, using *median* of supplied values in first 48 hours.")
+          } else {
+            baseline_scr <- stats::median(scr)
+            if(verbose) message("No baseline in first 48 hours, using *median* of supplied values.")
+          }
+        }
+      }
+    }
     if(baseline_scr == "median") {
       baseline_scr <- stats::median(scr)
       if(verbose) message("No baseline SCr value specified, using *median* of supplied values.")
@@ -103,6 +124,10 @@ calc_aki_stage <- function (
     if(baseline_scr == "first" && method !='prifle') {
       baseline_scr <- scr[1]
       if(verbose) message("No baseline SCr value specified, using *first* of supplied values.")
+    }
+    if(baseline_scr == "lowest") {
+      baseline_scr <- min(scr)
+      if(verbose) message("No baseline SCr value specified, using *lowest* of supplied values.")
     }
     if(baseline_scr == "expected" && method !='prifle') {
       ## need to implement
@@ -129,7 +154,7 @@ calc_aki_stage <- function (
 
   ## Differences in SCr - don't need scr for pRIFLE
   if (method %in% c("kdigo", "rifle")) {
-    dat <- data.frame(scr = scr, t = times, deltat = c(0, diff(times)))
+    dat <- data.frame(scr = scr, t = times, deltat = c(0, diff(times)), baseline_scr = baseline_scr)
     dat$baseline_scr_diff <- (dat$scr - baseline_scr)
     dat$baseline_scr_reldiff <- dat$baseline_scr_diff / baseline_scr
     dat$stage <- rep(NA, length(scr))
