@@ -202,3 +202,17 @@ test_that("calc_aki_stage correctly calculates baseline_scr", {
       verbose = FALSE
     )$data$baseline_scr)
 })
+
+test_that("Times are sorted", {
+  akis <- calc_aki_stage(
+    method = "kDIGO",
+    scr = c(0.1, 3.2, 3.4),
+    times = c(50, 12, 0),
+    t = c(0, 24),
+    first_dose_time = 23,
+    egfr = c(50, 30),
+    baseline_scr = "median_before_treatment",
+    verbose = FALSE
+  )
+  expect_true(is.na(akis$stage))
+})
