@@ -2,7 +2,7 @@
 % Please edit documentation in R/pk_2cmt_inf.R
 \name{pk_2cmt_inf}
 \alias{pk_2cmt_inf}
-\title{Concentration predictions for 1-compartmental PK model, single or multiple infusions}
+\title{Concentration predictions for 2-compartmental PK model, single or multiple infusions}
 \usage{
 pk_2cmt_inf(
   t = c(0:24),
@@ -36,5 +36,5 @@ pk_2cmt_inf(
 \item{ruv}{residual error (list)}
 }
 \description{
-Concentration predictions for 1-compartmental PK model, single or multiple infusions
+Concentration predictions for 2-compartmental PK model, single or multiple infusions
 }

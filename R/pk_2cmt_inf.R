@@ -1,4 +1,4 @@
-#' Concentration predictions for 1-compartmental PK model, single or multiple infusions
+#' Concentration predictions for 2-compartmental PK model, single or multiple infusions
 #'
 #' @param t vector of time
 #' @param dose dose

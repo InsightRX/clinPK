@@ -2,7 +2,7 @@
 % Please edit documentation in R/pk_2cmt_inf_ss.R
 \name{pk_2cmt_inf_ss}
 \alias{pk_2cmt_inf_ss}
-\title{Concentration predictions for 1-compartmental PK model with infusion dosing at steady state}
+\title{Concentration predictions for 2-compartmental PK model with infusion dosing at steady state}
 \usage{
 pk_2cmt_inf_ss(
   t = c(0:24),
@@ -36,7 +36,7 @@ pk_2cmt_inf_ss(
 \item{ruv}{residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. `list(prop=0.1, add=1, exp=0)`}
 }
 \description{
-Concentration predictions for 1-compartmental PK model with infusion dosing at steady state
+Concentration predictions for 2-compartmental PK model with infusion dosing at steady state
 }
 \examples{
 pk_2cmt_inf_ss(
