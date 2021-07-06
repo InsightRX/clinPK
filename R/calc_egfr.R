@@ -151,7 +151,7 @@ calc_egfr <- function (
 
     } else if (grepl('_adjusted', method)) {
       weight_for_egfr <- "Adjusted BW"
-      ibw <- calc_ibw(height = height, age = age, sex = sex)
+      ibw <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
       weight <- calc_abw(weight = weight, ibw = ibw, ...)
 
     } else if (grepl('_adaptive', method)) {
