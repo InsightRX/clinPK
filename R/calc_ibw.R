@@ -76,6 +76,9 @@ calc_ibw <- function (
   ## babies
   ibw <- rep(0, length(weight))
   if(any(age < 1)) {
+    if (is.null(weight)) {
+      stop("Actual body weight is used as IBW for children < 1yr. Please supply a weight value.")
+    }
     message("Note: using actual body weight as IBW for children < 1yr.")
     ibw[age < 1] <- weight[age < 1]
   }
