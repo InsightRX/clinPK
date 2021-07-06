@@ -386,14 +386,25 @@ test_that("egfr cap applied and info added", {
 
 test_that("calc_egfr does not error for patients < 1yr when calculating ibw", {
   expect_error(
-    calc_egfr(
+    suppressMessages(calc_egfr(
       age = 0.03,
       sex = "female",
       weight = 2,
       height = 30,
       scr = 0.5,
       method = "cockcroft_gault_adjusted"
-    ),
+    )),
+    NA
+  )
+  expect_error(
+    suppressMessages(calc_egfr(
+      age = 0.03,
+      sex = "female",
+      weight = 2,
+      height = 30,
+      scr = 0.5,
+      method = "cockcroft_gault_ideal"
+    )),
     NA
   )
 })
