@@ -34,3 +34,7 @@ test_that("vectorized input works", {
     c(4.0823362, 4.5359291)
   )
 })
+
+test_that("weight2kg supports grams as input unit", {
+  expect_equal(weight2kg(1000, "g"), 1)
+})
