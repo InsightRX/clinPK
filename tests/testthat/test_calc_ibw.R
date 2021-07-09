@@ -11,3 +11,8 @@ test_that("IBW calculation works", {
 test_that("calc_ibw() throws error if weight is missing but needed", {
   expect_error(calc_ibw(age = 0.03, height = 40))
 })
+
+test_that("calc_ibw() errors if method doesn't match allowed", {
+  expect_error(calc_ibw(method_children = "foo"))
+  expect_error(calc_ibw(method_adults = "foo"))
+})

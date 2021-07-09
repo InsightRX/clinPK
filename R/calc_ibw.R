@@ -25,12 +25,15 @@
 #'   IBW (male) = 50 + (2.3 x height in inches over 5 feet)
 #'   IBW (female) = 45.5 + (2.3 x height in inches over 5 feet)
 #'
-#' @param age age in years, can be vector
-#' @param weight weight in kg, can be vector
-#' @param height height in cm, can be vector
-#' @param sex either `male` or `female`, can be vector
-#' @param method_children method to use for children >1 and <18 years. Choose from `standard`, `mclaren` (McLaren DS, Read WWC. Lancet. 1972;2:146-148.), `moore` (Moore DJ et al. Nutr Res. 1985;5:797-799), `bmi` (), `ada` (American Dietary Association)
-#' @param method_adults method to use for >=18 years. Choose from `devine` (default, Devine BJ. Drug Intell Clin Pharm. 1974;8:650-655).
+#' @param age age in years
+#' @param weight weight in kg
+#' @param height height in cm
+#' @param sex sex
+#' @param method_children method to use for children >1 and <18 years. Currently
+#'   `"standard"` is the only method that is supported.
+#' @param method_adults method to use for >=18 years. Currently `"devine"` is
+#'   the only method that is supported (Devine BJ. Drug Intell Clin Pharm.
+#'   1974;8:650-655).
 #' @param digits number of decimals (can be NULL to for no rounding)
 #' @examples
 #' calc_ibw(weight = 70, height = 170, age = 40, sex = "female")
@@ -45,75 +48,89 @@ calc_ibw <- function (
   method_adults = "devine",
   digits = NULL
 ) {
-  available_methods_children <- c("standard") # c("moore", "mclaren", "bmi", "ada")
-  method_children <- tolower(method_children)
-  if(!(method_children %in% available_methods_children)) {
-    stop("Specified method for children not available.")
-  }
-  available_methods_adults <- c("devine")
-  method_adults <- tolower(method_adults)
-  if(!(method_adults %in% available_methods_adults)) {
-    stop("Specified method for adults not available.")
-  }
+  method_children <- match.arg(method_children)
+  method_adults <- match.arg(method_adults)
   if(is.null(age)) {
     stop("Age not specified!")
   }
-  if(length(weight > 1)) {
-    if(length(height) != length(weight)) {
-      message("Height and weight do not have same vector lenght, using only first height.")
-      height <- rep(height[1], length(weight))
-    }
-    if(length(age) != length(weight)) {
-      message("Age and weight do not have same vector lenght, using only first age.")
-      age <- rep(age[1], length(weight))
-    }
-    if(length(sex) != length(weight)) {
-      message("Sex and weight do not have same vector lenght, using only first sex.")
-      sex <- rep(sex[1], length(weight))
-    }
-  }
+  stopifnot(
+    length(age) == 1,
+    length(height) <= 1, # these are not always
+    length(weight) <= 1, # required, so may be
+    length(sex) <= 1     # NULL or length 1
+  )
 
   ## babies
-  ibw <- rep(0, length(weight))
-  if(any(age < 1)) {
+  if (age < 1) {
     if (is.null(weight)) {
       stop("Actual body weight is used as IBW for children < 1yr. Please supply a weight value.")
     }
     message("Note: using actual body weight as IBW for children < 1yr.")
-    ibw[age < 1] <- weight[age < 1]
+    return(weight)
   }
 
-  ## children
-  ht <- cm2inch(height)
-  if(any(age >= 1 & age < 18)) {
-    if(method_children == "standard") {
-      if(any(is.null(height) || is.null(age) || is.null(sex))) {
-        ibw[age >= 1 & age < 18 & (is.null(height) || is.null(age) || is.null(sex))] <- NA
-        message("Height, age and sex are required!")
-      }
-      ibw[age >= 1 & age < 18 & ht < 5*12] <- (height[age >= 1 & age < 18 & ht < 5*12]^2 * 1.65)/1000
-      ibw[age >= 1 & age < 18 & ht >= 5*12] <-
-        (39   + 2.27 * (ht[age >= 1 & age < 18 & ht >= 5*12]-(5*12))) * (sex[age >= 1 & age < 18 & ht >= 5*12]=="male") +
-        (42.2 + 2.27 * (ht[age >= 1 & age < 18 & ht >= 5*12]-(5*12))) * (sex[age >= 1 & age < 18 & ht >= 5*12]=="female")
-    }
+  if (age >= 1 & age < 18) {
+    ibw <- ibw_standard(age = age, height = height, sex = sex)
+  } else {
+    ibw <- ibw_devine(age = age, height = height, sex = sex)
   }
 
-  ## adults
-  if(any(age >= 18)) {
-    if(method_adults == "devine") {
-      if(any(is.null(height) || is.null(sex))) {
-        ibw[age >= 18 & (is.null(height) || is.null(sex))] <- NA
-        message("Height and sex are required to calculate!")
-      }
-      ibw[age >= 18] <-
-        (50 + (2.3 * (ht[age >= 18]-(5*12)))) * (sex[age >= 18] == "male") +
-        (45.5 + (2.3 * (ht[age >= 18]-(5*12)))) * (sex[age >= 18] == "female")
-    }
-  }
-
-  if(!is.null(digits)) {
-    ibw <- round(ibw, digits=digits)
+  if (!is.null(digits)) {
+    ibw <- round(ibw, digits = digits)
   }
 
   return(ibw)
+}
+
+#' Calculate IBW using "standard" equation
+#'
+#' @inheritParams calc_ibw
+ibw_standard <- function(age, height = NULL, sex = NULL) {
+  if (is.null(age) || age >= 18 || age < 1) {
+    stop("Age must be >=1 and <18")
+  }
+  if (is.null(height) || is.na(height)) {
+    message("Height is required to calculate IBW")
+    return(NA)
+  }
+  height_in <- cm2inch(height)
+  if (height_in < 5 * 12) {
+    return((height^2 * 1.65) / 1000)
+  }
+  if (is.null(sex) || is.na(sex) || !sex %in% c("male", "female")) {
+    message("The `standard` method for calculating IBW requires sex to be 'male' or 'female' for children 5 feet tall or taller.")
+    return(NA)
+  }
+  base_value <- switch(
+    sex,
+    "male" = 39,
+    "female" = 42.2
+  )
+  height_inches_over_5_feet <- height_in - (5 * 12)
+  base_value + (2.27 * height_inches_over_5_feet)
+}
+
+#' Calculate IBW using "devine" equation
+#'
+#' @inheritParams calc_ibw
+ibw_devine <- function(age, height = NULL, sex = NULL) {
+  if (age < 18) {
+    stop("Age must be >= 18 for the Devine equation")
+  }
+  if (is.null(height) || is.na(height)) {
+    message("Height is required to calculate IBW")
+    return(NA)
+  }
+  if (is.null(sex) || is.na(sex) || !sex %in% c("male", "female")) {
+    message("The `devine` method for calculating IBW requires sex to be 'male' or 'female'.")
+    return(NA)
+  }
+  base_value <- switch(
+    sex,
+    "male" = 50,
+    "female" = 45.5
+  )
+  height_in <- cm2inch(height)
+  height_inches_over_5_feet <- height_in - (5 * 12)
+  base_value + (2.3 * height_inches_over_5_feet)
 }
