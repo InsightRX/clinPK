@@ -70,9 +70,15 @@ calc_ibw <- function (
   }
 
   if (age >= 1 & age < 18) {
-    ibw <- ibw_standard(age = age, height = height, sex = sex)
+    ibw <- switch(
+      method_children,
+      "standard" = ibw_standard(age = age, height = height, sex = sex)
+    )
   } else {
-    ibw <- ibw_devine(age = age, height = height, sex = sex)
+    ibw <- switch(
+      method_adults,
+      "devine" = ibw_devine(age = age, height = height, sex = sex)
+    )
   }
 
   if (!is.null(digits)) {
