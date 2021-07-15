@@ -1,4 +1,4 @@
-#' Concentration predictions for 1-compartmental PK model with infusion dosing at steady state
+#' Concentration predictions for 2-compartmental PK model with infusion dosing at steady state
 #'
 #' @param t vector of time
 #' @param t_inf infusion time
