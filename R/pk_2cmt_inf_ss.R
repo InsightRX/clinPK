@@ -36,7 +36,7 @@ pk_2cmt_inf_ss <- function(
   A <- (1/V) * (alpha - (Q/V2))/(alpha-beta)
   B <- (1/V) * ((beta - Q/V2)/(beta-alpha))
 
-  dat <- data.frame(cbind(t = t, dv = 0))
+  dat <- data.frame(t = t, dv = 0)
   dat$dv[t_dos <= t_inf] <-
     (dose/t_inf) * (
       (A/alpha) * ((1-exp(-alpha*t_dos[t_dos <= t_inf])) +
