@@ -1,4 +1,4 @@
-#' Calculate adjusted body weight (ABW)
+#' Calculate adjusted body weight (ABW) in kg
 #'
 #' Often used for chemotherapy calculations when actual weight > 120% of IBW.
 #'

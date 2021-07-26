@@ -1,4 +1,4 @@
-#' Calculate commonly used "dosing weight", based on total (TBW), ideal (IBW), or adjusted (ABW) body weight
+#' Calculate commonly used "dosing weight", based on total (TBW), ideal (IBW), or adjusted (ABW) body weight in kg
 #' This is derived using following:
 #' - In principle, use IBW
 #' - If total body weight (TBW) > 1.2*IBW, then use ABW

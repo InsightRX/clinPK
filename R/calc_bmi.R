@@ -1,4 +1,4 @@
-#' Calculate BMI
+#' Calculate BMI in kg/m2
 #'
 #' @param weight weight in kg
 #' @param height height in cm

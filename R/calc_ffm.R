@@ -1,4 +1,4 @@
-#' Calculate fat-free mass
+#' Calculate fat-free mass in kg
 #'
 #' Get an estimate of body-surface area based on weight, height, and sex (and age for Storset equation).
 #'

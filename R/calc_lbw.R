@@ -1,4 +1,4 @@
-#' Calculate lean body weight
+#' Calculate lean body weight in kg
 #'
 #' Get an estimate of lean body weight (LBW) based on weight, height, and sex.
 #'

@@ -1,4 +1,4 @@
-#' Calculate body surface area
+#' Calculate body surface area in m^2
 #'
 #' Get an estimate of body-surface area based on weight and height
 #'
