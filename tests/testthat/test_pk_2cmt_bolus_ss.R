@@ -13,8 +13,8 @@ test_that("PK 2cmt bolus at steady state", {
     Q = 2.28,
     V2 = 58.56
   )
-  expect_true(all(c("t", "dv") %in% colnames(res)))
-  expect_true(inherits(res, "data.frame"))
+  expect_named(res, c("t", "dv"))
+  expect_s3_class(res, "data.frame")
   expect_equal(res$t, 0:12 - 0.001)
   expect_equal(
     round(res$dv[1:5], 2), 
@@ -41,8 +41,8 @@ test_that("Add RUV to PK 2cmt infusion at steady state", {
     V2 = 58.56,
     ruv = list(prop = 0.15, add = 1.6)
   )
-  expect_true(all(c("t", "dv") %in% colnames(res_ruv)))
-  expect_true(inherits(res_ruv, "data.frame"))
+  expect_named(res_ruv, c("t", "dv"))
+  expect_s3_class(res_ruv, "data.frame")
   expect_equal(res_ruv$t, 0:24)
   expect_false(any(res_ruv$dv[1:10] == res$dv[1:10]))
 })
