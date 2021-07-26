@@ -27,7 +27,7 @@ pk_2cmt_t12_interval <- function(
   if(!is.null(t_inf)) {
     conc <- pk_2cmt_inf_ss(t=c(t_inf, tau), dose = 1000, tau = tau, t_inf = t_inf, CL=CL, V=V, Q=Q, V2=V2)
   } else {
-    conc <- pk_2cmt_bolus_ss(t=c(0, tau), dose = 1000, tau = tau, CL=CL, V=V, Q=Q, V2=V2)
+    conc <- pk_2cmt_bolus_ss(t=c(0, tau - 0.00001), dose = 1000, tau = tau, CL=CL, V=V, Q=Q, V2=V2)
   }
   calc_t12(conc$t[1], conc$t[2], conc$dv[1], conc$dv[2])
 }

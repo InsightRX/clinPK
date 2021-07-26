@@ -23,10 +23,9 @@ pk_2cmt_bolus_ss <- function(
   ) {
   k <- CL / V
   tmp <- c()
-  dat <- data.frame(cbind(t = t, dv = 0))
+  dat <- data.frame(t = t, dv = 0)
   t_dos <- t %% tau
   n_dos <- floor(t/tau)
-  unq_dos <- unique(n_dos) + 1
 
   # reparametrization:
   terms <- (Q/V) + (Q/V2) + (CL/V)
