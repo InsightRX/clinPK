@@ -26,7 +26,6 @@ pk_2cmt_t12 <- function(
   k21 <- Q / V2
   beta <- ((1/2) * ((k12 + k21 + kel) - sqrt((k12 + k21 + kel)^2 - (4*k21*kel))))
   alpha <- k21*kel/beta
-  obj <- list(alpha = log(2)/alpha, beta = log(2)/beta)
   
   switch(
     phase,
