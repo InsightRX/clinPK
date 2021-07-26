@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_ibw.R
 \name{calc_ibw}
 \alias{calc_ibw}
-\title{Calculate ideal body weight for children and adults}
+\title{Calculate ideal body weight in kg for children and adults}
 \usage{
 calc_ibw(
   weight = NULL,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_bmi.R
 \name{calc_bmi}
 \alias{calc_bmi}
-\title{Calculate BMI}
+\title{Calculate BMI in kg/m2}
 \usage{
 calc_bmi(weight, height)
 }
@@ -12,7 +12,7 @@ calc_bmi(weight, height)
 \item{height}{height in cm}
 }
 \description{
-Calculate BMI
+Calculate BMI in kg/m2
 }
 \examples{
 calc_bmi(weight = 70, height = 160)

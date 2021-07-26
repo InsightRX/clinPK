@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_lbw.R
 \name{calc_lbw}
 \alias{calc_lbw}
-\title{Calculate lean body weight}
+\title{Calculate lean body weight in kg}
 \usage{
 calc_lbw(
   weight = NULL,

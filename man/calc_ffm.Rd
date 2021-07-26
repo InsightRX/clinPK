@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_ffm.R
 \name{calc_ffm}
 \alias{calc_ffm}
-\title{Calculate fat-free mass}
+\title{Calculate fat-free mass in kg}
 \usage{
 calc_ffm(
   weight = NULL,

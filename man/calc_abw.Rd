@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_abw.R
 \name{calc_abw}
 \alias{calc_abw}
-\title{Calculate adjusted body weight (ABW)}
+\title{Calculate adjusted body weight (ABW) in kg}
 \usage{
 calc_abw(weight = NULL, ibw = NULL, factor = 0.4, verbose = TRUE, ...)
 }
