@@ -1,6 +1,6 @@
-#' Calculate lean body weight in kg
+#' Calculate lean body weight
 #'
-#' Get an estimate of lean body weight (LBW) based on weight, height, and sex.
+#' Get an estimate of lean body weight (LBW, in kg) based on weight, height, and sex.
 #'
 #' Note: technically not the same as fat-free mass, although difference is small.
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_lbw.R
 \name{calc_lbw}
 \alias{calc_lbw}
-\title{Calculate lean body weight in kg}
+\title{Calculate lean body weight}
 \usage{
 calc_lbw(
   weight = NULL,
@@ -30,7 +30,7 @@ calc_lbw(
 list of lean body weight in kg and unit
 }
 \description{
-Get an estimate of lean body weight (LBW) based on weight, height, and sex.
+Get an estimate of lean body weight (LBW, in kg) based on weight, height, and sex.
 }
 \details{
 Note: technically not the same as fat-free mass, although difference is small.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_abw.R
 \name{calc_abw}
 \alias{calc_abw}
-\title{Calculate adjusted body weight (ABW) in kg}
+\title{Calculate adjusted body weight (ABW)}
 \usage{
 calc_abw(weight = NULL, ibw = NULL, factor = 0.4, verbose = TRUE, ...)
 }
@@ -22,6 +22,7 @@ adjusted body weight in kg
 }
 \description{
 Often used for chemotherapy calculations when actual weight > 120% of IBW.
+Adjusted body weight is returned in units of kg.
 }
 \examples{
 calc_abw(weight = 80, ibw = 60)

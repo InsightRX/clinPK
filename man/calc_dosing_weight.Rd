@@ -2,11 +2,7 @@
 % Please edit documentation in R/calc_dosing_weight.R
 \name{calc_dosing_weight}
 \alias{calc_dosing_weight}
-\title{Calculate commonly used "dosing weight", based on total (TBW), ideal (IBW), or adjusted (ABW) body weight in kg
-This is derived using following:
-- In principle, use IBW
-- If total body weight (TBW) > 1.2*IBW, then use ABW
-- If TBW < IBW, use TBW}
+\title{Calculate commonly used "dosing weight"}
 \usage{
 calc_dosing_weight(weight, height, age, sex, verbose = TRUE, ...)
 }
@@ -24,10 +20,16 @@ calc_dosing_weight(weight, height, age, sex, verbose = TRUE, ...)
 \item{...}{pased to `calc_abw()` function}
 }
 \value{
-list of dosing weight in kg, unit ("kg"), and weight type
+Returns a list of the following elements:
+\item{value}{Dosing weight, in units of kg}
+\item{unit}{Units of dosing weight (kg)}
+\item{type}{Type of dosing weight selected, e.g., total body weight, ideal body weight.}
 }
 \description{
-Calculate commonly used "dosing weight", based on total (TBW), ideal (IBW), or adjusted (ABW) body weight in kg
+Dosing weight is determined based on total (TBW), ideal (IBW), or 
+adjusted (ABW) body weight in kg.
+}
+\details{
 This is derived using following:
 - In principle, use IBW
 - If total body weight (TBW) > 1.2*IBW, then use ABW
