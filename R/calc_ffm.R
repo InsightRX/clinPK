@@ -1,6 +1,6 @@
 #' Calculate fat-free mass
 #'
-#' Get an estimate of body-surface area based on weight, height, and sex (and age for Storset equation).
+#' Get an estimate of fat-free mass (FFM, in kg) based on weight, height, and sex (and age for Storset equation).
 #'
 #' References:
 #' `janmahasatian`, `green`: Janmahasatian et al. Clin Pharmacokinet. 2005;44(10):1051-65)
@@ -21,6 +21,10 @@
 #' @param age age, only used for Storset equation
 #' @param method estimation method, either `green` (default), `holford`, or `storset`
 #' @param digits round to number of digits
+#' @return Returns a list of the following elements:
+#' \item{value}{Fat-free Mass (FFM) in units of kg}
+#' \item{unit}{Unit describing FFM, (kg)}
+#' \item{method}{Method used to calculate FFF}
 #' @examples
 #' calc_ffm(weight = 70, bmi = 25, sex = "male")
 #' calc_ffm(weight = 70, height = 180, age = 40, sex = "female", method = "storset")

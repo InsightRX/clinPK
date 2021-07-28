@@ -1,4 +1,4 @@
-#' Calculate ideal body weight for children and adults
+#' Calculate ideal body weight in kg for children and adults
 #'
 #' Get an estimate of ideal body weight. This function allows several commonly used equations
 #'

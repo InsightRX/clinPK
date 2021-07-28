@@ -11,6 +11,9 @@ calc_bmi(weight, height)
 
 \item{height}{height in cm}
 }
+\value{
+value of BMI in kg/m2
+}
 \description{
 Calculate BMI
 }

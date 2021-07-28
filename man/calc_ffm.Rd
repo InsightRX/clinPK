@@ -29,8 +29,14 @@ calc_ffm(
 
 \item{digits}{round to number of digits}
 }
+\value{
+Returns a list of the following elements:
+\item{value}{Fat-free Mass (FFM) in units of kg}
+\item{unit}{Unit describing FFM, (kg)}
+\item{method}{Method used to calculate FFF}
+}
 \description{
-Get an estimate of body-surface area based on weight, height, and sex (and age for Storset equation).
+Get an estimate of fat-free mass (FFM, in kg) based on weight, height, and sex (and age for Storset equation).
 }
 \details{
 References:

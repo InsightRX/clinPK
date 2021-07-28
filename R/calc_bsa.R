@@ -1,10 +1,13 @@
 #' Calculate body surface area
 #'
-#' Get an estimate of body-surface area based on weight and height
+#' Get an estimate of body-surface area (in m2) based on weight and height
 #'
 #' @param weight weight
 #' @param height height
 #' @param method estimation method, choose from `dubois`, `mosteller`, `haycock`, `gehan_george`, `boyd`
+#' @return Returns a list of the following elements:
+#' \item{value}{Body Surface Area (BSA) in units of m2}
+#' \item{unit}{Unit describing BSA, (m2)}
 #' @examples
 #' calc_bsa(weight = 70, height = 170)
 #' calc_bsa(weight = 70, height = 170, method = "gehan_george")
