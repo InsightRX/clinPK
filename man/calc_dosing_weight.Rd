@@ -23,6 +23,9 @@ calc_dosing_weight(weight, height, age, sex, verbose = TRUE, ...)
 
 \item{...}{pased to `calc_abw()` function}
 }
+\value{
+list of dosing weight in kg, unit ("kg"), and weight type
+}
 \description{
 Calculate commonly used "dosing weight", based on total (TBW), ideal (IBW), or adjusted (ABW) body weight in kg
 This is derived using following:

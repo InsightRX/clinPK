@@ -26,6 +26,9 @@ calc_lbw(
 
 \item{digits}{round to number of digits}
 }
+\value{
+list of lean body weight in kg and unit
+}
 \description{
 Get an estimate of lean body weight (LBW) based on weight, height, and sex.
 }

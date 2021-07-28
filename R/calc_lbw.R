@@ -17,6 +17,7 @@
 #' @param sex sex, either `male` of `female`
 #' @param method estimation method, either `green` (default), `boer`, `james`, `hume`
 #' @param digits round to number of digits
+#' @return list of lean body weight in kg and unit
 #' @examples
 #' calc_lbw(weight = 80, height = 170, sex = "male")
 #' calc_lbw(weight = 80, height = 170, sex = "male", method = "james")

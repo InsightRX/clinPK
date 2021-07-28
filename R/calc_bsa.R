@@ -5,6 +5,7 @@
 #' @param weight weight
 #' @param height height
 #' @param method estimation method, choose from `dubois`, `mosteller`, `haycock`, `gehan_george`, `boyd`
+#' @return list of value of BSA in m2, and unit of m2
 #' @examples
 #' calc_bsa(weight = 70, height = 170)
 #' calc_bsa(weight = 70, height = 170, method = "gehan_george")

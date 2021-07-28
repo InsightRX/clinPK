@@ -29,6 +29,9 @@ calc_ffm(
 
 \item{digits}{round to number of digits}
 }
+\value{
+list of fat free mass in kg, unit (which is kg), and FFM method
+}
 \description{
 Get an estimate of body-surface area based on weight, height, and sex (and age for Storset equation).
 }

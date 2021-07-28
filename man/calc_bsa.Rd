@@ -13,6 +13,9 @@ calc_bsa(weight = NULL, height = NULL, method = "dubois")
 
 \item{method}{estimation method, choose from `dubois`, `mosteller`, `haycock`, `gehan_george`, `boyd`}
 }
+\value{
+list of value of BSA in m2, and unit of m2
+}
 \description{
 Get an estimate of body-surface area based on weight and height
 }

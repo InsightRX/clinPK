@@ -9,6 +9,7 @@
 #' @param age age
 #' @param verbose verbosity (`TRUE` or `FALSE`)
 #' @param ... pased to `calc_abw()` function
+#' @return list of dosing weight in kg, unit ("kg"), and weight type
 #' @export
 #' @examples
 #' calc_dosing_weight(weight = 50, height = 170, sex = "female", age = 50)
