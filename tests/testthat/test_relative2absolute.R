@@ -1,0 +1,16 @@
+test_that("convert when bsa is supplied", {
+  # This is a patient with BSA < 1.7, so relative should be > absolute
+  expect_equal(round(relative2absolute(59.8, 1.62), 2), 56)
+})
+
+test_that("convert when height/weight supplied", {
+  # This is a patient with BSA > 1.7, so relative should be < absolute
+  expect_equal(round(relative2absolute(144.5, weight = 80, height = 200)), 180)
+})
+
+test_that("errors when bsa and (height or weight) missing", {
+  expect_error(relative2absolute(180, height = 200))
+  expect_error(relative2absolute(180, weight = 100))
+})
+
+
