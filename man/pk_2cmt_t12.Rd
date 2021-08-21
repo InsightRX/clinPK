@@ -4,7 +4,7 @@
 \alias{pk_2cmt_t12}
 \title{Calculate half-life(s) for 2-compartment model}
 \usage{
-pk_2cmt_t12(CL = 3, V = 30, Q = 2, V2 = 20, phase = "both")
+pk_2cmt_t12(CL = 3, V = 30, Q = 2, V2 = 20, phase = c("both", "alpha", "beta"))
 }
 \arguments{
 \item{CL}{clearance}
