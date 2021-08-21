@@ -14,5 +14,7 @@ relative2absolute <- function(quantity, bsa = NULL, ...) {
   if(is.null(bsa)) {
     bsa <- calc_bsa(...)$value
   }
-  quantity * bsa / 1.73
+  list(
+    value = quantity * bsa / 1.73
+  )
 }
