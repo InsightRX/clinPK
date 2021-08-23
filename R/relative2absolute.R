@@ -10,7 +10,7 @@
 #' relative2absolute(quantity = 60, bsa = 1.6)
 #' relative2absolute(quantity = 60, weight = 14, height = 90, method = "dubois")
 #' @export
-relative2absolute <- function(quantity, bsa = NULL, ...) {
+relative2absolute_bsa <- function(quantity, bsa = NULL, ...) {
   if(is.null(bsa)) {
     bsa <- calc_bsa(...)$value
   }
