@@ -256,12 +256,12 @@ calc_egfr <- function (
 
   # --- Convert to relative if required
   if (!relative & !grepl('cockcroft_gault', method)) {
-    crcl <- relative2absolute(crcl, bsa)[["value"]]
+    crcl <- relative2absolute_bsa(crcl, bsa)[["value"]]
   } else if (relative & !grepl('cockcroft_gault', method)){
     unit <- paste0(unit, "/1.73m^2")
   } else if (relative) {
     unit <- paste0(unit, "/1.73m^2")
-    crcl <- absolute2relative(crcl, bsa)[["value"]]
+    crcl <- absolute2relative_bsa(crcl, bsa)[["value"]]
   }
   # --- Convert to /h or to L if required
   conversion_factor <- 1
