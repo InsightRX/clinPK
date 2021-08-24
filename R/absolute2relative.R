@@ -7,8 +7,8 @@
 #' @param ... arguments passed on to `calc_bsa`, if bsa is NULL
 #' @return quantity expressed relative to /1.73m2
 #' @examples
-#' absolute2relative(quantity = 60, bsa = 1.6)
-#' absolute2relative(quantity = 60, weight = 14, height = 90, method = "dubois")
+#' absolute2relative_bsa(quantity = 60, bsa = 1.6)
+#' absolute2relative_bsa(quantity = 60, weight = 14, height = 90, method = "dubois")
 #' @export
 absolute2relative_bsa <- function(quantity, bsa = NULL, ...) {
   if(is.null(bsa)) {

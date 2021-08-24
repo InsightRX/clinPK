@@ -20,6 +20,6 @@ quantity expressed in absolute units
 Often used for eGFR estimates
 }
 \examples{
-relative2absolute(quantity = 60, bsa = 1.6)
-relative2absolute(quantity = 60, weight = 14, height = 90, method = "dubois")
+relative2absolute_bsa(quantity = 60, bsa = 1.6)
+relative2absolute_bsa(quantity = 60, weight = 14, height = 90, method = "dubois")
 }

@@ -7,8 +7,8 @@
 #' @param ... arguments passed on to `calc_bsa`, if bsa is NULL
 #' @return quantity expressed in absolute units
 #' @examples
-#' relative2absolute(quantity = 60, bsa = 1.6)
-#' relative2absolute(quantity = 60, weight = 14, height = 90, method = "dubois")
+#' relative2absolute_bsa(quantity = 60, bsa = 1.6)
+#' relative2absolute_bsa(quantity = 60, weight = 14, height = 90, method = "dubois")
 #' @export
 relative2absolute_bsa <- function(quantity, bsa = NULL, ...) {
   if(is.null(bsa)) {
