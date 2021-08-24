@@ -20,6 +20,6 @@ quantity expressed relative to /1.73m2
 Often used for eGFR estimates
 }
 \examples{
-absolute2relative(quantity = 60, bsa = 1.6)
-absolute2relative(quantity = 60, weight = 14, height = 90, method = "dubois")
+absolute2relative_bsa(quantity = 60, bsa = 1.6)
+absolute2relative_bsa(quantity = 60, weight = 14, height = 90, method = "dubois")
 }
