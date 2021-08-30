@@ -30,13 +30,6 @@ test_that("calc_ibw() uses weight when age < 1", {
   )
 })
 
-test_that("calc_ibw() can round output", {
-  expect_equal(
-    calc_ibw(age = 40, height = 180, sex = "female", digits = 1),
-    70.5
-  )
-})
-
 test_that("ibw_standard only supports children and requires age", {
   expect_error(ibw_standard(age = 25))
   expect_error(ibw_standard(age = NULL))

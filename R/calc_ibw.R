@@ -34,7 +34,6 @@
 #' @param method_adults method to use for >=18 years. Currently `"devine"` is
 #'   the only method that is supported (Devine BJ. Drug Intell Clin Pharm.
 #'   1974;8:650-655).
-#' @param digits number of decimals (can be NULL to for no rounding)
 #' @examples
 #' calc_ibw(weight = 70, height = 170, age = 40, sex = "female")
 #' calc_ibw(weight = 30, height = 140, age = 10, sex = "female")
@@ -45,8 +44,7 @@ calc_ibw <- function (
   age = NULL,
   sex = "male",
   method_children = "standard",
-  method_adults = "devine",
-  digits = NULL
+  method_adults = "devine"
 ) {
   method_children <- match.arg(method_children)
   method_adults <- match.arg(method_adults)
@@ -79,10 +77,6 @@ calc_ibw <- function (
       method_adults,
       "devine" = ibw_devine(age = age, height = height, sex = sex)
     )
-  }
-
-  if (!is.null(digits)) {
-    ibw <- round(ibw, digits = digits)
   }
 
   return(ibw)
