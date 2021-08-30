@@ -10,8 +10,7 @@ calc_ibw(
   age = NULL,
   sex = "male",
   method_children = "standard",
-  method_adults = "devine",
-  digits = NULL
+  method_adults = "devine"
 )
 }
 \arguments{
@@ -29,8 +28,6 @@ calc_ibw(
 \item{method_adults}{method to use for >=18 years. Currently `"devine"` is
 the only method that is supported (Devine BJ. Drug Intell Clin Pharm.
 1974;8:650-655).}
-
-\item{digits}{number of decimals (can be NULL to for no rounding)}
 }
 \description{
 Get an estimate of ideal body weight. This function allows several commonly used equations
