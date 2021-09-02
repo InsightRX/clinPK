@@ -19,7 +19,7 @@
 #' @param height height in cm, only required for `holford` method, can be used instead of `bmi` for `green` method
 #' @param sex sex, either `male` of `female`
 #' @param age age, only used for Storset equation
-#' @param method estimation method, either `green` (default), `holford`, or `storset`
+#' @param method estimation method, one of `janmahasatian` (default), `green`, `al-sallami`, `storset`, `bucaloiu`, `hume`, `james`, or `garrow_webster`.
 #' @param digits round to number of digits
 #' @return Returns a list of the following elements:
 #' \item{value}{Fat-free Mass (FFM) in units of kg}
@@ -35,12 +35,9 @@ calc_ffm <- function (
   sex = NULL,
   height = NULL,
   age = NULL,
-  method = "janmahasatian",
+  method = c("janmahasatian", "green", "al-sallami", "storset", "bucaloiu", "hume", "james", "garrow_webster"),
   digits = 1) {
-  methods <- c("janmahasatian", "green", "al-sallami", "storset", "bucaloiu", "hume", "james", "garrow_webster")
-  if(! method %in% methods) {
-    stop(paste0("Unknown estimation method, please choose from: ", paste(methods, collapse=" ")))
-  }
+  method <- match.arg(method)
   if(is.null(sex) || !(sex %in% c("male", "female"))) {
     stop("Sex needs to be either male or female!")
   }

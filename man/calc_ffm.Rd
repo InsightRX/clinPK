@@ -10,7 +10,8 @@ calc_ffm(
   sex = NULL,
   height = NULL,
   age = NULL,
-  method = "janmahasatian",
+  method = c("janmahasatian", "green", "al-sallami", "storset", "bucaloiu", "hume",
+    "james", "garrow_webster"),
   digits = 1
 )
 }
@@ -25,7 +26,7 @@ calc_ffm(
 
 \item{age}{age, only used for Storset equation}
 
-\item{method}{estimation method, either `green` (default), `holford`, or `storset`}
+\item{method}{estimation method, one of `janmahasatian` (default), `green`, `al-sallami`, `storset`, `bucaloiu`, `hume`, `james`, or `garrow_webster`.}
 
 \item{digits}{round to number of digits}
 }
