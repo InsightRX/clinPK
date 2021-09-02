@@ -4,7 +4,11 @@
 \alias{calc_bsa}
 \title{Calculate body surface area}
 \usage{
-calc_bsa(weight = NULL, height = NULL, method = "dubois")
+calc_bsa(
+  weight = NULL,
+  height = NULL,
+  method = c("dubois", "mosteller", "haycock", "gehan_george", "boyd")
+)
 }
 \arguments{
 \item{weight}{weight}
