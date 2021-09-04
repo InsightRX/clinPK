@@ -28,7 +28,9 @@ calc_egfr(
 )
 }
 \arguments{
-\item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`}
+\item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
+`cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, `mdrd_ignore_race`, `ckd_epi`, `ckd_epi_ignore_race`, 
+`malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.}
 
 \item{sex}{sex}
 
@@ -38,7 +40,8 @@ calc_egfr(
 
 \item{scr_unit, }{`mg/dL` or `micromol/L` (==`umol/L`)}
 
-\item{race}{`black` or `other`}
+\item{race}{`black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. See References section below
+for important considerations when using race as a predictive factor in eGFR.}
 
 \item{weight}{weight}
 
@@ -69,12 +72,13 @@ calc_egfr(
 \item{...}{arguments passed on}
 }
 \description{
-Calculate the estimated glomerulal filtration rate (an estimate of renal function) based on measured serum creatinine using one of the following approaches:
+Calculate the estimated glomerular filtration rate (an indicator of renal function) based on measured serum creatinine using one of the following approaches:
 \itemize{
   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
   \item C-G spinal cord injury
   \item Revised Lund-Malmo
-  \item Modification of Diet in Renal Disease study (MDRD)
+  \item Modification of Diet in Renal Disease study (MDRD; with or without consideration of race)
+  \item CKD-EPI (with or without consideration of race)
   \item Schwartz
   \item Schwartz revised / bedside
   \item Jelliffe
@@ -82,6 +86,18 @@ Calculate the estimated glomerulal filtration rate (an estimate of renal functio
   \item Wright
 }
 Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
+}
+\note{
+The MDRD and CKD-EPI equations use race as a factor in estimation of GFR. Racism has
+  historically been and continues to be a problem in medicine, with racialized patients
+  experiencing poorer outcomes. Given this context, the use of race in clinical algorithms
+  should be considered carefully (\href{www.nejm.org/doi/10.1056/NEJMms2004740}{Vyas et al., NEJM (2020)}).
+  Provided here are versions of the CKD-EPI and MDRD equations that neglect the impact of race.
+  Removing race from GFR estimation may lead to worse outcomes for Black patients in some contexts
+  (\href{https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext}{Casal et al., The Lancet (2021)}). 
+  On the other hand, including race in GFR estimation may also prevent Black patients 
+  from obtaining procedures like kidney transplants
+  ({\href{pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
 }
 \examples{
 calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
@@ -99,7 +115,8 @@ calc_egfr(sex = "male", age = 50, scr = 1.1,
   \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
   \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
   \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
-  \item MDRD: \href{https://www.ncbi.nlm.nih.gov/pubmed/10075613}{Level et al., Annals of Internal Medicine}
+  \item MDRD: \href{https://www.ncbi.nlm.nih.gov/pubmed/10075613}{Level et al., Annals of Internal Medicine}. (See Note.)
+  \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
   \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
