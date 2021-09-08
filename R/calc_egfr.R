@@ -54,13 +54,13 @@
 #'   The MDRD and CKD-EPI equations use race as a factor in estimation of GFR. Racism has
 #'   historically been and continues to be a problem in medicine, with racialized patients
 #'   experiencing poorer outcomes. Given this context, the use of race in clinical algorithms
-#'   should be considered carefully (\href{www.nejm.org/doi/10.1056/NEJMms2004740}{Vyas et al., NEJM (2020)}).
+#'   should be considered carefully (\href{https://www.nejm.org/doi/10.1056/NEJMms2004740}{Vyas et al., NEJM (2020)}).
 #'   Provided here are versions of the CKD-EPI and MDRD equations that neglect the impact of race.
 #'   Removing race from GFR estimation may lead to worse outcomes for Black patients in some contexts
 #'   (\href{https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext}{Casal et al., The Lancet (2021)}). 
 #'   On the other hand, including race in GFR estimation may also prevent Black patients 
 #'   from obtaining procedures like kidney transplants
-#'   ({\href{pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
+#'   ({\href{https://pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
 #'  
 #' @examples
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
