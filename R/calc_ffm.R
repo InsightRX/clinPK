@@ -38,9 +38,6 @@ calc_ffm <- function (
   method = c("janmahasatian", "green", "al-sallami", "storset", "bucaloiu", "hume", "james", "garrow_webster"),
   digits = 1) {
   method <- match.arg(method)
-  if(is.null(sex) || !(sex %in% c("male", "female"))) {
-    stop("Sex needs to be either male or female!")
-  }
   sex <- tolower(sex)
 
   ffm <- switch(
@@ -96,22 +93,30 @@ calc_ffm <- function (
 ffm_janmahasatian_green <- function(weight, sex, height = NULL, bmi = NULL) {
   if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex)) {
     stop("Equation needs weight, BMI or height, and sex of patient!")
-  } else {
-    if(is.null(bmi)) {
-      bmi <- calc_bmi(height = height, weight = weight)
-    }
-    if(sex == "male") {
-      ffm <- (9.27e03 * weight) / ((6.68e03) + 216 * bmi)
-    } else {
-      ffm <- (9.27e03 * weight) / ((8.78e03) + 244 * bmi)
-    }
   }
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  if(is.null(bmi)) {
+    bmi <- calc_bmi(height = height, weight = weight)
+  }
+  if(sex == "male") {
+    ffm <- (9.27e03 * weight) / ((6.68e03) + 216 * bmi)
+  } else {
+    ffm <- (9.27e03 * weight) / ((8.78e03) + 244 * bmi)
+  }
+
 }
 
 #' @rdname calc_ffm
 ffm_al_sallami <- function(weight, sex, age, height = NULL, bmi = NULL) {
   if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex) || is.null(age)) {
-    stop("Equation needs weight, BMI or height, and sex of patient!")
+    stop("Equation needs weight, BMI or height, sex, and age of patient!")
+  }
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
   }
   if(is.null(bmi)) {
     bmi <- calc_bmi(weight = weight, height = height)
@@ -127,12 +132,15 @@ ffm_al_sallami <- function(weight, sex, age, height = NULL, bmi = NULL) {
 ffm_storset <- function(weight, sex, height, age) {
   if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
     stop("Equation needs weight, height, sex, and age of patient!")
+  }
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  if(sex == "male") {
+    ffm <- (11.4 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1-age*0.0007)
   } else {
-    if(sex == "male") {
-      ffm <- (11.4 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1-age*0.0007)
-    } else {
-      ffm <- (10.2 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1-age*0.0007)
-    }
+    ffm <- (10.2 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1-age*0.0007)
   }
 }
 
@@ -140,29 +148,30 @@ ffm_storset <- function(weight, sex, height, age) {
 ffm_bucaloiu <- function(weight, sex, height, age) {
   if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
     stop("Equation needs weight, height, sex, and age of patient!")
-  } else {
-    if(sex == "male") {
-      stop("This equation is only meant for (obese) females.")
-    } else {
-      bmi <- calc_bmi(weight = weight, height = height)
-      if(any(bmi < 25)) {
-        warning("This equation is only meant for obese females.")
-      }
-      ffm <- -11.41 + 0.354 * weight + 11.06 * height/100
-    }
   }
+  if(!sex == "female") {
+    warning("This equation is only meant for (obese) females.")
+  }
+  bmi <- calc_bmi(weight = weight, height = height)
+  if(any(bmi < 25)) {
+    warning("This equation is only meant for obese females.")
+  }
+  ffm <- -11.41 + 0.354 * weight + 11.06 * height/100
 }
 
 #' @rdname calc_ffm
 ffm_hume <- function(weight, sex, height) {
   if(is.null(weight) || is.null(height) || is.null(sex)) {
     stop("Equation needs weight, height, sex of patient!")
+  }
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  if(sex == "male") {
+    ffm <- 0.3281 * weight + 0.33929 * height - 29.5336
   } else {
-    if(sex == "male") {
-      ffm <- 0.3281 * weight + 0.33929 * height - 29.5336
-    } else {
-      ffm <- 0.29569 * weight + 0.41813 * height - 43.2933
-    }
+    ffm <- 0.29569 * weight + 0.41813 * height - 43.2933
   }
 }
 
@@ -170,24 +179,30 @@ ffm_hume <- function(weight, sex, height) {
 ffm_james <- function(weight, sex, height) {
   if(is.null(weight) || is.null(height) || is.null(sex)) {
     stop("Equation needs weight, height, sex of patient!")
+  }
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  if(sex == "male") {
+    ffm <- 1.1 * weight - 128*(weight/height)^2
   } else {
-    if(sex == "male") {
-      ffm <- 1.1 * weight - 128*(weight/height)^2
-    } else {
-      ffm <- 1.07 * weight - 148*(weight/height)^2
-    }
+    ffm <- 1.07 * weight - 148*(weight/height)^2
   }
 }
 
 #' @rdname calc_ffm
 ffm_garrow_webster <- function(weight, sex, height) {
   if(is.null(weight) || is.null(height) || is.null(sex)) {
-    stop("Equation needs weight, height of patient!")
+    stop("Equation needs weight, height, and sex of patient!")
+  }
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  if(sex == "male") {
+    ffm <- 0.285 * weight + 12.1*(height/100)^2
   } else {
-    if(sex == "male") {
-      ffm <- 0.285 * weight + 12.1*(height/100)^2
-    } else {
-      ffm <- 0.287 * weight + 9.74*(height/100)^2
-    }
+    ffm <- 0.287 * weight + 9.74*(height/100)^2
   }
 }
