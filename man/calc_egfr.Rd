@@ -34,34 +34,35 @@ calc_egfr(
 
 \item{sex}{sex}
 
-\item{age}{age}
+\item{age}{age, in years}
 
 \item{scr}{serum creatinine (mg/dL)}
 
 \item{scr_unit, }{`mg/dL` or `micromol/L` (==`umol/L`)}
 
-\item{race}{`black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. See References section below
-for important considerations when using race as a predictive factor in eGFR.}
+\item{race}{`black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. 
+To use these methods without race, use `method = "ckd_epi_ignore_race"` or `method = "mdrd_ignore_race"` 
+See Note section below for important considerations when using race as a predictive factor in eGFR.}
 
-\item{weight}{weight}
+\item{weight}{weight, in `kg`}
 
-\item{height}{height, only relevant when converting to/from BSA-relative unit}
+\item{height}{height, in `cm`, used for converting to/from BSA-normalized units.}
 
 \item{bsa}{body surface area}
 
-\item{preterm}{is patient preterm?}
+\item{preterm}{is patient preterm? Used for Schwartz method.}
 
-\item{ckd}{chronic kidney disease? (Schwartz equations only)}
+\item{ckd}{chronic kidney disease? Used for Schwartz method.}
 
 \item{times}{vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)}
 
-\item{bsa_method}{BSA estimation method, see `bsa()` for details}
+\item{bsa_method}{BSA estimation method, see `calc_bsa()` for details}
 
 \item{relative}{`TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.}
 
 \item{unit_out}{`ml/min` (default), `L/hr`, or `mL/hr`}
 
-\item{verbose}{verbocity, show guidance and warnings. `TRUE` by default}
+\item{verbose}{verbosity, show guidance and warnings. `TRUE` by default}
 
 \item{min_value}{minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.}
 
@@ -69,7 +70,7 @@ for important considerations when using race as a predictive factor in eGFR.}
 
 \item{fail}{invoke `stop()` if not all covariates available?}
 
-\item{...}{arguments passed on}
+\item{...}{arguments passed on to `calc_abw` or `calc_dosing_weight`}
 }
 \description{
 Calculate the estimated glomerular filtration rate (an indicator of renal function) based on measured serum creatinine using one of the following approaches:
@@ -91,13 +92,13 @@ Equations for estimation of eGFR from Cystatin C concentrations are available fr
 The MDRD and CKD-EPI equations use race as a factor in estimation of GFR. Racism has
   historically been and continues to be a problem in medicine, with racialized patients
   experiencing poorer outcomes. Given this context, the use of race in clinical algorithms
-  should be considered carefully (\href{www.nejm.org/doi/10.1056/NEJMms2004740}{Vyas et al., NEJM (2020)}).
-  Provided here are versions of the CKD-EPI and MDRD equations that neglect the impact of race.
-  Removing race from GFR estimation may lead to worse outcomes for Black patients in some contexts
-  (\href{https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext}{Casal et al., The Lancet (2021)}). 
+  should be considered carefully (\href{https://www.nejm.org/doi/10.1056/NEJMms2004740}{Vyas et al., NEJM (2020)}).
+  Provided here are versions of the CKD-EPI and MDRD equations that do not consider the race
+  of the patient. Removing race from GFR estimation may lead to worse outcomes for Black patients 
+  in some contexts (\href{https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext}{Casal et al., The Lancet (2021)}). 
   On the other hand, including race in GFR estimation may also prevent Black patients 
   from obtaining procedures like kidney transplants
-  ({\href{pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
+  ({\href{https://pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
 }
 \examples{
 calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
