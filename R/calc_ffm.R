@@ -151,11 +151,8 @@ ffm_bucaloiu <- function(weight, sex, height, age) {
   if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
     stop("Equation needs weight, height, sex, and age of patient!")
   }
-  if(!sex == "female") {
-    warning("This equation is only meant for (obese) females.")
-  }
   bmi <- calc_bmi(weight = weight, height = height)
-  if(any(bmi < 25)) {
+  if(any(bmi < 25) || !sex == "female") {
     warning("This equation is only meant for obese females.")
   }
   ffm <- -11.41 + 0.354 * weight + 11.06 * height/100
