@@ -30,23 +30,23 @@ test_that("calc_ibw() uses weight when age < 1", {
   )
 })
 
-test_that("ibw_standard only supports children and requires age", {
-  expect_error(ibw_standard(age = 25))
-  expect_error(ibw_standard(age = NULL))
+test_that("ibw_standard warns if used for adults/missing age", {
+  expect_warning(ibw_standard(age = 25, height = 100, sex = "male"))
+  expect_warning(ibw_standard(age = NULL, height = 100, sex = "male"))
 })
 
-test_that("ibw_standard returns NA and message if missing data", {
-  res1 <- expect_message(ibw_standard(age = 10, height = NA))
-  res2 <- expect_message(ibw_standard(age = 10, height = NULL))
-  expect_true(is.na(res1))
-  expect_true(is.na(res2))
+test_that("ibw_standard errors if missing data", {
+  expect_error(ibw_standard(age = 10, height = NA, sex = "female"))
+  expect_error(ibw_standard(age = 10, height = NULL, sex = "female"))
+  expect_error(ibw_standard(age = 17, height = 165, sex = NULL))
+  expect_error(ibw_standard(age = 17, height = 165, sex = NA))
+})
 
-  res3 <- expect_message(ibw_standard(age = 17, height = 165))
-  res4 <- expect_message(
-    ibw_standard(age = 17, height = 165, sex = "unknown")
+test_that("ibw_standard returns NULL if sex isn't supported", {
+  expect_warning(
+    res <- ibw_standard(age = 17, height = 165, sex = "unknown")
   )
-  expect_true(is.na(res3))
-  expect_true(is.na(res4))
+  expect_null(res)
 })
 
 test_that("ibw_standard doesn't require sex if height < 5ft", {
@@ -65,22 +65,22 @@ test_that("ibw_standard calculates correct IBW", {
 })
 
 test_that("ibw_devine only supports adults and requires age", {
-  expect_error(ibw_devine(age = 15))
   expect_error(ibw_devine(age = NULL))
+  expect_warning(ibw_devine(age = 15, sex = "female", height = 150))
 })
 
 test_that("ibw_devine returns NA and message if missing data", {
-  res1 <- expect_message(ibw_devine(age = 20, height = NA))
-  res2 <- expect_message(ibw_devine(age = 20, height = NULL))
-  expect_true(is.na(res1))
-  expect_true(is.na(res2))
+  expect_error(ibw_devine(age = 20, height = NA, sex = "female"))
+  expect_error(ibw_devine(age = 20, height = NULL, sex = "female"))
+  expect_error(ibw_devine(age = 30, height = 165, sex = NULL))
+  expect_error(ibw_devine(age = 30, height = 165, sex = NA))
+})
 
-  res3 <- expect_message(ibw_devine(age = 30, height = 165))
-  res4 <- expect_message(
-    ibw_devine(age = 30, height = 165, sex = "unknown")
+test_that("ibw_devine returns NULL if sex isn't supported", {
+  expect_warning(
+    res <- ibw_devine(age = 30, height = 165, sex = "unknown")
   )
-  expect_true(is.na(res3))
-  expect_true(is.na(res4))
+  expect_null(res)
 })
 
 test_that("ibw_devine calculates correct IBW", {
