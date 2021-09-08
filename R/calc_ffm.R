@@ -106,7 +106,7 @@ ffm_janmahasatian_green <- function(weight, sex, height = NULL, bmi = NULL) {
   } else {
     ffm <- (9.27e03 * weight) / ((8.78e03) + 244 * bmi)
   }
-
+  ffm
 }
 
 #' @rdname calc_ffm
@@ -126,6 +126,7 @@ ffm_al_sallami <- function(weight, sex, age, height = NULL, bmi = NULL) {
   } else {
     ffm <- (0.88 + ((1-0.88)/(1+(age/13.4)^-12.7))) * ((9270 * weight)/(6680 + (216 * bmi)))
   }
+  ffm
 }
 
 #' @rdname calc_ffm
@@ -142,6 +143,7 @@ ffm_storset <- function(weight, sex, height, age) {
   } else {
     ffm <- (10.2 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1-age*0.0007)
   }
+  ffm
 }
 
 #' @rdname calc_ffm
@@ -157,6 +159,7 @@ ffm_bucaloiu <- function(weight, sex, height, age) {
     warning("This equation is only meant for obese females.")
   }
   ffm <- -11.41 + 0.354 * weight + 11.06 * height/100
+  ffm
 }
 
 #' @rdname calc_ffm
@@ -173,6 +176,7 @@ ffm_hume <- function(weight, sex, height) {
   } else {
     ffm <- 0.29569 * weight + 0.41813 * height - 43.2933
   }
+  ffm
 }
 
 #' @rdname calc_ffm
@@ -189,6 +193,7 @@ ffm_james <- function(weight, sex, height) {
   } else {
     ffm <- 1.07 * weight - 148*(weight/height)^2
   }
+  ffm
 }
 
 #' @rdname calc_ffm
@@ -205,4 +210,5 @@ ffm_garrow_webster <- function(weight, sex, height) {
   } else {
     ffm <- 0.287 * weight + 9.74*(height/100)^2
   }
+  ffm
 }
