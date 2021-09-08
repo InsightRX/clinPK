@@ -1,11 +1,12 @@
 #' Calculate eGFR
 #'
-#' Calculate the estimated glomerulal filtration rate (an estimate of renal function) based on measured serum creatinine using one of the following approaches:
+#' Calculate the estimated glomerular filtration rate (an indicator of renal function) based on measured serum creatinine using one of the following approaches:
 #' \itemize{
 #'   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
 #'   \item C-G spinal cord injury
 #'   \item Revised Lund-Malmo
-#'   \item Modification of Diet in Renal Disease study (MDRD)
+#'   \item Modification of Diet in Renal Disease study (MDRD; with or without consideration of race)
+#'   \item CKD-EPI (with or without consideration of race)
 #'   \item Schwartz
 #'   \item Schwartz revised / bedside
 #'   \item Jelliffe
@@ -14,37 +15,54 @@
 #' }
 #' Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
 #'
-#' @param method eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive `mdrd`, `ckd_epi`, malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`
+#' @param method eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
+#'   `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, `mdrd_ignore_race`, `ckd_epi`, `ckd_epi_ignore_race`, 
+#'   `malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.
 #' @param sex sex
-#' @param age age
+#' @param age age, in years
 #' @param scr serum creatinine (mg/dL)
 #' @param scr_unit, `mg/dL` or `micromol/L` (==`umol/L`)
-#' @param race `black` or `other`
-#' @param weight weight
-#' @param height height, only relevant when converting to/from BSA-relative unit
+#' @param race `black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. 
+#'   To use these methods without race, use `method = "ckd_epi_ignore_race"` or `method = "mdrd_ignore_race"` 
+#'   See Note section below for important considerations when using race as a predictive factor in eGFR.
+#' @param weight weight, in `kg`
+#' @param height height, in `cm`, used for converting to/from BSA-normalized units.
 #' @param bsa body surface area
-#' @param bsa_method BSA estimation method, see `bsa()` for details
+#' @param bsa_method BSA estimation method, see `calc_bsa()` for details
 #' @param times vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)
-#' @param ckd chronic kidney disease? (Schwartz equations only)
+#' @param ckd chronic kidney disease? Used for Schwartz method.
 #' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
 #' @param unit_out `ml/min` (default), `L/hr`, or `mL/hr`
-#' @param preterm is patient preterm?
+#' @param preterm is patient preterm? Used for Schwartz method.
 #' @param min_value minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
 #' @param max_value maximum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
-#' @param verbose verbocity, show guidance and warnings. `TRUE` by default
+#' @param verbose verbosity, show guidance and warnings. `TRUE` by default
 #' @param fail invoke `stop()` if not all covariates available?
-#' @param ... arguments passed on
+#' @param ... arguments passed on to `calc_abw` or `calc_dosing_weight`
 #' @references \itemize{
 #'   \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
 #'   \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
 #'   \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
-#'   \item MDRD: \href{https://www.ncbi.nlm.nih.gov/pubmed/10075613}{Level et al., Annals of Internal Medicine}
+#'   \item MDRD: \href{https://www.ncbi.nlm.nih.gov/pubmed/10075613}{Level et al., Annals of Internal Medicine}. (See Note.)
+#'   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
 #'   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
 #'   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
 #'   \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
 #'   \item Jelliffe for unstable renal function: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, American Journal of Nephrology (2002)}
 #'   \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
 #' }
+#' @note 
+#'   The MDRD and CKD-EPI equations use race as a factor in estimation of GFR. Racism has
+#'   historically been and continues to be a problem in medicine, with racialized patients
+#'   experiencing poorer outcomes. Given this context, the use of race in clinical algorithms
+#'   should be considered carefully (\href{https://www.nejm.org/doi/10.1056/NEJMms2004740}{Vyas et al., NEJM (2020)}).
+#'   Provided here are versions of the CKD-EPI and MDRD equations that do not consider the race
+#'   of the patient. Removing race from GFR estimation may lead to worse outcomes for Black patients 
+#'   in some contexts (\href{https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext}{Casal et al., The Lancet (2021)}). 
+#'   On the other hand, including race in GFR estimation may also prevent Black patients 
+#'   from obtaining procedures like kidney transplants
+#'   ({\href{https://pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
+#'  
 #' @examples
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70, unit_out = "L/hr")
@@ -211,11 +229,19 @@ calc_egfr <- function (
     f_sex <- ifelse(sex == 'female', 0.762, 1)
     f_race <- ifelse(race == 'black', 1.21, 1)
     crcl <- 186 * scr^(-1.154) * f_sex * f_race * age^(-0.203)
+    
+  } else if (method == "mdrd_ignore_race") {
+    f_sex <- ifelse(sex == 'female', 0.762, 1)
+    crcl <- 186 * scr^(-1.154) * f_sex * age^(-0.203)
 
   } else if (method == "ckd_epi"){
     f_sex <- ifelse(sex == 'female', 1.018, 1)
     f_race <- ifelse(race == 'black', 1.159, 1)
     crcl <- 141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex * f_race
+    
+  } else if (method == "ckd_epi_ignore_race"){
+    f_sex <- ifelse(sex == 'female', 1.018, 1)
+    crcl <- 141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex
 
   } else if (method == 'cockcroft_gault_sci') {
     f_sex <- ifelse(sex == 'female', 0.85, 1)

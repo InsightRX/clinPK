@@ -408,3 +408,75 @@ test_that("calc_egfr does not error for patients < 1yr when calculating ibw", {
     NA
   )
 })
+
+test_that("eGFR for ckd_epi_ignore_race", {
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 40,
+        sex = "male",
+        weight = 80,
+        scr = 0.5,
+        method = "ckd_epi_ignore_race",
+        verbose = FALSE
+      )$value
+    ),
+    134
+  )
+  expect_equal(
+    calc_egfr(
+      age = 40,
+      sex = "male",
+      race = "other",
+      weight = 80,
+      scr = 0.5,
+      method = "ckd_epi_ignore_race",
+      verbose = FALSE
+    )$value,
+    calc_egfr(
+      age = 40,
+      sex = "male",
+      race = "black",
+      weight = 80,
+      scr = 0.5,
+      method = "ckd_epi_ignore_race",
+      verbose = FALSE
+    )$value
+  )
+})
+
+test_that("eGFR for mdrd_ignore_race", {
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 40,
+        sex = "male",
+        weight = 80,
+        scr = 0.5,
+        method = "mdrd_ignore_race",
+        verbose = FALSE
+      )$value
+    ),
+    196
+  )
+  expect_equal(
+    calc_egfr(
+      age = 40,
+      sex = "male",
+      race = "other",
+      weight = 80,
+      scr = 0.5,
+      method = "mdrd_ignore_race",
+      verbose = FALSE
+    )$value,
+    calc_egfr(
+      age = 40,
+      sex = "male",
+      race = "black",
+      weight = 80,
+      scr = 0.5,
+      method = "mdrd_ignore_race",
+      verbose = FALSE
+    )$value
+  )
+})
