@@ -281,6 +281,21 @@ calc_egfr <- function (
   # -------------
   unit <- tolower(unit_out)
 
+  if (is.null(crcl)) {
+    return(
+      list(
+        value = crcl,
+        age = age,
+        bsa = bsa,
+        sex = sex,
+        scr = scr,
+        unit = unit,
+        weight = weight_for_egfr,
+        capped = list()
+      )
+    )
+  }
+
   # --- Convert to relative if required
   if (!relative & !grepl('cockcroft_gault', method)) {
     crcl <- relative2absolute_bsa(crcl, bsa)[["value"]]
