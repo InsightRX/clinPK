@@ -101,6 +101,9 @@ See Note section below for important considerations when using race as a predict
 \item{fail}{invoke `stop()` if not all covariates available?}
 
 \item{...}{arguments passed on to `calc_abw` or `calc_dosing_weight`}
+
+\item{use_race}{whether to include race as a factor in the calculation (TRUE
+or FALSE); see note}
 }
 \description{
 Calculate the estimated glomerular filtration rate (an indicator of renal function) based on measured serum creatinine using one of the following approaches:

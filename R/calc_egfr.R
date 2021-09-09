@@ -399,6 +399,8 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
 }
 
 #' @rdname calc_egfr
+#' @param use_race whether to include race as a factor in the calculation (TRUE
+#'   or FALSE); see note
 egfr_mdrd <- function(sex, race, scr, age, use_race) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
