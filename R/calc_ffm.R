@@ -74,7 +74,7 @@ calc_ffm <- function (
       age = age
     ),
     "hume" = ffm_hume(weight = weight, height = height, sex = sex),
-    "james" = ffm_james(weight = weight, heigh = height, sex = sex),
+    "james" = ffm_james(weight = weight, height = height, sex = sex),
     "garrow_webster" = ffm_garrow_webster(
       weight = weight,
       height = height,
