@@ -469,22 +469,16 @@ egfr_bedside_schwartz <- function(age, height, scr, verbose) {
 
 #' @rdname calc_egfr
 egfr_schwartz <- function(age, preterm, sex, height, scr) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
+  if (age < 1 ) {
+    k <- ifelse(preterm, 0.33, 0.45)
+  } else if (age > 13) {
+    if (!sex %in% c("male", "female")) {
+      warning("This method requires sex to be one of 'male' or 'female'.")
+      return(NULL)
+    }
+    k <- ifelse(sex == 'male', 0.7,  0.55)
+  } else {
+    k <- 0.55
   }
-  k <- ifelse(
-    preterm & age < 1,
-    0.33,
-    ifelse(
-      age < 1,
-      0.45,
-      ifelse(
-        age > 13 & sex == 'male',
-        0.7,
-        0.55
-      )
-    )
-  )
   (k * height) / scr
 }
