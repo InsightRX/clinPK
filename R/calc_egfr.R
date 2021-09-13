@@ -274,7 +274,7 @@ calc_egfr <- function (
       height = height,
       scr = scr
     ),
-    FALSE
+    NULL
   )
 
   # Format Output
