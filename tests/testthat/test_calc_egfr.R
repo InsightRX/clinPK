@@ -480,3 +480,17 @@ test_that("eGFR for mdrd_ignore_race", {
     )$value
   )
 })
+
+test_that("calc_egfr warns and returns NULL if sex isn't supported", {
+  expect_warning(
+    res <- calc_egfr(
+      age = 40,
+      sex = "unknown",
+      weight = 80,
+      scr = 1,
+      method = "cockcroft_gault",
+      verbose = FALSE
+    )
+  )
+  expect_null(res$value)
+})

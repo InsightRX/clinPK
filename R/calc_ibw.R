@@ -87,19 +87,23 @@ calc_ibw <- function (
 #' @inheritParams calc_ibw
 ibw_standard <- function(age, height = NULL, sex = NULL) {
   if (is.null(age) || age >= 18 || age < 1) {
-    stop("Age must be >=1 and <18")
+    warning("Age should be >=1 and <18 for the `standard` method.")
   }
   if (is.null(height) || is.na(height)) {
-    message("Height is required to calculate IBW")
-    return(NA)
+    stop("Height is required to calculate IBW")
   }
   height_in <- cm2inch(height)
   if (height_in < 5 * 12) {
     return((height^2 * 1.65) / 1000)
   }
-  if (is.null(sex) || is.na(sex) || !sex %in% c("male", "female")) {
-    message("The `standard` method for calculating IBW requires sex to be 'male' or 'female' for children 5 feet tall or taller.")
-    return(NA)
+  if (is.null(sex) || is.na(sex)) {
+    # Sex is only required if height >= 5ft, so this must come after the lines
+    # above
+    stop("Sex is required to calculate IBW when height is >= 5 feet")
+  }
+  if (!sex %in% c("male", "female")) {
+    warning("The `standard` method for calculating IBW requires sex to be 'male' or 'female' for children 5 feet tall or taller.")
+    return(NULL)
   }
   base_value <- switch(
     sex,
@@ -115,15 +119,14 @@ ibw_standard <- function(age, height = NULL, sex = NULL) {
 #' @inheritParams calc_ibw
 ibw_devine <- function(age, height = NULL, sex = NULL) {
   if (age < 18) {
-    stop("Age must be >= 18 for the Devine equation")
+    warning("Age should be >18 for the `devine` method.")
   }
-  if (is.null(height) || is.na(height)) {
-    message("Height is required to calculate IBW")
-    return(NA)
+  if (is.null(height) || is.na(height) || is.null(sex) || is.na(sex)) {
+    stop("Height and sex are required to calculate IBW")
   }
-  if (is.null(sex) || is.na(sex) || !sex %in% c("male", "female")) {
-    message("The `devine` method for calculating IBW requires sex to be 'male' or 'female'.")
-    return(NA)
+  if (!sex %in% c("male", "female")) {
+    warning("The `devine` method for calculating IBW requires sex to be 'male' or 'female'.")
+    return(NULL)
   }
   base_value <- switch(
     sex,

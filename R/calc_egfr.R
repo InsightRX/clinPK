@@ -72,7 +72,7 @@
 #' calc_egfr(sex = "male", age = 50, scr = c(1.1, 0.8),
 #'   weight = 70, height = 170, method = "jelliffe_unstable")
 #' calc_egfr(sex = "male", age = 50, scr = 1.1,
-#'   weight = 70, bsa = 1.6, method = "malmo_lund_rev", relative = FALSE)
+#'   weight = 70, bsa = 1.6, method = "malmo_lund_revised", relative = FALSE)
 #' @export
 calc_egfr <- function (
   method = "cockcroft_gault",
@@ -191,94 +191,110 @@ calc_egfr <- function (
 
   # Calculate eGFR
   # --------------
-  crcl <- c()
-  if (method == 'wright'){
-    crcl <- ((74.4344 - (0.438914 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr
 
-  } else if (method == "jelliffe") {
-    crcl <- ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
-
-  } else if (method == "jelliffe_unstable") {
-    vol <- 4 * weight
-
-    # for times, if null or negative or mismatch in times/scr length, assume one day difference
-    # otherwise, ensure times and scrs are sequential.
-    if (is.null(times) | length(scr) != length(times)) {
-      dt <- rep(1, length(scr))
-    } else {
-      scr <- scr[order(times)]
-      times <- sort(times)
-      dt <- c(1, diff(times))
-    }
-
-    # for first creatinine, use that value. for subsequent creatinines, use average of current and previous values.
-    if (length(scr) == 1) {
-      scr_diff <- 0
-      scr_av <- scr
-    } else {
-      scr_diff <- c(0, diff(scr)) * -1
-      scr_av <- scr + scr_diff/2
-    }
-
-    # calculate creatinine production
-    cr_prod <- (29.305-(0.203 * age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
-    # calculate crcl
-    crcl <- ((vol * scr_diff/dt + cr_prod) * 100) / (1440 * scr_av)
-
-  } else if (method == "mdrd") {
-    f_sex <- ifelse(sex == 'female', 0.762, 1)
-    f_race <- ifelse(race == 'black', 1.21, 1)
-    crcl <- 186 * scr^(-1.154) * f_sex * f_race * age^(-0.203)
-    
-  } else if (method == "mdrd_ignore_race") {
-    f_sex <- ifelse(sex == 'female', 0.762, 1)
-    crcl <- 186 * scr^(-1.154) * f_sex * age^(-0.203)
-
-  } else if (method == "ckd_epi"){
-    f_sex <- ifelse(sex == 'female', 1.018, 1)
-    f_race <- ifelse(race == 'black', 1.159, 1)
-    crcl <- 141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex * f_race
-    
-  } else if (method == "ckd_epi_ignore_race"){
-    f_sex <- ifelse(sex == 'female', 1.018, 1)
-    crcl <- 141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex
-
-  } else if (method == 'cockcroft_gault_sci') {
-    f_sex <- ifelse(sex == 'female', 0.85, 1)
-    crcl <- 2.3 * (f_sex * (140-age) / scr * (weight/72)) ^0.7
-
-  } else if (grepl('cockcroft_gault', method)) {
-    f_sex <- ifelse(sex == 'female', 0.85, 1)
-    crcl <- f_sex * (140-age) / scr * (weight/72)
-
-  } else if (grepl('malmo', method) & grepl('lund', method)) {
-    scr_cutoff <- ifelse(sex == 'female', 1.696833, 2.0362)
-    intercept <- ifelse(sex == 'female', 2.5, 2.56)
-    slope <- ifelse(scr >= scr_cutoff, -0.926,
-                    ifelse(sex == 'female', 1.06964, 0.855712))
-    cr_term <- ifelse(scr < scr_cutoff, scr_cutoff - scr, log(scr/scr_cutoff))
-    x <- intercept + slope * cr_term
-
-    crcl <- exp(x - 0.0158*age + 0.438*log(age))
-
-  } else if (method %in% c("bedside_schwartz", "schwartz_revised")) {
-    if(age < 1 && verbose) message("This equation is not meant for patients < 1 years of age.")
-    k <- 0.413
-    crcl <- (k * height) / scr
-
-  } else if (method == 'schwartz') {
-    k <- ifelse(preterm & age < 1, 0.33,
-                ifelse(age < 1, 0.45,
-                       ifelse(age > 13 & sex == 'male', 0.7,
-                               0.55)))
-    crcl <- (k * height) / scr
-  } else {
-    return(FALSE)
+  if (grepl("cockcroft_gault(.*)(?<!sci)$", method, perl = TRUE)) {
+    method <- "cockcroft_gault"
   }
+  if (grepl("malmo", method) & grepl("lund", method)) {
+    method <- "malmo_lund_revised"
+  }
+
+  crcl <- switch(
+    method,
+    "wright" = egfr_wright(age = age, bsa = bsa, sex = sex, scr = scr),
+    "jelliffe" = egfr_jelliffe(age = age, sex = sex, bsa = bsa, scr = scr),
+    "jelliffe_unstable" = egfr_jelliffe_unstable(
+      weight = weight,
+      times = times,
+      scr = scr,
+      age = age,
+      sex = sex
+    ),
+    "mdrd" = egfr_mdrd(
+      sex = sex,
+      race = race,
+      scr = scr,
+      age = age,
+      use_race = TRUE
+    ),
+    "mdrd_ignore_race" = egfr_mdrd(
+      sex = sex,
+      race = race,
+      scr = scr,
+      age = age,
+      use_race = FALSE
+    ),
+    "ckd_epi" = egfr_ckd_epi(
+      sex = sex,
+      race = race,
+      scr = scr,
+      age = age,
+      use_race = TRUE
+    ),
+    "ckd_epi_ignore_race" = egfr_ckd_epi(
+      sex = sex,
+      race = race,
+      scr = scr,
+      age = age,
+      use_race = FALSE
+    ),
+    "cockcroft_gault_sci" = egfr_cockcroft_gault_sci(
+      sex = sex,
+      age = age,
+      scr = scr,
+      weight = weight
+    ),
+    "cockcroft_gault" = egfr_cockcroft_gault(
+      sex = sex,
+      age = age,
+      scr = scr,
+      weight = weight
+    ),
+    "malmo_lund_revised" = egfr_malmo_lund(
+      sex = sex,
+      age = age,
+      scr = scr
+    ),
+    "bedside_schwartz" = egfr_bedside_schwartz(
+      age = age,
+      height = height,
+      scr = scr,
+      verbose = verbose
+    ),
+    "schwartz_revised" = egfr_bedside_schwartz(
+      age = age,
+      height = height,
+      scr = scr,
+      verbose = verbose
+    ),
+    "schwartz" = egfr_schwartz(
+      age = age,
+      preterm = preterm,
+      sex = sex,
+      height = height,
+      scr = scr
+    ),
+    NULL
+  )
 
   # Format Output
   # -------------
   unit <- tolower(unit_out)
+
+  if (is.null(crcl)) {
+    return(
+      list(
+        value = crcl,
+        age = age,
+        bsa = bsa,
+        sex = sex,
+        scr = scr,
+        unit = unit,
+        weight = weight_for_egfr,
+        capped = list()
+      )
+    )
+  }
 
   # --- Convert to relative if required
   if (!relative & !grepl('cockcroft_gault', method)) {
@@ -329,4 +345,140 @@ calc_egfr <- function (
     weight = weight_for_egfr,
     capped = capped
   ))
+}
+
+#' @rdname calc_egfr
+egfr_wright <- function(age, bsa, sex, scr) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  ((74.4344 - (0.438914 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr
+}
+
+#' @rdname calc_egfr
+egfr_jelliffe <- function(age, sex, bsa, scr) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
+}
+
+#' @rdname calc_egfr
+egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  vol <- 4 * weight
+
+  # for times, if null or negative or mismatch in times/scr length, assume one day difference
+  # otherwise, ensure times and scrs are sequential.
+  if (is.null(times) | length(scr) != length(times)) {
+    dt <- rep(1, length(scr))
+  } else {
+    scr <- scr[order(times)]
+    times <- sort(times)
+    dt <- c(1, diff(times))
+  }
+
+  # for first creatinine, use that value. for subsequent creatinines, use average of current and previous values.
+  if (length(scr) == 1) {
+    scr_diff <- 0
+    scr_av <- scr
+  } else {
+    scr_diff <- c(0, diff(scr)) * -1
+    scr_av <- scr + scr_diff/2
+  }
+
+  # calculate creatinine production
+  cr_prod <- (29.305-(0.203 * age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
+  # calculate crcl
+  ((vol * scr_diff/dt + cr_prod) * 100) / (1440 * scr_av)
+}
+
+#' @rdname calc_egfr
+#' @param use_race whether to include race as a factor in the calculation (TRUE
+#'   or FALSE); see note
+egfr_mdrd <- function(sex, race, scr, age, use_race) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  f_sex <- ifelse(sex == 'female', 0.762, 1)
+  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.21, 1)
+  186 * scr^(-1.154) * f_sex * f_race * age^(-0.203)
+}
+
+#' @rdname calc_egfr
+egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  f_sex <- ifelse(sex == 'female', 1.018, 1)
+  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.159, 1)
+  141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex * f_race
+}
+
+#' @rdname calc_egfr
+egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  f_sex <- ifelse(sex == 'female', 0.85, 1)
+  2.3 * (f_sex * (140-age) / scr * (weight/72)) ^0.7
+}
+
+#' @rdname calc_egfr
+egfr_cockcroft_gault <- function(sex, age, scr, weight) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  f_sex <- ifelse(sex == 'female', 0.85, 1)
+  f_sex * (140-age) / scr * (weight/72)
+}
+
+#' @rdname calc_egfr
+egfr_malmo_lund <- function(sex, age, scr) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  scr_cutoff <- ifelse(sex == 'female', 1.696833, 2.0362)
+  intercept <- ifelse(sex == 'female', 2.5, 2.56)
+  slope <- ifelse(
+    scr >= scr_cutoff,
+    -0.926,
+    ifelse(sex == 'female', 1.06964, 0.855712)
+  )
+  cr_term <- ifelse(scr < scr_cutoff, scr_cutoff - scr, log(scr/scr_cutoff))
+  x <- intercept + slope * cr_term
+  exp(x - 0.0158*age + 0.438*log(age))
+}
+
+#' @rdname calc_egfr
+egfr_bedside_schwartz <- function(age, height, scr, verbose) {
+  if(age < 1 && verbose) warning("This equation is not meant for patients < 1 years of age.")
+  k <- 0.413
+  (k * height) / scr
+}
+
+#' @rdname calc_egfr
+egfr_schwartz <- function(age, preterm, sex, height, scr) {
+  if (age < 1 ) {
+    k <- ifelse(preterm, 0.33, 0.45)
+  } else if (age > 13) {
+    if (!sex %in% c("male", "female")) {
+      warning("This method requires sex to be one of 'male' or 'female'.")
+      return(NULL)
+    }
+    k <- ifelse(sex == 'male', 0.7,  0.55)
+  } else {
+    k <- 0.55
+  }
+  (k * height) / scr
 }
