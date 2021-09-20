@@ -159,3 +159,46 @@ test_that("calc_aki_stage errors if can't coerce scr to numeric", {
     )
   )
 })
+
+test_that("calc_aki_stage correctly calculates baseline_scr", {
+  test11 <- calc_aki_stage(
+    method = "kDIGO",
+    scr = c(0.5, 1.5),
+    t = c(0, 24),
+    egfr = c(50, 30),
+    baseline_scr = "median",
+    first_dose_time = 50,
+    verbose = FALSE
+  )
+  expect_equal(test11$data$baseline_scr, c(1,1))
+  test12 <- calc_aki_stage(
+    method = "kDIGO",
+    scr = c(0.5, 1.0, 1.5),
+    t = c(0, 10, 24),
+    egfr = c(50, 40, 30),
+    baseline_scr = "median_before_treatment",
+    first_dose_time = 12,
+    verbose = FALSE
+  )
+  expect_equal(test12$data$baseline_scr, c(0.75, 0.75, 0.75))
+  expect_equal(
+    calc_aki_stage(
+      method = "kDIGO",
+      scr = c(0.5, 1.0, 1.5),
+      t = c(0, 10, 24),
+      egfr = c(50, 40, 30),
+      baseline_scr = "lowest",
+      first_dose_time = 12,
+      verbose = FALSE
+    )$data$baseline_scr, rep(0.5, 3))
+  expect_error(
+    calc_aki_stage(
+      method = "kDIGO",
+      scr = c(0.5, 1.0, 1.5),
+      t = c(0, 10, 24),
+      egfr = c(50, 40, 30),
+      baseline_scr = "typo",
+      first_dose_time = 12,
+      verbose = FALSE
+    )$data$baseline_scr)
+})
