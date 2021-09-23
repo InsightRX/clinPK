@@ -36,6 +36,15 @@ test_that("AKI stage is calculated correctly", {
     force_numeric = TRUE,
     verbose = FALSE
   )
+  test3 <- calc_aki_stage(
+    scr = 1.9,
+    t = 72,
+    baseline_scr = 0.9,
+    egfr = 40,
+    age = 40,
+    return_obj = FALSE,
+    verbose = FALSE
+  )
   expect_equal(test0$stage, "stage 3")
   expect_equal(test1$stage, "stage 1")
   expect_equal(test2$stage, "stage 3")
@@ -43,6 +52,7 @@ test_that("AKI stage is calculated correctly", {
   expect_equal(test2a$stage, "stage 1")
   expect_equal(test2a$time_max_stage, 48)
   expect_equal(test2b, 1)
+  expect_equal(test3, "stage 2")
 })
 
 
