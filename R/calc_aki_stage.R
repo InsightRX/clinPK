@@ -162,9 +162,7 @@ calc_aki_stage <- function (
     dat$stage[dat$baseline_scr_diff >= 0.5 | dat$scr >= 4.0] <- 3
     
   } else if (method == "kdigo") {
-    dat$stage[dat$scr / baseline_scr >= 1.5 | dat$baseline_scr_diff >= 0.3] <- 1
-    dat$stage[dat$scr / baseline_scr >= 2 ] <- 2
-    dat$stage[dat$scr / baseline_scr >= 3 | dat$scr >= 4 | (dat$egfr < 35 & age < 18)] <- 3
+    dat$stage <- kdigo_stage(dat = dat, baseline_scr = baseline_scr, age = age)
   }
 
   ## get max class, convert to character class:
@@ -199,4 +197,44 @@ calc_aki_stage <- function (
   }
 
   return(obj)
+}
+
+#' Calculate AKI stage according to KDIGO criteria
+#'
+#' @param dat Data frame containing at least the following columns:
+#'  * `scr`: serum creatinine
+#'  * `t`: creatinine sample times in hours
+#'  * `baseline_scr_diff`: difference between baseline scr and scr at current
+#'     timepoint
+#'  * `egfr`: eGFR at timepoint
+#' @param baseline_scr Baseline serum creatinine value (numeric)
+#' @param age Patient age
+#' @md
+#'
+kdigo_stage <- function(dat, baseline_scr, age) {
+  stage <- rep(NA, nrow(dat))
+  for (i in seq_along(dat$t)) {
+    current_time <- dat$t[i]
+    last_48h <- which(dat$t < current_time & dat$t > (current_time - 48))
+    scr <- dat$scr[i]
+    scr_last_48h <- dat$scr[last_48h]
+    # An AKI has occurred if there's a rise by 0.3 mg/dl within 48 hours or if
+    # there's a rise to 1.5x baseline*. We only check for the 0.3 mg/dl rise if
+    # i > 1, since otherwise we don't have any prior timepoints to compare to.
+    #
+    # *technically the rise to 1.5x baseline should be "known or presumed to
+    # have occurred within the prior 7 days", but that is a bit hard to pin
+    # down and raises a lot of edge cases, so we do not implement that logic
+    # here currently.
+    if (scr / baseline_scr >= 1.5 | (i > 1 && scr - min(scr_last_48h) >= 0.3)) {
+      stage[i] <- 1
+    }
+    if (scr / baseline_scr >= 2) {
+      stage[i] <- 2
+    }
+    if (scr / baseline_scr >= 3 | scr >= 4 | (dat$egfr[i] < 35 & age < 18)) {
+      stage[i] <- 3
+    }
+  }
+  stage
 }
