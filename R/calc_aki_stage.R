@@ -232,7 +232,7 @@ kdigo_stage <- function(dat, baseline_scr, age) {
     if (scr / baseline_scr >= 2) {
       stage[i] <- 2
     }
-    if (scr / baseline_scr >= 3 | scr >= 4 | (dat$egfr[i] < 35 & age < 18)) {
+    if (scr / baseline_scr >= 3 | scr >= 4 | isTRUE(dat$egfr[i] < 35 & age < 18)) {
       stage[i] <- 3
     }
   }

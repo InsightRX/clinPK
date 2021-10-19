@@ -212,3 +212,16 @@ test_that("calc_aki_stage correctly calculates baseline_scr", {
       verbose = FALSE
     )$data$baseline_scr)
 })
+
+test_that("age is not required if egfr is provided", {
+  res <- calc_aki_stage(
+    scr = 5,
+    times = 0,
+    egfr = 30,
+    baseline_egfr = 30,
+    method = "KDIGO",
+    verbose = FALSE
+  )
+  # Stage 3 because scr >= 4
+  expect_equal(res$stage, "stage 3")
+})
