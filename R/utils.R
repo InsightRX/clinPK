@@ -24,6 +24,9 @@ remove_lt_gt <- function(x) {
 
 #' Greater-than-or-equal-to with a little room for floating point precision
 #' issues
+#'
+#' @param x Numeric vector
+#' @param y Numeric vector
 `%>=%` <- function(x, y) {
   x > y | mapply(function(x, y) isTRUE(all.equal(x, y)), x, y)
 }
