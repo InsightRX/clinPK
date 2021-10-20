@@ -220,7 +220,8 @@ kdigo_stage <- function(dat, baseline_scr, age) {
     scr_last_48h <- dat$scr[last_48h]
     # An AKI has occurred if there's a rise by 0.3 mg/dl within 48 hours or if
     # there's a rise to 1.5x baseline*. We only check for the 0.3 mg/dl rise if
-    # i > 1, since otherwise we don't have any prior timepoints to compare to.
+    # scr_last_48h contains at least one value, since otherwise we don't have
+    # any prior timepoints to compare to.
     #
     # *technically the rise to 1.5x baseline should be "known or presumed to
     # have occurred within the prior 7 days", but that is a bit hard to pin
