@@ -21,3 +21,9 @@ remove_lt_gt <- function(x) {
     return(as.numeric(x))
   }
 }
+
+#' Greater-than-or-equal-to with a little room for floating point precision
+#' issues
+`%>=%` <- function(x, y) {
+  x > y | mapply(function(x, y) isTRUE(all.equal(x, y)), x, y)
+}
