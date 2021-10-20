@@ -226,7 +226,7 @@ kdigo_stage <- function(dat, baseline_scr, age) {
     # have occurred within the prior 7 days", but that is a bit hard to pin
     # down and raises a lot of edge cases, so we do not implement that logic
     # here currently.
-    if (scr / baseline_scr >= 1.5 || (i > 1 && scr - min(scr_last_48h) >= 0.3)) {
+    if (scr / baseline_scr >= 1.5 || (length(scr_last_48h) > 0 && scr - min(scr_last_48h) >= 0.3)) {
       stage[i] <- 1
     }
     if (scr / baseline_scr >= 2) {
