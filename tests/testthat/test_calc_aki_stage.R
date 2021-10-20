@@ -265,3 +265,14 @@ test_that("age is not required if egfr is provided", {
   # Stage 3 because scr >= 4
   expect_equal(res$stage, "stage 3")
 })
+
+test_that("kdigo_stage doesn't throw warning if no scr in last 48h", {
+  dat <- data.frame(
+    scr = c(1.5, 1.5, 1.9),
+    t = c(-1, 0, 55),
+    baseline_scr_diff = c(0, 0, 0.4),
+    egfr = c(100, 100, 60)
+  )
+
+  expect_warning(kdigo_stage(dat, 1.5, 50), NA)
+})
