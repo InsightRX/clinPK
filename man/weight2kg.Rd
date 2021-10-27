@@ -9,7 +9,7 @@ weight2kg(value = NULL, unit = NULL)
 \arguments{
 \item{value}{weight in any allowed unit}
 
-\item{unit}{unit of weight, one of "lbs", "pound", "pounds", "oz", "ounce", "ounces", "g", "gram", "grams"}
+\item{unit}{unit of weight, one of "lb", "lbs", "pound", "pounds", "oz", "ounce", "ounces", "g", "gram", "grams"}
 }
 \description{
 Convert any weight unit to kg
