@@ -23,10 +23,10 @@ weight2kg <- function(value = NULL, unit = NULL) {
         value <- value / 1000
       }
     } else {
-      warning(paste0("Unit (", unit,") not recognized, returning original weight."))
+      stop(paste0("Unit (", unit,") not recognized."))
     }
   } else {
-    warning("Weight unit not specified, returning weight in original unit.")
+    stop("Weight unit not specified.")
   }
   return(value)
 }
