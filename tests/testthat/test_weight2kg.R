@@ -13,6 +13,7 @@ test_that("original weight is returned if unit not recognized", {
 })
 
 test_that("pounds are converted to kg", {
+  expect_equal(weight2kg(150, "lb"), 68.038936)
   expect_equal(weight2kg(150, "lbs"), 68.038936)
   expect_equal(weight2kg(150, "pounds"), 68.038936)
   expect_equal(weight2kg(150, "pound"), 68.038936)
