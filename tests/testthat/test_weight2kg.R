@@ -39,3 +39,9 @@ test_that("vectorized input works", {
 test_that("weight2kg supports grams as input unit", {
   expect_equal(weight2kg(1000, "g"), 1)
 })
+
+test_that("weight2kg supports capitalized units", {
+  expect_equal(weight2kg(1000, "G"), 1)
+  expect_equal(weight2kg(10, "LB"), 4.53592909)
+  expect_equal(weight2kg(5, "KG"), 5)
+})
