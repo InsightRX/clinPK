@@ -12,7 +12,7 @@ weight2kg <- function(value = NULL, unit = NULL) {
     stop("No weight value specified.")
   }
   if(!is.null(unit) && !is.na(unit)) {
-    if(tolower(unit) %in% c("kg", "lb", "lbs", "pound", "pounds", "oz", "ounce", "ounces", "g", "gram", "grams")) {
+    if(tolower(unit) %in% valid_units("weight")) {
       if(tolower(unit) %in% c("lb", "lbs", "pound", "pounds")) {
         value <- value / 2.20462
       }

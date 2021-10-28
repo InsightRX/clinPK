@@ -130,7 +130,7 @@ calc_egfr <- function (
   if (is.null(scr_unit)) {
     if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
     scr_unit <- "mg/dl"
-  } else if (!(all(tolower(scr_unit) %in% c("mg/dl", "micromol/l", "mumol/l", "umol/l")))) {
+  } else if (!(all(tolower(scr_unit) %in% valid_units("scr")))) {
     stop("Sorry, specified serum creatinine unit not recognized!")
   }
   if (length(scr_unit) == 1 && length(scr) > 1) {
