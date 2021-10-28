@@ -14,7 +14,7 @@ valid_units <- function(covariate = c("height", "weight", "age", "scr")) {
     cov,
     height = c("cm", "inch", "inches", "in"),
     weight = c("kg", "lb", "lbs", "pound", "pounds", "oz", "ounce", "ounces", "g", "gram", "grams"),
-    scr = c("mg/dl", "micromol/l", "mumol/l", "umol/l"),
+    scr = c("mg/dl", "mg_dl", "micromol/l", "micromol_l", "micromol", "mmol", "mumol/l", "umol/l"),
     age = c("yrs", "weeks", "days")
   )
 }
