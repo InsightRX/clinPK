@@ -1,5 +1,5 @@
 test_that("valid_units returns valid units", {
-  expect_equal(valid_units("age"), c("yrs", "weeks", "days"))
+  expect_equal(valid_units("age"), c("yrs", "weeks", "days", "years"))
   expect_equal(valid_units("height"), c("cm", "inch", "inches", "in"))
 })
 
