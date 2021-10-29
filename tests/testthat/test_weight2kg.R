@@ -2,14 +2,18 @@ test_that("no value throws an error", {
   expect_error(weight2kg(NULL))
 })
 
-test_that("original weight is returned if given in kg (or no unit)", {
+test_that("original weight is returned if given in kg", {
   expect_equal(weight2kg(50, "kg"), 50)
-  expect_equal(expect_warning(weight2kg(50)), 50)
-  expect_equal(expect_warning(weight2kg(50, unit = NA)), 50)
 })
 
-test_that("original weight is returned if unit not recognized", {
-  expect_equal(expect_warning(weight2kg(10, "stone")), 10)
+test_that("weight2kg errors if given no unit", {
+  expect_error(weight2kg(50))
+  expect_error(weight2kg(50, unit = NA))
+  expect_error(weight2kg(50, unit = NULL))
+})
+
+test_that("weight2kg errors if unit not recognized", {
+  expect_error(weight2kg(10, "stone"))
 })
 
 test_that("pounds are converted to kg", {

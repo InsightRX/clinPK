@@ -13,7 +13,7 @@ convert_creat_unit <- function(
     unit_in <- value$unit
     value <- value$value
   }
-  allowed <- c("mg/dl", "micromol/l", "mumol/l", "mg_dl", "micromol_l", "mumol_l")
+  allowed <- valid_units("scr")
   if(! all(tolower(unit_in) %in% allowed)) {
     stop(paste0("Input unit needs to be one of ", paste(allowed, collapse = " ")))
   }
