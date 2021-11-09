@@ -55,3 +55,8 @@ test_that("%>=% operator handles vectors of different lengths", {
   expect_equal(2 %>=% c(1, 3), c(TRUE, FALSE))
   expect_equal(c(1, 3) %>=% 2, c(FALSE, TRUE))
 })
+
+test_that("%>=% handles zero-length input", {
+  expect_equal(c(1, 3) %>=% numeric(0), logical(0))
+  expect_equal(numeric(0) %>=% 5, logical(0))
+})
