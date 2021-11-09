@@ -39,6 +39,10 @@ test_that("%>=% operator works", {
   expect_true((0.7 - 0.4) %>=% 0.3)
 })
 
+test_that("%<=% operator works", {
+  expect_true((0.1 + 0.2) %<=% 0.3)
+})
+
 test_that("%>=% operator works on vectors", {
   res <- c(1, 2, 3, 4) %>=% c(0, 3, 1, 5)
   expect_equal(res, c(TRUE, FALSE, TRUE, FALSE))
