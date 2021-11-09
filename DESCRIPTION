@@ -18,6 +18,6 @@ Description: Calculates equations commonly used in clinical
         peer-reviewed equations within the respective R function.
 License: MIT + file LICENSE
 LazyData: TRUE
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3

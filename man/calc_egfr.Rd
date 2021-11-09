@@ -43,7 +43,7 @@ egfr_jelliffe(age, sex, bsa, scr)
 
 egfr_jelliffe_unstable(weight, times, scr, age, sex)
 
-egfr_mdrd(sex, race, scr, age, use_race)
+egfr_mdrd(sex, race, scr, age, use_race, original_expression)
 
 egfr_ckd_epi(sex, race, scr, age, use_race)
 
@@ -59,7 +59,8 @@ egfr_schwartz(age, preterm, sex, height, scr)
 }
 \arguments{
 \item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
-`cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, `mdrd_ignore_race`, `ckd_epi`, `ckd_epi_ignore_race`, 
+`cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, 
+`mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`, `ckd_epi`, `ckd_epi_ignore_race`, 
 `malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.}
 
 \item{sex}{sex}
@@ -71,7 +72,8 @@ egfr_schwartz(age, preterm, sex, height, scr)
 \item{scr_unit, }{`mg/dL` or `micromol/L` (==`umol/L`)}
 
 \item{race}{`black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. 
-To use these methods without race, use `method = "ckd_epi_ignore_race"` or `method = "mdrd_ignore_race"` 
+To use these methods without race, use `method = "ckd_epi_ignore_race"`,  
+`method = "mdrd_ignore_race"` or `method = "mdrd_original_ignore_race"`.
 See Note section below for important considerations when using race as a predictive factor in eGFR.}
 
 \item{weight}{weight, in `kg`}
@@ -104,14 +106,23 @@ See Note section below for important considerations when using race as a predict
 
 \item{use_race}{whether to include race as a factor in the calculation (TRUE
 or FALSE); see note}
+
+\item{original_expression}{whether the MDRD equation should use the 2001 
+coefficient (TRUE) or the 2006 coefficient (FALSE), which was updated for 
+standardization of the creatinine assay.}
 }
 \description{
-Calculate the estimated glomerular filtration rate (an indicator of renal function) based on measured serum creatinine using one of the following approaches:
+Calculate the estimated glomerular filtration rate (an indicator of renal 
+function) based on measured serum creatinine using one of the following 
+approaches:
 \itemize{
   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
   \item C-G spinal cord injury
   \item Revised Lund-Malmo
-  \item Modification of Diet in Renal Disease study (MDRD; with or without consideration of race)
+  \item Modification of Diet in Renal Disease study (MDRD; 
+    with or without consideration of race, using either the original equation 
+    (published 2001) or the equation updated to reflect serum creatinine 
+    assay standardization (2006))
   \item CKD-EPI (with or without consideration of race)
   \item Schwartz
   \item Schwartz revised / bedside
@@ -149,7 +160,8 @@ calc_egfr(sex = "male", age = 50, scr = 1.1,
   \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
   \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
   \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
-  \item MDRD: \href{https://www.ncbi.nlm.nih.gov/pubmed/10075613}{Level et al., Annals of Internal Medicine}. (See Note.)
+  \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
+    and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}

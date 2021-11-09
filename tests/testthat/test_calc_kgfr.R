@@ -9,7 +9,7 @@ test_that("egfr call works", {
     sex = 'male',
     time_delay = 26
   )
-  expect_equal(round(test1, 2), 104.81)
+  expect_equal(round(test1, 2), 98.91)
 })
 
 test_that("unit conversion works", {

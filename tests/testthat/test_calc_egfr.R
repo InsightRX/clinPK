@@ -145,7 +145,7 @@ test_that("calculate egfr works: ckd-epi", {
 })
 
 
-test_that("calculate egfr works: mdrd", {
+test_that("calculate egfr works: mdrd, mdrd_original", {
   expect_equal(
     round(
       calc_egfr(
@@ -159,7 +159,22 @@ test_that("calculate egfr works: mdrd", {
         verbose = FALSE
       )$value
     ),
-    106
+    100
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 40,
+        sex="male",
+        weight = 80,
+        height=180,
+        scr = 1,
+        race = "black",
+        method="mdrd_original",
+        verbose = FALSE
+      )$value
+    ),
+    107
   )
 })
 
@@ -445,7 +460,7 @@ test_that("eGFR for ckd_epi_ignore_race", {
   )
 })
 
-test_that("eGFR for mdrd_ignore_race", {
+test_that("eGFR for mdrd_ignore_race and mdrd_original_ignore_race", {
   expect_equal(
     round(
       calc_egfr(
@@ -454,6 +469,19 @@ test_that("eGFR for mdrd_ignore_race", {
         weight = 80,
         scr = 0.5,
         method = "mdrd_ignore_race",
+        verbose = FALSE
+      )$value
+    ),
+    184
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 40,
+        sex = "male",
+        weight = 80,
+        scr = 0.5,
+        method = "mdrd_original_ignore_race",
         verbose = FALSE
       )$value
     ),
@@ -476,6 +504,26 @@ test_that("eGFR for mdrd_ignore_race", {
       weight = 80,
       scr = 0.5,
       method = "mdrd_ignore_race",
+      verbose = FALSE
+    )$value
+  )
+  expect_equal(
+    calc_egfr(
+      age = 40,
+      sex = "male",
+      race = "other",
+      weight = 80,
+      scr = 0.5,
+      method = "mdrd_original_ignore_race",
+      verbose = FALSE
+    )$value,
+    calc_egfr(
+      age = 40,
+      sex = "male",
+      race = "black",
+      weight = 80,
+      scr = 0.5,
+      method = "mdrd_original_ignore_race",
       verbose = FALSE
     )$value
   )
