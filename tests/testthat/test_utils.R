@@ -64,3 +64,8 @@ test_that("%>=% handles zero-length input", {
   expect_equal(c(1, 3) %>=% numeric(0), logical(0))
   expect_equal(numeric(0) %>=% 5, logical(0))
 })
+
+test_that("%<=% handles zero-length input", {
+  expect_equal(c(1, 3) %<=% numeric(0), logical(0))
+  expect_equal(numeric(0) %<=% 5, logical(0))
+})
