@@ -1,11 +1,16 @@
 #' Calculate eGFR
 #'
-#' Calculate the estimated glomerular filtration rate (an indicator of renal function) based on measured serum creatinine using one of the following approaches:
+#' Calculate the estimated glomerular filtration rate (an indicator of renal 
+#' function) based on measured serum creatinine using one of the following 
+#' approaches:
 #' \itemize{
 #'   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
 #'   \item C-G spinal cord injury
 #'   \item Revised Lund-Malmo
-#'   \item Modification of Diet in Renal Disease study (MDRD; with or without consideration of race)
+#'   \item Modification of Diet in Renal Disease study (MDRD; 
+#'     with or without consideration of race, using either the original equation 
+#'     (published 2001) or the equation updated to reflect serum creatinine 
+#'     assay standardization (2006))
 #'   \item CKD-EPI (with or without consideration of race)
 #'   \item Schwartz
 #'   \item Schwartz revised / bedside
@@ -16,14 +21,16 @@
 #' Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
 #'
 #' @param method eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
-#'   `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, `mdrd_ignore_race`, `ckd_epi`, `ckd_epi_ignore_race`, 
+#'   `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, 
+#'   `mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`, `ckd_epi`, `ckd_epi_ignore_race`, 
 #'   `malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.
 #' @param sex sex
 #' @param age age, in years
 #' @param scr serum creatinine (mg/dL)
 #' @param scr_unit, `mg/dL` or `micromol/L` (==`umol/L`)
 #' @param race `black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. 
-#'   To use these methods without race, use `method = "ckd_epi_ignore_race"` or `method = "mdrd_ignore_race"` 
+#'   To use these methods without race, use `method = "ckd_epi_ignore_race"`,  
+#'   `method = "mdrd_ignore_race"` or `method = "mdrd_original_ignore_race"`.
 #'   See Note section below for important considerations when using race as a predictive factor in eGFR.
 #' @param weight weight, in `kg`
 #' @param height height, in `cm`, used for converting to/from BSA-normalized units.
@@ -43,7 +50,8 @@
 #'   \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
 #'   \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
 #'   \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
-#'   \item MDRD: \href{https://www.ncbi.nlm.nih.gov/pubmed/10075613}{Level et al., Annals of Internal Medicine}. (See Note.)
+#'   \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
+#'     and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
 #'   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
 #'   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
 #'   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
@@ -144,17 +152,21 @@ calc_egfr <- function (
 
   # Confirm Required Covariates Are Present
   # ---------------------------------------
-  calculate_egfr <- check_covs_available(cov_reqs,
-                                         list(age = age,
-                                              sex = sex,
-                                              creat = scr,
-                                              weight = weight,
-                                              height = height,
-                                              bsa = bsa,
-                                              race = race,
-                                              preterm = preterm),
-                                         verbose = TRUE, 
-                                         fail = fail)
+  calculate_egfr <- check_covs_available(
+    cov_reqs,
+    list(
+      age = age,
+      sex = sex,
+      creat = scr,
+      weight = weight,
+      height = height,
+      bsa = bsa,
+      race = race,
+      preterm = preterm
+      ),
+    verbose = TRUE, 
+    fail = fail
+  )
   if (!(calculate_egfr)) {
     return(FALSE)
   }
@@ -215,14 +227,32 @@ calc_egfr <- function (
       race = race,
       scr = scr,
       age = age,
-      use_race = TRUE
+      use_race = TRUE,
+      original_expression = FALSE
+    ),
+    "mdrd_original" = egfr_mdrd(
+      sex = sex,
+      race = race,
+      scr = scr,
+      age = age,
+      use_race = TRUE,
+      original_expression = TRUE
     ),
     "mdrd_ignore_race" = egfr_mdrd(
       sex = sex,
       race = race,
       scr = scr,
       age = age,
-      use_race = FALSE
+      use_race = FALSE,
+      original_expression = FALSE
+    ),
+    "mdrd_original_ignore_race" = egfr_mdrd(
+      sex = sex,
+      race = race,
+      scr = scr,
+      age = age,
+      use_race = FALSE,
+      original_expression = TRUE
     ),
     "ckd_epi" = egfr_ckd_epi(
       sex = sex,
@@ -401,14 +431,18 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
 #' @rdname calc_egfr
 #' @param use_race whether to include race as a factor in the calculation (TRUE
 #'   or FALSE); see note
-egfr_mdrd <- function(sex, race, scr, age, use_race) {
+#' @param original_expression whether the MDRD equation should use the 2001 
+#'   coefficient (TRUE) or the 2006 coefficient (FALSE), which was updated for 
+#'   standardization of the creatinine assay.
+egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
-  f_sex <- ifelse(sex == 'female', 0.762, 1)
-  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.21, 1)
-  186 * scr^(-1.154) * f_sex * f_race * age^(-0.203)
+  coeff <- ifelse(original_expression, 186, 175)
+  f_sex <- ifelse(sex == 'female', 0.742, 1)
+  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.212, 1)
+  coeff * scr^(-1.154) * f_sex * f_race * age^(-0.203)
 }
 
 #' @rdname calc_egfr

@@ -19,7 +19,8 @@ egfr_cov_reqs <- function(method, relative = NULL){
     "cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
     "cockcroft_gault_adaptive", "cockcroft_gault_sci",
     "malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev",
-    "mdrd", "mdrd_ignore_race", "ckd_epi", "ckd_epi_ignore_race", "schwartz", "schwartz_revised", 
+    "mdrd", "mdrd_ignore_race", "mdrd_original", "mdrd_original_ignore_race",
+    "ckd_epi", "ckd_epi_ignore_race", "schwartz", "schwartz_revised", 
     "bedside_schwartz", "jelliffe", "jelliffe_unstable", "wright"
   )
   if(!(method %in% available_methods)) {
@@ -31,7 +32,7 @@ egfr_cov_reqs <- function(method, relative = NULL){
   if (method %in% c("cockcroft_gault", "jelliffe_unstable", "cockcroft_gault_sci")) {
     covs <- list(c("creat", "age", "weight", "sex"))
     
-  } else if (method %in% c("malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev", "mdrd_ignore_race", "ckd_epi_ignore_race")) {
+  } else if (method %in% c("malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev", "mdrd_ignore_race", "mdrd_original_ignore_race", "ckd_epi_ignore_race")) {
     covs <- list(c("creat", "sex", "age"))
     
   } else if (method %in% c("schwartz_revised", "bedside_schwartz")) {
@@ -40,7 +41,7 @@ egfr_cov_reqs <- function(method, relative = NULL){
   } else if (method %in% c("schwartz")) {
     covs <- list(c("creat", "age", "sex", "height", "preterm"))
     
-  } else if (method %in% c("mdrd", "ckd_epi")) {
+  } else if (method %in% c("mdrd", "mdrd_original", "ckd_epi")) {
     covs <- list(c("creat", "sex", "age", "race"))
     
   } else if (method %in% c("jelliffe", "wright")) {
