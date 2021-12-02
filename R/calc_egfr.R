@@ -11,7 +11,7 @@
 #'     with or without consideration of race, using either the original equation 
 #'     (published 2001) or the equation updated to reflect serum creatinine 
 #'     assay standardization (2006))
-#'   \item CKD-EPI (with or without consideration of race)
+#'   \item CKD-EPI (with or without consideration of race, or 2021 re-fit without race)
 #'   \item Schwartz
 #'   \item Schwartz revised / bedside
 #'   \item Jelliffe
@@ -22,14 +22,15 @@
 #'
 #' @param method eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
 #'   `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, 
-#'   `mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`, `ckd_epi`, `ckd_epi_ignore_race`, 
+#'   `mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`, 
+#'   `ckd_epi`, `ckd_epi_ignore_race`, `ckd_epi_as_2021`,
 #'   `malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.
 #' @param sex sex
 #' @param age age, in years
 #' @param scr serum creatinine (mg/dL)
 #' @param scr_unit, `mg/dL` or `micromol/L` (==`umol/L`)
 #' @param race `black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. 
-#'   To use these methods without race, use `method = "ckd_epi_ignore_race"`,  
+#'   To use these methods without race, use `method = "ckd_epi_ignore_race"`,  `method = "ckd_epi_as_2021"`,
 #'   `method = "mdrd_ignore_race"` or `method = "mdrd_original_ignore_race"`.
 #'   See Note section below for important considerations when using race as a predictive factor in eGFR.
 #' @param weight weight, in `kg`
@@ -53,6 +54,7 @@
 #'   \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
 #'     and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
 #'   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
+#'   \item CKD-EPI (2021): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}.
 #'   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
 #'   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
 #'   \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
@@ -70,6 +72,10 @@
 #'   On the other hand, including race in GFR estimation may also prevent Black patients 
 #'   from obtaining procedures like kidney transplants
 #'   ({\href{https://pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
+#'   In 2021, the NKF/ASN Task Force on Reassessing the Inclusion of Race in Diagnosing Kidney Diseases
+#'   published revised versions of the CKD-EPI equations refit on the original data but with race excluded, 
+#'   which may produce less biased estimates 
+#'   (\href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}).
 #'  
 #' @examples
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
@@ -268,6 +274,11 @@ calc_egfr <- function (
       age = age,
       use_race = FALSE
     ),
+    "ckd_epi_as_2021" = egfr_ckd_epi_as_2021(
+      sex = sex,
+      scr = scr,
+      age = age
+    ),
     "cockcroft_gault_sci" = egfr_cockcroft_gault_sci(
       sex = sex,
       age = age,
@@ -454,6 +465,18 @@ egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
   f_sex <- ifelse(sex == 'female', 1.018, 1)
   f_race <- ifelse(race == 'black' && use_race == TRUE, 1.159, 1)
   141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex * f_race
+}
+
+#' @rdname calc_egfr
+egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
+  if (!sex %in% c("male", "female")) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+  a1 <- ifelse(sex == 'female', -0.241, -0.302)
+  cr_spline <- ifelse(sex == 'female', 0.7, 0.9)
+  f_sex <- ifelse(sex == 'female', 1.012, 1)
+  142 * (scr ^ ifelse(scr < cr_spline, a1, -1.200)) * 0.9938^age * f_sex
 }
 
 #' @rdname calc_egfr

@@ -20,8 +20,9 @@ egfr_cov_reqs <- function(method, relative = NULL){
     "cockcroft_gault_adaptive", "cockcroft_gault_sci",
     "malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev",
     "mdrd", "mdrd_ignore_race", "mdrd_original", "mdrd_original_ignore_race",
-    "ckd_epi", "ckd_epi_ignore_race", "schwartz", "schwartz_revised", 
-    "bedside_schwartz", "jelliffe", "jelliffe_unstable", "wright"
+    "ckd_epi", "ckd_epi_ignore_race", "ckd_epi_as_2021", 
+    "schwartz", "schwartz_revised", "bedside_schwartz", 
+    "jelliffe", "jelliffe_unstable", "wright"
   )
   if(!(method %in% available_methods)) {
     stop(paste0("Sorry, eGFR calculation method not recognized! Please choose from: ", 
@@ -32,7 +33,7 @@ egfr_cov_reqs <- function(method, relative = NULL){
   if (method %in% c("cockcroft_gault", "jelliffe_unstable", "cockcroft_gault_sci")) {
     covs <- list(c("creat", "age", "weight", "sex"))
     
-  } else if (method %in% c("malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev", "mdrd_ignore_race", "mdrd_original_ignore_race", "ckd_epi_ignore_race")) {
+  } else if (method %in% c("malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev", "mdrd_ignore_race", "mdrd_original_ignore_race", "ckd_epi_ignore_race", "ckd_epi_as_2021")) {
     covs <- list(c("creat", "sex", "age"))
     
   } else if (method %in% c("schwartz_revised", "bedside_schwartz")) {

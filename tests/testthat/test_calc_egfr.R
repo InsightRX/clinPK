@@ -144,6 +144,37 @@ test_that("calculate egfr works: ckd-epi", {
   )
 })
 
+test_that("calculate egfr works: ckd_epi_as_2021", {
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 80,
+        sex="female",
+        weight = 83,
+        scr = 0.8,
+        method = "ckd_epi_as_2021",
+        race="black",
+        verbose = FALSE
+      )$value
+    ),
+    114
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 80,
+        sex="male",
+        weight = 83,
+        scr = 0.8,
+        method = "ckd_epi_as_2021",
+        race="black",
+        verbose = FALSE
+      )$value
+    ),
+    92
+  )
+})
+
 
 test_that("calculate egfr works: mdrd, mdrd_original", {
   expect_equal(
