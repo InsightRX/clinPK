@@ -462,9 +462,11 @@ egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
+  a1 <- ifelse(sex == 'female', -0.329, -0.411)
+  K <- ifelse(sex == 'female', 0.7, 0.9)
   f_sex <- ifelse(sex == 'female', 1.018, 1)
   f_race <- ifelse(race == 'black' && use_race == TRUE, 1.159, 1)
-  141 * (scr ^ ifelse(scr < 1, -0.329, -1.209)) * 0.993^age * f_sex * f_race
+  141 * ((scr/K) ^ ifelse(scr < K, a1, -1.209)) * 0.993^age * f_sex * f_race
 }
 
 #' @rdname calc_egfr
@@ -474,9 +476,9 @@ egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
     return(NULL)
   }
   a1 <- ifelse(sex == 'female', -0.241, -0.302)
-  cr_spline <- ifelse(sex == 'female', 0.7, 0.9)
+  K <- ifelse(sex == 'female', 0.7, 0.9)
   f_sex <- ifelse(sex == 'female', 1.012, 1)
-  142 * (scr ^ ifelse(scr < cr_spline, a1, -1.200)) * 0.9938^age * f_sex
+  142 * ((scr/K) ^ ifelse(scr < K, a1, -1.200)) * 0.9938^age * f_sex
 }
 
 #' @rdname calc_egfr
