@@ -140,7 +140,38 @@ test_that("calculate egfr works: ckd-epi", {
         verbose = FALSE
       )$value
     ),
-    123
+    109
+  )
+})
+
+test_that("calculate egfr works: ckd_epi_as_2021", {
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 80,
+        sex="female",
+        weight = 83,
+        scr = 0.8,
+        method = "ckd_epi_as_2021",
+        race="black",
+        verbose = FALSE
+      )$value
+    ),
+    74
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 80,
+        sex="male",
+        weight = 83,
+        scr = 0.8,
+        method = "ckd_epi_as_2021",
+        race="black",
+        verbose = FALSE
+      )$value
+    ),
+    89
   )
 })
 
@@ -436,7 +467,7 @@ test_that("eGFR for ckd_epi_ignore_race", {
         verbose = FALSE
       )$value
     ),
-    134
+    136
   )
   expect_equal(
     calc_egfr(
