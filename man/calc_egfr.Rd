@@ -132,7 +132,8 @@ approaches:
   \item Schwartz revised / bedside
   \item Jelliffe
   \item Jelliffe for unstable renal function
-  \item Wright
+  \item Wright equation for eGFR in cancer patients, with creatinine measured
+    using the Jaffe assay.
 }
 Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
 }

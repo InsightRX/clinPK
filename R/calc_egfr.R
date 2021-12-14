@@ -16,7 +16,8 @@
 #'   \item Schwartz revised / bedside
 #'   \item Jelliffe
 #'   \item Jelliffe for unstable renal function
-#'   \item Wright
+#'   \item Wright equation for eGFR in cancer patients, with creatinine measured
+#'     using the Jaffe assay.
 #' }
 #' Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
 #'
@@ -394,7 +395,7 @@ egfr_wright <- function(age, bsa, sex, scr) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
-  ((74.4344 - (0.438914 * age)) * bsa * (1-(0.168*ifelse(sex == "male", 0, 1))))/scr
+  ((6580 - (38.8 * age)) * bsa * (1-(0.168 * (sex == "female"))))/(scr * 88.42)
 }
 
 #' @rdname calc_egfr
