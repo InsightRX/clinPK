@@ -131,7 +131,9 @@ approaches:
   \item Schwartz
   \item Schwartz revised / bedside
   \item Jelliffe
-  \item Jelliffe for unstable renal function
+  \item Jelliffe for unstable renal function. Note that the 15% reduction in 
+    P_adj recommended for hemodialysis patients is not included in this 
+    implementation.
   \item Wright equation for eGFR in cancer patients, with creatinine measured
     using the Jaffe assay.
 }
@@ -176,7 +178,7 @@ calc_egfr(sex = "male", age = 50, scr = 1.1,
   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
   \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
-  \item Jelliffe for unstable renal function: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, American Journal of Nephrology (2002)}
+  \item Jelliffe for unstable renal function: \href{https://pubmed.ncbi.nlm.nih.gov/12169862/}{Jelliffe, American Journal of Nephrology (2002)}
   \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
 }
 }

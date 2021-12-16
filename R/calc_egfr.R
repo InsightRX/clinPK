@@ -15,7 +15,9 @@
 #'   \item Schwartz
 #'   \item Schwartz revised / bedside
 #'   \item Jelliffe
-#'   \item Jelliffe for unstable renal function
+#'   \item Jelliffe for unstable renal function. Note that the 15% reduction in 
+#'     P_adj recommended for hemodialysis patients is not included in this 
+#'     implementation.
 #'   \item Wright equation for eGFR in cancer patients, with creatinine measured
 #'     using the Jaffe assay.
 #' }
@@ -59,7 +61,7 @@
 #'   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
 #'   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
 #'   \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
-#'   \item Jelliffe for unstable renal function: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, American Journal of Nephrology (2002)}
+#'   \item Jelliffe for unstable renal function: \href{https://pubmed.ncbi.nlm.nih.gov/12169862/}{Jelliffe, American Journal of Nephrology (2002)}
 #'   \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
 #' }
 #' @note 
@@ -415,9 +417,9 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
   }
   vol <- 4 * weight
 
-  # for times, if null or negative or mismatch in times/scr length, assume one day difference
-  # otherwise, ensure times and scrs are sequential.
-  if (is.null(times) | length(scr) != length(times)) {
+  # for times, if null or negative or mismatch in times/scr length, assume one 
+  # day difference otherwise, ensure times and scrs are sequential.
+  if (is.null(times) || length(scr) != length(times)) {
     dt <- rep(1, length(scr))
   } else {
     scr <- scr[order(times)]
@@ -425,19 +427,27 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
     dt <- c(1, diff(times))
   }
 
-  # for first creatinine, use that value. for subsequent creatinines, use average of current and previous values.
+  # for first creatinine, use that value. for subsequent creatinines, use 
+  # average of current and previous values.
   if (length(scr) == 1) {
     scr_diff <- 0
     scr_av <- scr
   } else {
-    scr_diff <- c(0, diff(scr)) * -1
-    scr_av <- scr + scr_diff/2
+    scr_diff <- c(0, diff(scr))
+    padded_means <- 0.5 * c(scr[1], scr) + c(scr, tail(scr, 1)) * 0.5
+    scr_av <- padded_means[1:length(padded_means) - 1]
   }
 
   # calculate creatinine production
-  cr_prod <- (29.305-(0.203 * age)) * weight * (1.037-(0.0338 * scr_av)) * ifelse(sex == "male", 0.85, 0.765)
+  Fsex <- ifelse(sex == "male", 0.95, 0.9 * 0.95)
+  E_mgkgday <- 29.305 - (0.203 * age)
+  E_ <- E_mgkgday * weight
+  P1 <- 1344.4 - 43.76 * scr_av
+  P2 <- 1344.4 - 43.76 * 1.1
+  R_ <- P1/P2
+  P_adj <- E_ * R_ * Fsex
   # calculate crcl
-  ((vol * scr_diff/dt + cr_prod) * 100) / (1440 * scr_av)
+  100 * (P_adj - vol * scr_diff/dt) / (scr_av * 1440)
 }
 
 #' @rdname calc_egfr
