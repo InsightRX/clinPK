@@ -123,7 +123,7 @@ test_that("calculate egfr works: cockroft_gault", {
         verbose = FALSE
       )$value
     ),
-    54
+    67
   )
 })
 
@@ -334,6 +334,122 @@ test_that("calculate egfr works: jelliffe", {
       )$value
     ),
     76
+  )
+})
+
+test_that("calculate egfr works: jelliffe unstable", {
+  # The following tests match the equation against examples in the
+  # original publication. Please verify the original publication before
+  # adjusting test expectations.
+  
+  # Examples from Table 1
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 50,
+        sex= "male",
+        bsa = 1.73,
+        weight = 72,
+        scr = c(0.6, 0.6),
+        times = c(1, 2),
+        method = "jelliffe_unstable",
+        verbose = FALSE
+      )$value
+    ),
+    c(154, 154)
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 20,
+        sex= "male",
+        bsa = 1.73,
+        weight = 72,
+        scr = c(1, 1),
+        times = c(1, 2),
+        method = "jelliffe_unstable",
+        verbose = FALSE
+      )$value
+    ),
+    c(120, 120)
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 80,
+        sex= "female",
+        bsa = 1.73,
+        weight = 72,
+        scr = c(3, 3),
+        times = c(1, 2),
+        method = "jelliffe_unstable",
+        verbose = FALSE
+      )$value,
+      1
+    ),
+    c(17.4, 17.4)
+  )
+  
+  # Examples from Table 2
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 50,
+        sex = "male",
+        bsa = 1.73,
+        weight = 72,
+        scr = c(1, 0.6),
+        times = c(1, 2),
+        method = "jelliffe_unstable",
+        verbose = FALSE
+      )$value
+    ),
+    c(91, 125) # actually 124 in paper, but I think it's a rounding issue
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 50,
+        sex = "male",
+        bsa = 1.73,
+        weight = 72,
+        scr = c(1, 3),
+        times = c(1, 2),
+        method = "jelliffe_unstable",
+        verbose = FALSE
+      )$value
+    ),
+    c(91, 24)
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 50,
+        sex = "male",
+        bsa = 1.73,
+        weight = 72,
+        scr = c(0.6, 3),
+        times = c(1, 2),
+        method = "jelliffe_unstable",
+        verbose = FALSE
+      )$value
+    ),
+    c(154, 23)
+  )
+  expect_equal(
+    round(
+      calc_egfr(
+        age = 50,
+        sex = "male",
+        bsa = 1.73,
+        weight = 72,
+        scr = c(3, 1),
+        times = c(1, 2),
+        method = "jelliffe_unstable",
+        verbose = FALSE
+      )$value
+    ),
+    c(28, 64)
   )
 })
 
