@@ -123,7 +123,7 @@ test_that("calculate egfr works: cockroft_gault", {
         verbose = FALSE
       )$value
     ),
-    54
+    67
   )
 })
 

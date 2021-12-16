@@ -121,7 +121,9 @@ function) based on measured serum creatinine using one of the following
 approaches:
 \itemize{
   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
-  \item C-G spinal cord injury
+  \item C-G spinal cord injury (using correction factot of 0.7, representing 
+    median correction point reported in the original publication (parapalegic
+    patients: 0.8; tetrapalegic patients: 0.6))
   \item Revised Lund-Malmo
   \item Modification of Diet in Renal Disease study (MDRD; 
     with or without consideration of race, using either the original equation 

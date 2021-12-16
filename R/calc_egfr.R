@@ -5,7 +5,9 @@
 #' approaches:
 #' \itemize{
 #'   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
-#'   \item C-G spinal cord injury
+#'   \item C-G spinal cord injury (using correction factot of 0.7, representing 
+#'     median correction point reported in the original publication (parapalegic
+#'     patients: 0.8; tetrapalegic patients: 0.6))
 #'   \item Revised Lund-Malmo
 #'   \item Modification of Diet in Renal Disease study (MDRD; 
 #'     with or without consideration of race, using either the original equation 
@@ -499,7 +501,7 @@ egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
     return(NULL)
   }
   f_sex <- ifelse(sex == 'female', 0.85, 1)
-  2.3 * (f_sex * (140-age) / scr * (weight/72)) ^0.7
+  0.7 * (f_sex * (140-age) / scr * (weight/72))
 }
 
 #' @rdname calc_egfr
