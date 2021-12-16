@@ -121,7 +121,7 @@ function) based on measured serum creatinine using one of the following
 approaches:
 \itemize{
   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
-  \item C-G spinal cord injury (using correction factot of 0.7, representing 
+  \item C-G spinal cord injury (using correction factor of 0.7, representing 
     median correction point reported in the original publication (parapalegic
     patients: 0.8; tetrapalegic patients: 0.6))
   \item Revised Lund-Malmo
