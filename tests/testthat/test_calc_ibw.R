@@ -24,9 +24,11 @@ test_that("calc_ibw errors if passed a vector", {
 })
 
 test_that("calc_ibw() uses weight when age < 1", {
-  expect_equal(
-    expect_message(calc_ibw(age = 0.5, weight = 7)),
-    7
+  expect_message(
+    expect_equal(
+      calc_ibw(age = 0.5, weight = 7),
+      7
+    )
   )
 })
 
