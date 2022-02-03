@@ -99,11 +99,13 @@ test_that("extreme percentiles capped to min and max", {
 })
 
 test_that("percentiles right at 0.1 return a value", {
-  res1 <- pct_for_age_generic(
-    age = 0.0349462365591398,
-    sex = "female",
-    value = 2.21,
-    variable = "weight"
+  res1 <- suppressMessages(
+    pct_for_age_generic(
+      age = 0.0349462365591398,
+      sex = "female",
+      value = 2.21,
+      variable = "weight"
+    )
   )
   expect_equal(res1, list(percentile = 0.1))
 })
