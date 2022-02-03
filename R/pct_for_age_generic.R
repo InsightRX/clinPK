@@ -41,11 +41,11 @@ pct_for_age_generic <- function(age = NULL, value = NULL, sex = NULL, variable="
     p[length(p)] <- p[length(p)]/10 # 99.9
     p_txt <- paste0("pct_", p)
     if(value >= max(tmp)) {
-      message(paste0("Specified ", variable," > 99.9th percentile!"))
+      message(paste0("Specified ", variable," >= 99.9th percentile!"))
       pct <- list(percentile = 99.9)
     }
     if(value <= min(tmp)) {
-      message(paste0("Specified ", variable, " < 0.1th percentile!"))
+      message(paste0("Specified ", variable, " <= 0.1th percentile!"))
       pct <- list(percentile = 0.1)
     }
     if(is.null(pct$percentile)) {
