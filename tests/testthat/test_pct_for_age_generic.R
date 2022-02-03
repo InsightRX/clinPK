@@ -97,3 +97,13 @@ test_that("extreme percentiles capped to min and max", {
   expect_equal(pct1$percentile, 0.1)
   expect_equal(pct2$percentile, 99.9)
 })
+
+test_that("percentiles right at 0.1 return a value", {
+  res1 <- pct_for_age_generic(
+    age = 0.0349462365591398,
+    sex = "female",
+    value = 2.21,
+    variable = "weight"
+  )
+  expect_equal(res1, list(percentile = 0.1))
+})
