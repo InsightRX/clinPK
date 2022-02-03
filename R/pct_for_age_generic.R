@@ -49,10 +49,16 @@ pct_for_age_generic <- function(age = NULL, value = NULL, sex = NULL, variable="
       pct <- list(percentile = 0.1)
     }
     if(is.null(pct$percentile)) {
-      data <- data.frame(cbind(
-        x = c(as.num(tmp[value <= as.num(tmp)][1]), tail(as.num(tmp[value > as.num(tmp)]),1)),
-        y = c(p[value <= as.num(tmp)][1], tail(p[value > as.num(tmp)],1))
-      ))
+      data <- data.frame(
+        x = c(
+          as.num(tmp[value <= as.num(tmp)][1]),
+          tail(as.num(tmp[value > as.num(tmp)]),1)
+        ),
+        y = c(
+          p[value <= as.num(tmp)][1],
+          tail(p[value > as.num(tmp)],1)
+        )
+      )
       # linearly scale between two values
       fit <- lm(y~x, data)
       par <- coef(fit)
