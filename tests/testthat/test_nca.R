@@ -99,3 +99,32 @@ test_that("NCA with same DV at 3 different timepoints", {
     )/ res3$descriptive$auc_24 < 0.0001
   )
 })
+
+test_that("NCA with a sample at exactly tau still does peak extension", {
+  dat <- data.frame(
+    time = c(0, 3, 4, 6),
+    dv = c(0.001, 884, 586, 293)
+  )
+  out_extend <- nca(
+    data = dat,
+    dose = 58000,
+    tau = 6,           # exact time of last TDM
+    t_inf = 2,         # end of infusion is an hour before first sample
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = TRUE
+  )
+  out_no_extend <- nca(
+    data = dat,
+    dose = 58000,
+    tau = 6,           # exact time of last TDM
+    t_inf = 2,         # end of infusion is an hour before first sample
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = FALSE
+  )
+  expect_true(out_no_extend$descriptive$auc_t < out_extend$descriptive$auc_t)
+  expect_equal(out_extend$descriptive$auc_tau, out_extend$descriptive$auc_t)
+})
