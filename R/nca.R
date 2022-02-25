@@ -157,7 +157,7 @@ nca <- function (
       auc_t <- (auc_pre + auc_post)
       c_at_tmax <- data$time[1]
       c_at_tau  <- utils::tail(data$time,1)
-      if(tau > utils::tail(data$time,1)) {
+      if(tau > utils::tail(data$time,1) || extend) {
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!
         c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
         if(extend) { # back-extrapolate to the true Cmax, to include that area too

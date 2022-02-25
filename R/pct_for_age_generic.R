@@ -40,19 +40,25 @@ pct_for_age_generic <- function(age = NULL, value = NULL, sex = NULL, variable="
     p[1] <- p[1]/10 # 0.1
     p[length(p)] <- p[length(p)]/10 # 99.9
     p_txt <- paste0("pct_", p)
-    if(value > max(tmp)) {
-      message(paste0("Specified ", variable," > 99.9th percentile!"))
+    if(value >= max(tmp)) {
+      message(paste0("Specified ", variable," >= 99.9th percentile!"))
       pct <- list(percentile = 99.9)
     }
-    if(value < min(tmp)) {
-      message(paste0("Specified ", variable, " < 0.1th percentile!"))
+    if(value <= min(tmp)) {
+      message(paste0("Specified ", variable, " <= 0.1th percentile!"))
       pct <- list(percentile = 0.1)
     }
     if(is.null(pct$percentile)) {
-      data <- data.frame(cbind(
-        x = c(as.num(tmp[value <= as.num(tmp)][1]), tail(as.num(tmp[value > as.num(tmp)]),1)),
-        y = c(p[value <= as.num(tmp)][1], tail(p[value > as.num(tmp)],1))
-      ))
+      data <- data.frame(
+        x = c(
+          as.num(tmp[value <= as.num(tmp)][1]),
+          tail(as.num(tmp[value > as.num(tmp)]),1)
+        ),
+        y = c(
+          p[value <= as.num(tmp)][1],
+          tail(p[value > as.num(tmp)],1)
+        )
+      )
       # linearly scale between two values
       fit <- lm(y~x, data)
       par <- coef(fit)
