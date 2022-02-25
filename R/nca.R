@@ -129,9 +129,9 @@ nca <- function (
     if(!is.null(t_inf) && t_inf > 0) {
       ## If infusion:
       c_at_tmax <- tail(pre$dv, 1) * exp(-out$pk$kel * (t_inf - max(pre$time)))
-      out$pk$v <- ((dose / ( c_at_tmax / (1-exp(-out$pk$kel * t_inf)) )) ) / (out$pk$kel * t_inf)
+      out$pk$v <- ((dose / ( (c_at_tmax - baseline) / (1-exp(-out$pk$kel * t_inf)) )) ) / (out$pk$kel * t_inf)
     } else {
-      out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline) # this is only for infusions
+      out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline) # this is only for bolus
     }
     out$pk$cl <- out$pk$kel * out$pk$v
     
