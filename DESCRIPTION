@@ -1,7 +1,7 @@
 Package: clinPK
 Type: Package
 Title: Clinical Pharmacokinetics Toolkit
-Version: 0.10.7
+Version: 0.10.8
 Date: 2022-02-25
 Authors@R: c(person("Ron", "Keizer", email = "ron@insight-rx.com", role
         = "aut"), person("Jasmine", "Hughes", email =

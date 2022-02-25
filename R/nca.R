@@ -65,6 +65,12 @@ nca <- function (
   if(is.null(data)) {
     stop("No data supplied to NCA function")
   } else {
+    if(method == "log_log") {
+      if(!extend) {
+        warning("With log-log method, the data has to be back-extrapolated to end-of-infusion for calculations to be accurate.")
+      }
+      extend <- TRUE
+    }
     if(is.null(data$dv) || is.null(data$time)) {
       stop("No time ('time') or dependent variable ('dv') data in supplied dataset")
     }
@@ -130,20 +136,16 @@ nca <- function (
     out$pk$cl <- out$pk$kel * out$pk$v
     
     if (length(pre[,1]) > 0) {
-      if(method == "log_log") {
-        reg_infusion <- new_regimen(amt = dose, t_inf = t_inf, times = 0, type = "infusion")
-        data_infusion <- PKPDsim::advan_create_data(
-          reg_infusion,
-          parameters = list(CL = out$pk$cl, V = out$pk$v),
-          cmts = 1,
-          t_obs = pre$t
-        )
-        sim_auc <- PKPDsim::advan("1cmt_iv_infusion")(data_infusion)
-        auc_pre <- sim_auc$AUC[sim_auc$TIME == max(pre$time)]
-        # tmp$dv <- tmp$dv * (tail(pre$dv,1) / tail(tmp$dv,1)) # correction factor due to model-misspecification
-        # auc_pre <- sum(diff(tmp$t) * (mean_step(tmp$dv)))
+      if(extend) { # back-extending: then only calculate until EOI, the AUC between EOI and first sample after EOI will be added later
+        t_end <- t_inf   
       } else {
-        auc_pre <- sum(diff(pre$time) * (mean_step(pre$dv) ) )
+        t_end <- diff(pre$time)
+      }
+      if(method == "log_log") {
+        # AUC during infusion is total AUC of dose (A/CL) minus the AUC still to be eliminated (Amount from dose at EOI/CL)
+        auc_pre <- dose/out$pk$cl - (c_at_tmax * out$pk$v) / out$pk$cl
+      } else {
+        auc_pre <- sum(t_end * (mean_step(pre$dv) ) )
       }
     } else {
       auc_pre <- 0
