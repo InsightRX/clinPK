@@ -113,22 +113,44 @@ nca <- function (
     out <- list(pk = list(), descriptive = list())
     out$pk$kel <- -stats::coef(fit)[["time"]]
     out$pk$t_12 <- log(2) / out$pk$kel
-    out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline)
-    out$pk$cl <- (out$pk$kel) * out$pk$v
-
+    
     ## get the auc
     tmax_id <- match(max(data$dv), data$dv)[1]
     out$descriptive$tmax <- data$time[tmax_id]
     pre <- data[1:tmax_id,]
     trap <- data[tmax_id:length(data[,1]),]
+    
+    if(!is.null(t_inf) && t_inf > 0) {
+      ## If infusion:
+      c_at_tmax <- tail(pre$dv, 1) * exp(-out$pk$kel * (t_inf - max(pre$time)))
+      out$pk$v <- ((dose / ( c_at_tmax / (1-exp(-out$pk$kel * t_inf)) )) ) / (out$pk$kel * t_inf)
+    } else {
+      out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline) # this is only for infusions
+    }
+    out$pk$cl <- out$pk$kel * out$pk$v
+    
     if (length(pre[,1]) > 0) {
-      auc_pre <- sum(diff(pre$time) * (mean_step(pre$dv) ) )
+      if(method == "log_log") {
+        reg_infusion <- new_regimen(amt = dose, t_inf = t_inf, times = 0, type = "infusion")
+        data_infusion <- PKPDsim::advan_create_data(
+          reg_infusion,
+          parameters = list(CL = out$pk$cl, V = out$pk$v),
+          cmts = 1,
+          t_obs = pre$t
+        )
+        sim_auc <- PKPDsim::advan("1cmt_iv_infusion")(data_infusion)
+        auc_pre <- sim_auc$AUC[sim_auc$TIME == max(pre$time)]
+        # tmp$dv <- tmp$dv * (tail(pre$dv,1) / tail(tmp$dv,1)) # correction factor due to model-misspecification
+        # auc_pre <- sum(diff(tmp$t) * (mean_step(tmp$dv)))
+      } else {
+        auc_pre <- sum(diff(pre$time) * (mean_step(pre$dv) ) )
+      }
     } else {
       auc_pre <- 0
     }
-    if (length(pre[,1])>0 & length(trap[,1]) >= 2) {
-      if (method == "log_linear") {
-        auc_post <- nca_trapezoid(trap)
+    if (length(pre[,1]) > 0 & length(trap[,1]) >= 2) {
+      if (method %in% c("log_linear", "log_log")) {
+        auc_post <- clinPK:::nca_trapezoid(trap)
       } else {
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
