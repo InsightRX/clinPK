@@ -187,7 +187,14 @@ nca <- function (
             auc_tau <- auc_pre + nca_trapezoid(trap_tau)
             auc_t   <- auc_pre + nca_trapezoid(trap_t) # also recalculate auc_t
         } else {
-            auc_tau <- auc_pre + nca_trapezoid(trap)
+          trap_tau <- rbind(
+            trap[,c("time", "dv")],
+            data.frame(
+              time = c(tau),
+              dv = c(c_at_tau)
+            )
+          )
+          auc_tau <- auc_pre + nca_trapezoid(trap_tau)
         }
       } else {
         auc_tau <- auc_t
@@ -205,6 +212,7 @@ nca <- function (
       out$descriptive$auc_24 <- auc_tau * (24/tau) * scale$auc
       out$descriptive$auc_tau <- auc_tau * scale$auc
       out$descriptive$auc_t <- auc_t * scale$auc
+      out$descriptive$auc_pre <- auc_pre * scale$auc
       out$settings <- list(dose = dose, interval = tau,
                            last_n = last_n, weights = weights)
     }

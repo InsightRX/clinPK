@@ -5,11 +5,11 @@ test_that("NCA estimates are correct", {
   )
   t1 <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = FALSE)
 
-  expect_equal(round(t1$descriptive$auc_inf), 8049)
-  expect_equal(round(t1$descriptive$auc_tau), 6824)
+  expect_equal(round(t1$descriptive$auc_inf), 9216)
+  expect_equal(round(t1$descriptive$auc_tau), 7991)
   expect_equal(round(t1$descriptive$auc_t), 6824)
   expect_equal(round(t1$descriptive$cav_t), 853)
-  expect_equal(round(t1$descriptive$cav_tau), 569)
+  expect_equal(round(t1$descriptive$cav_tau), 666)
 
   t1a <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = TRUE)
   expect_equal(round(t1a$descriptive$auc_tau), 8721)
