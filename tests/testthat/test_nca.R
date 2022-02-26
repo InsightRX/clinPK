@@ -12,7 +12,7 @@ test_that("NCA estimates are correct", {
   expect_equal(round(t1$descriptive$cav_tau), 666)
 
   t1a <- nca(data, has_baseline = TRUE, tau = 12, t_inf = 0.5, extend = TRUE)
-  expect_equal(round(t1a$descriptive$auc_tau), 8721)
+  expect_equal(round(t1a$descriptive$auc_tau), 8296)
 })
 
 test_that("NCA estimates half life different", {
@@ -64,10 +64,10 @@ test_that("NCA estimates with missing data are correct", {
   t2 <- suppressMessages(
     nca(data, has_baseline = TRUE, tau = 12, extend = TRUE, t_inf = 0)
   )
-  expect_equal(round(t2$descriptive$auc_inf), 10464)
-  expect_equal(round(t2$descriptive$auc_t), 8245)
-  expect_equal(round(t2$descriptive$cav_t), 1031)
-  expect_equal(round(t2$descriptive$cav_tau), 782)
+  expect_equal(round(t2$descriptive$auc_inf), 9614)
+  expect_equal(round(t2$descriptive$auc_t), 7395)
+  expect_equal(round(t2$descriptive$cav_t), 924)
+  expect_equal(round(t2$descriptive$cav_tau), 711)
 })
 
 test_that("NCA with same DV at 2 different timepoints", {
