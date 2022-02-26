@@ -3,7 +3,7 @@
 #' @param data data.frame with time and dv columns
 #' @param dose dose amount
 #' @param tau dosing frequency, default is 24.
-#' @param method `log_linear` or `linear`
+#' @param method `linear`, `log_linear` (default), or `log_log`
 #' @param scale list with scaling for auc and concentration (`conc`)
 #' @param dv_min minimum concentrations, lower observations will be set to this value
 #' @param t_inf infusion time, defaults to 0
@@ -152,7 +152,7 @@ nca <- function (
     }
     if (length(pre[,1]) > 0 & length(trap[,1]) >= 2) {
       if (method %in% c("log_linear", "log_log")) {
-        auc_post <- clinPK:::nca_trapezoid(trap)
+        auc_post <- nca_trapezoid(trap)
       } else {
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }

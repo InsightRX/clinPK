@@ -25,7 +25,7 @@ nca(
 
 \item{tau}{dosing frequency, default is 24.}
 
-\item{method}{`log_linear` or `linear`}
+\item{method}{`linear`, `log_linear` (default), or `log_log`}
 
 \item{scale}{list with scaling for auc and concentration (`conc`)}
 
