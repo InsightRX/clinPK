@@ -128,3 +128,92 @@ test_that("NCA with a sample at exactly tau still does peak extension", {
   expect_true(out_no_extend$descriptive$auc_t < out_extend$descriptive$auc_t)
   expect_equal(out_extend$descriptive$auc_tau, out_extend$descriptive$auc_t)
 })
+
+test_that("AUC pre-Cmax is returned and calculated appropriately", {
+  # Cmax is not concentration of 1st observation (different based on extend T/F)
+  dat1 <- data.frame(
+    time = c(0, 2.25, 2.5, 4, 6),
+    dv = c(0.001, 884, 900, 586, 293)
+  )
+  
+  # Cmax is concentration of 1st observation (different based on extend T/F)
+  dat2 <- data.frame(
+    time = c(0, 2.25, 4, 6),
+    dv = c(0.001, 884, 586, 293)
+  )
+  
+  # Cmax at end of infusion (nothing to extend, should be equal)
+  dat3 <- data.frame(
+    time = c(0, 2, 4, 6),
+    dv = c(0.001, 884, 586, 293)
+  )
+  
+  out_extend1 <- nca(
+    data = dat1,
+    dose = 58000,
+    tau = 6,           
+    t_inf = 2,         
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = TRUE
+  )[["descriptive"]][["auc_pre"]]
+  out_no_extend1 <- nca(
+    data = dat1,
+    dose = 58000,
+    tau = 6,           
+    t_inf = 2,         
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = FALSE
+  )[["descriptive"]][["auc_pre"]]
+  out_extend2 <- nca(
+    data = dat2,
+    dose = 58000,
+    tau = 6,           
+    t_inf = 2,         
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = TRUE
+  )[["descriptive"]][["auc_pre"]]
+  out_no_extend2 <- nca(
+    data = dat2,
+    dose = 58000,
+    tau = 6,           
+    t_inf = 2,         
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = FALSE
+  )[["descriptive"]][["auc_pre"]]
+  out_extend3 <- nca(
+    data = dat3,
+    dose = 58000,
+    tau = 6,           
+    t_inf = 2,         
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = TRUE
+  )[["descriptive"]][["auc_pre"]]
+  out_no_extend3 <- nca(
+    data = dat3,
+    dose = 58000,
+    tau = 6,           
+    t_inf = 2,         
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = FALSE
+  )[["descriptive"]][["auc_pre"]]
+  expect_false(out_no_extend1 == out_extend1)
+  expect_false(out_no_extend2 == out_extend2)
+  expect_true(out_no_extend3 == out_extend3)
+  expect_equal(round(out_no_extend1, 3), 1.125)
+  expect_equal(round(out_no_extend2, 3), 0.995)
+  expect_equal(round(out_no_extend3, 3), 0.884)
+  expect_equal(round(out_extend2, 3), 0.884)
+  expect_equal(round(out_extend1, 3), 0.9)
+})
