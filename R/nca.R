@@ -164,7 +164,6 @@ nca <- function (
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
       auc_t <- (auc_pre + auc_post)
-      c_at_tmax <- data$time[1]
       c_at_tau  <- utils::tail(data$time,1)
       if(tau > utils::tail(data$time,1) || extend) {
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!

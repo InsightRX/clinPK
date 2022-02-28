@@ -1,3 +1,13 @@
+test_that("Unsupported methods throws error", {
+  dat <- data.frame(
+    time = c(0, 3, 4, 6),
+    dv = c(0.001, 884, 586, 293)
+  )
+  expect_error( 
+    nca(data = dat, dose = 5, t_inf = 2,method = "experimental_method")
+  )
+})
+
 test_that("NCA estimates are correct", {
   data <- data.frame(
     time = c(0, 1, 2, 4, 6, 8),
@@ -216,4 +226,54 @@ test_that("AUC pre-Cmax is returned and calculated appropriately", {
   expect_equal(round(out_no_extend3, 3), 0.884)
   expect_equal(round(out_extend2, 3), 0.884)
   expect_equal(round(out_extend1, 3), 0.9)
+})
+
+test_that("NCA with log_log method returns expected values", {
+  dat <- data.frame(
+    time = c(0, 3, 4, 6),
+    dv = c(0.001, 884, 586, 293)
+  )
+  out_loglog <- nca(
+    data = dat,
+    dose = 58000,
+    tau = 24,           
+    t_inf = 2,  
+    method = "log_log",
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = TRUE
+  )[["descriptive"]]
+  out_loglin <- nca(
+    data = dat,
+    dose = 58000,
+    tau = 24,           
+    t_inf = 2,
+    method = "log_linear",
+    scale = list(auc = 0.001, conc = 1),
+    has_baseline = TRUE,
+    fit_samples = NULL,
+    extend = TRUE
+  )[["descriptive"]]
+  
+  # exponential decay should be the same, only infusion period should vary:
+  expect_equal(
+    out_loglog$auc_tau - out_loglog$auc_pre,
+    out_loglin$auc_tau - out_loglin$auc_pre
+  )
+  expect_false(out_loglog$auc_pre == out_loglin$auc_pre)
+  expect_equal(round(out_loglog$auc_pre, 3), 1.427)
+})
+
+test_that("NCA with log_log method has expected arg handling", {
+  dat <- data.frame(
+    time = c(0, 3, 4, 6),
+    dv = c(0.001, 884, 586, 293)
+  )
+  expect_warning( # extend needs to be TRUE for log/log
+    nca(data = dat, dose = 5, t_inf = 2,method = "log_log", extend = FALSE)
+  )
+  expect_error( # route needs to be IV for log_log
+    nca(data = dat, dose = 5, t_inf = 2,method = "log_log", route = "po")
+  )
 })
