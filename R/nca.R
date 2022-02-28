@@ -54,7 +54,7 @@ nca <- function (
     data = NULL,
     dose = 100,
     tau = 24,
-    method = "log_linear",
+    method = c("log_linear", "log_log", "linear"),
     scale = list(auc = 1, conc = 1),
     dv_min = 1e-3,
     t_inf = NULL,
@@ -68,6 +68,7 @@ nca <- function (
     stop("No data supplied to NCA function")
   } else {
     route <- match.arg(route)
+    method <- match.arg(method)
     if(method == "log_log") {
       if(route != "iv") stop("Cannot use log-log method using non-intravenous data.")
       if(!extend) {

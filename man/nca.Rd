@@ -8,7 +8,7 @@ nca(
   data = NULL,
   dose = 100,
   tau = 24,
-  method = "log_linear",
+  method = c("log_linear", "log_log", "linear"),
   scale = list(auc = 1, conc = 1),
   dv_min = 0.001,
   t_inf = NULL,
