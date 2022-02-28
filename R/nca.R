@@ -123,7 +123,7 @@ nca <- function (
     ## get the auc
     tmax_id <- match(max(data$dv), data$dv)[1]
     out$descriptive$tmax <- data$time[tmax_id]
-    pre <- data[1:tmax_id,]
+    pre <- data[c(1, tmax_id),]
     trap <- data[tmax_id:length(data[,1]),]
     
     if(!is.null(t_inf) && t_inf > 0) {
