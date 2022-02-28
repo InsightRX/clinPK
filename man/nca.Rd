@@ -15,7 +15,8 @@ nca(
   fit_samples = NULL,
   weights = NULL,
   extend = TRUE,
-  has_baseline = TRUE
+  has_baseline = TRUE,
+  route = c("iv", "oral", "im", "sc")
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ regression, and use those samples in the estimation of the elimination rate.}
 \item{extend}{perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.}
 
 \item{has_baseline}{does the included data include a baseline? If `FALSE`, baseline is set to zero.}
+
+\item{route}{administration route, `iv` (default), `oral`, `sc`, or `im`.}
 }
 \value{
 Returns a list of three lists:

@@ -14,6 +14,7 @@
 #' @param weights vector of weights to be used in linear regression (same size as specified concentration data), or function with concentration as argument.
 #' @param extend perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.
 #' @param has_baseline does the included data include a baseline? If `FALSE`, baseline is set to zero.
+#' @param route administration route, `iv` (default), `oral`, `sc`, or `im`.
 #' @return Returns a list of three lists:
 #'  \describe{
 #'   \item{\code{pk}}{Lists pk parameters.
@@ -60,12 +61,15 @@ nca <- function (
     fit_samples = NULL,
     weights = NULL,
     extend = TRUE,
-    has_baseline = TRUE
+    has_baseline = TRUE,
+    route = c("iv", "oral", "im", "sc")
   ) {
   if(is.null(data)) {
     stop("No data supplied to NCA function")
   } else {
+    route <- match.arg(route)
     if(method == "log_log") {
+      if(route != "iv") stop("Cannot use log-log method using non-intravenous data.")
       if(!extend) {
         warning("With log-log method, the data has to be back-extrapolated to end-of-infusion for calculations to be accurate.")
       }
@@ -126,15 +130,17 @@ nca <- function (
     pre <- data[c(1, tmax_id),]
     trap <- data[tmax_id:length(data[,1]),]
     
-    if(!is.null(t_inf) && t_inf > 0) {
-      ## If infusion:
-      c_at_tmax <- tail(pre$dv, 1) * exp(-out$pk$kel * (t_inf - max(pre$time)))
-      out$pk$v <- ((dose / ( (c_at_tmax - baseline) / (1-exp(-out$pk$kel * t_inf)) )) ) / (out$pk$kel * t_inf)
-    } else {
-      out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline) # this is only for bolus
+    if(route == "iv") { ## only calculate / report CL and V for iv.
+      if(nrow(pre > 0)) { ## if infusion
+        tmax_id <- which.max(pre$dv) # with dense sampling / simulated data it could be that first sample after EOI is not highest.
+        c_at_tmax <- pre$dv[tmax_id] * exp(-out$pk$kel * (t_inf - pre$time[tmax_id])) 
+        out$pk$v <- ((dose / ( (c_at_tmax - baseline) / (1-exp(-out$pk$kel * t_inf)) )) ) / (out$pk$kel * t_inf)
+      } else {
+        out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline) # this is only for bolus
+      }
+      out$pk$cl <- out$pk$kel * out$pk$v
     }
-    out$pk$cl <- out$pk$kel * out$pk$v
-    
+
     if (length(pre[,1]) > 0) {
       if(extend) { # back-extending: then only calculate until EOI, the AUC between EOI and first sample after EOI will be added later
         t_end <- t_inf   
@@ -145,7 +151,7 @@ nca <- function (
         # AUC during infusion is total AUC of dose (A/CL) minus the AUC still to be eliminated (Amount from dose at EOI/CL)
         auc_pre <- dose/out$pk$cl - (c_at_tmax * out$pk$v) / out$pk$cl
       } else {
-        auc_pre <- sum(t_end * (mean_step(pre$dv) ) )
+        auc_pre <- sum(t_end * (mean_step(pre$dv) ) ) # linear or log_lin methods
       }
     } else {
       auc_pre <- 0
