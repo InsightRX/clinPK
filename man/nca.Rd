@@ -8,14 +8,15 @@ nca(
   data = NULL,
   dose = 100,
   tau = 24,
-  method = "log_linear",
+  method = c("log_linear", "log_log", "linear"),
   scale = list(auc = 1, conc = 1),
   dv_min = 0.001,
   t_inf = NULL,
   fit_samples = NULL,
   weights = NULL,
   extend = TRUE,
-  has_baseline = TRUE
+  has_baseline = TRUE,
+  route = c("iv", "oral", "im", "sc")
 )
 }
 \arguments{
@@ -25,7 +26,7 @@ nca(
 
 \item{tau}{dosing frequency, default is 24.}
 
-\item{method}{`log_linear` or `linear`}
+\item{method}{`linear`, `log_linear` (default), or `log_log`}
 
 \item{scale}{list with scaling for auc and concentration (`conc`)}
 
@@ -43,6 +44,8 @@ regression, and use those samples in the estimation of the elimination rate.}
 \item{extend}{perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.}
 
 \item{has_baseline}{does the included data include a baseline? If `FALSE`, baseline is set to zero.}
+
+\item{route}{administration route, `iv` (intravenous, default), `oral`, `sc` (sub-cutaneous), or `im` (intra-muscular).}
 }
 \value{
 Returns a list of three lists:

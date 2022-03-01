@@ -3,7 +3,7 @@
 #' @param data data.frame with time and dv columns
 #' @param dose dose amount
 #' @param tau dosing frequency, default is 24.
-#' @param method `log_linear` or `linear`
+#' @param method `linear`, `log_linear` (default), or `log_log`
 #' @param scale list with scaling for auc and concentration (`conc`)
 #' @param dv_min minimum concentrations, lower observations will be set to this value
 #' @param t_inf infusion time, defaults to 0
@@ -14,6 +14,7 @@
 #' @param weights vector of weights to be used in linear regression (same size as specified concentration data), or function with concentration as argument.
 #' @param extend perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.
 #' @param has_baseline does the included data include a baseline? If `FALSE`, baseline is set to zero.
+#' @param route administration route, `iv` (intravenous, default), `oral`, `sc` (sub-cutaneous), or `im` (intra-muscular).
 #' @return Returns a list of three lists:
 #'  \describe{
 #'   \item{\code{pk}}{Lists pk parameters.
@@ -53,18 +54,28 @@ nca <- function (
     data = NULL,
     dose = 100,
     tau = 24,
-    method = "log_linear",
+    method = c("log_linear", "log_log", "linear"),
     scale = list(auc = 1, conc = 1),
     dv_min = 1e-3,
     t_inf = NULL,
     fit_samples = NULL,
     weights = NULL,
     extend = TRUE,
-    has_baseline = TRUE
+    has_baseline = TRUE,
+    route = c("iv", "oral", "im", "sc")
   ) {
   if(is.null(data)) {
     stop("No data supplied to NCA function")
   } else {
+    route <- match.arg(route)
+    method <- match.arg(method)
+    if(method == "log_log") {
+      if(route != "iv") stop("Cannot use log-log method using non-intravenous data.")
+      if(!extend) {
+        warning("With log-log method, the data has to be back-extrapolated to end-of-infusion for calculations to be accurate.")
+      }
+      extend <- TRUE
+    }
     if(is.null(data$dv) || is.null(data$time)) {
       stop("No time ('time') or dependent variable ('dv') data in supplied dataset")
     }
@@ -113,27 +124,46 @@ nca <- function (
     out <- list(pk = list(), descriptive = list())
     out$pk$kel <- -stats::coef(fit)[["time"]]
     out$pk$t_12 <- log(2) / out$pk$kel
-    out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline)
-    out$pk$cl <- (out$pk$kel) * out$pk$v
-
+    
     ## get the auc
     tmax_id <- match(max(data$dv), data$dv)[1]
     out$descriptive$tmax <- data$time[tmax_id]
-    pre <- data[1:tmax_id,]
+    pre <- data[c(1, tmax_id),]
     trap <- data[tmax_id:length(data[,1]),]
+    
+    if(route == "iv") { ## only calculate / report CL and V for iv.
+      if(nrow(pre > 0)) { ## if infusion
+        tmax_id <- which.max(pre$dv) # with dense sampling / simulated data it could be that first sample after EOI is not highest.
+        c_at_tmax <- pre$dv[tmax_id] * exp(-out$pk$kel * (t_inf - pre$time[tmax_id])) 
+        out$pk$v <- ((dose / ( (c_at_tmax - baseline) / (1-exp(-out$pk$kel * t_inf)) )) ) / (out$pk$kel * t_inf)
+      } else {
+        out$pk$v <- dose / (exp(stats::coef(fit)[[1]]) - baseline) # this is only for bolus
+      }
+      out$pk$cl <- out$pk$kel * out$pk$v
+    }
+
     if (length(pre[,1]) > 0) {
-      auc_pre <- sum(diff(pre$time) * (mean_step(pre$dv) ) )
+      if(extend) { # back-extending: then only calculate until EOI, the AUC between EOI and first sample after EOI will be added later
+        t_end <- t_inf   
+      } else {
+        t_end <- diff(pre$time)
+      }
+      if(method == "log_log") {
+        # AUC during infusion is total AUC of dose (A/CL) minus the AUC still to be eliminated (Amount from dose at EOI/CL)
+        auc_pre <- dose/out$pk$cl - (c_at_tmax * out$pk$v) / out$pk$cl
+      } else {
+        auc_pre <- sum(t_end * (mean_step(pre$dv) ) ) # linear or log_lin methods
+      }
     } else {
       auc_pre <- 0
     }
-    if (length(pre[,1])>0 & length(trap[,1]) >= 2) {
-      if (method == "log_linear") {
+    if (length(pre[,1]) > 0 & length(trap[,1]) >= 2) {
+      if (method %in% c("log_linear", "log_log")) {
         auc_post <- nca_trapezoid(trap)
       } else {
         auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
       }
       auc_t <- (auc_pre + auc_post)
-      c_at_tmax <- data$time[1]
       c_at_tau  <- utils::tail(data$time,1)
       if(tau > utils::tail(data$time,1) || extend) {
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!
@@ -163,7 +193,14 @@ nca <- function (
             auc_tau <- auc_pre + nca_trapezoid(trap_tau)
             auc_t   <- auc_pre + nca_trapezoid(trap_t) # also recalculate auc_t
         } else {
-            auc_tau <- auc_pre + nca_trapezoid(trap)
+          trap_tau <- rbind(
+            trap[,c("time", "dv")],
+            data.frame(
+              time = c(tau),
+              dv = c(c_at_tau)
+            )
+          )
+          auc_tau <- auc_pre + nca_trapezoid(trap_tau)
         }
       } else {
         auc_tau <- auc_t
@@ -181,6 +218,7 @@ nca <- function (
       out$descriptive$auc_24 <- auc_tau * (24/tau) * scale$auc
       out$descriptive$auc_tau <- auc_tau * scale$auc
       out$descriptive$auc_t <- auc_t * scale$auc
+      out$descriptive$auc_pre <- auc_pre * scale$auc
       out$settings <- list(dose = dose, interval = tau,
                            last_n = last_n, weights = weights)
     }
