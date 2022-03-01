@@ -14,7 +14,7 @@
 #' @param weights vector of weights to be used in linear regression (same size as specified concentration data), or function with concentration as argument.
 #' @param extend perform an 'extended' NCA, i.e. for the calculation of the AUCs, back-extend to the expected true Cmax to also include that area.
 #' @param has_baseline does the included data include a baseline? If `FALSE`, baseline is set to zero.
-#' @param route administration route, `iv` (default), `oral`, `sc`, or `im`.
+#' @param route administration route, `iv` (intravenous, default), `oral`, `sc` (sub-cutaneous), or `im` (intra-muscular).
 #' @return Returns a list of three lists:
 #'  \describe{
 #'   \item{\code{pk}}{Lists pk parameters.

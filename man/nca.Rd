@@ -45,7 +45,7 @@ regression, and use those samples in the estimation of the elimination rate.}
 
 \item{has_baseline}{does the included data include a baseline? If `FALSE`, baseline is set to zero.}
 
-\item{route}{administration route, `iv` (default), `oral`, `sc`, or `im`.}
+\item{route}{administration route, `iv` (intravenous, default), `oral`, `sc` (sub-cutaneous), or `im` (intra-muscular).}
 }
 \value{
 Returns a list of three lists:

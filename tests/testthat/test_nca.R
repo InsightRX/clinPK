@@ -277,3 +277,17 @@ test_that("NCA with log_log method has expected arg handling", {
     nca(data = dat, dose = 5, t_inf = 2,method = "log_log", route = "po")
   )
 })
+
+test_that("NCA with log_log method handles first sample after EOI not being Cmax", {
+  dat <- data.frame(
+    time = c(0, 3, 3.5, 4, 6),
+    dv = c(0.01, 884, 925, 586, 293)
+  )
+  res <- nca(data = dat, dose = 5, t_inf = 2, method = "log_log")
+  expect_equal(
+    round(res$descriptive$auc_inf, 2), 5741.75
+  )
+  expect_equal(
+    round(res$descriptive$auc_pre, 2), 1889.8
+  )
+})
