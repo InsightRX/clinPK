@@ -23,7 +23,7 @@ pipeline {
         echo 'Installing and checking clinPK'
         sh """
         docker cp . ${BUILD_TAG}:/src/clinPK
-        docker exec -i ${BUILD_TAG} Rscript -e "devtools::check('clinPK')"
+        docker exec -i ${BUILD_TAG} Rscript -e "devtools::check('/src/clinPK')"
         """
       }
     }
