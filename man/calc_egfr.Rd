@@ -172,7 +172,7 @@ calc_egfr(sex = "male", age = 50, scr = 1.1,
 \itemize{
   \item Cockcroft-Gault: \href{https://pubmed.ncbi.nlm.nih.gov/1244564/}{Cockcroft & Gault, Nephron (1976)}
   \item Cockcroft-Gault for spinal cord injury: \href{https://pubmed.ncbi.nlm.nih.gov/6835689/}{Mirahmadi et al., Paraplegia (1983)}
-  \item Revised Lund-Malmo: \href{http://pubmed.ncbi.nlm.nih.gov/24334413/}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
+  \item Revised Lund-Malmo: \href{https://pubmed.ncbi.nlm.nih.gov/24334413/}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
   \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
     and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
