@@ -78,10 +78,10 @@ calc_aki_stage <- function (
 
   if(is.null(scr) && method !='prifle') stop("No serum creatinine values provided.")
   if(is.null(times) && method !='prifle') stop("No sample times (days) provided.")
-  if(class(times) == "Date") {
+  if(inherits(times, "Date")) {
     times <- as.numeric(difftime(times, min(times), units = "days"))
   }
-  if((!class(times[1]) %in% c("numeric","integer")) && method !='prifle') {
+  if(!inherits(times[1], c("numeric","integer")) && method !='prifle') {
     stop("`times` argument should be supplied either as days (numeric) or as Date class.")
   }
   if(length(scr) != length(times) && method !='prifle') stop("Serum creatinine values and vector of sample times should have same length.")
@@ -104,7 +104,7 @@ calc_aki_stage <- function (
     }
   }
   # pRIFLE does not require SCr
-  if(class(baseline_scr) == "character" && method !='prifle') {
+  if(inherits(baseline_scr, "character") && method !='prifle') {
     baseline_scr <- calc_baseline_scr(baseline_scr, 
                                       scr,
                                       times,

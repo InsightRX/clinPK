@@ -98,7 +98,7 @@ nca <- function (
       baseline <- data$dv[1]
     }
     data_fit <- data
-    if(class(weights) == "function") { # transform f(y) to vector of weights
+    if(inherits(weights, "function")) { # transform f(y) to vector of weights
       weights <- do.call("weights", args = list(data_fit$dv))
     }
     
