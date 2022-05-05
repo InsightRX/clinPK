@@ -16,7 +16,7 @@ calc_baseline_scr <- function(
       baseline_scr <- stats::median(scr, na.rm = TRUE)
       if(verbose) message("To calculate median baseline before treatment start need time of first dose. Using median over whole treatment period.")
     } else {
-      if((!class(first_dose_time) %in% c("numeric","integer"))) {
+      if((!inherits(first_dose_time, c("numeric","integer")))) {
         stop("`first_dose_times` argument should be supplied as numeric (hours).")
       }
       if(any(times <= first_dose_time)) {
@@ -48,7 +48,7 @@ calc_baseline_scr <- function(
   if(baseline_scr == "expected" && method !='prifle') {
     ## TODO: need to implement
   }
-  if(! class(baseline_scr) %in% c("numeric", "integer")) {
+  if(! inherits(baseline_scr, c("numeric", "integer"))) {
     stop("Requested baseline calculation method not recognized.")
   }
   
