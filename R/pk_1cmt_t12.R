@@ -12,8 +12,8 @@ pk_1cmt_t12 <- function(
   V = 30
 ) {
   ## conversions, if necessary
-  if(class(CL) == "list" && !is.null(CL$value)) { CL <- CL$value }
-  if(class(V) == "list"  && !is.null(V$value)) { V <- V$value }
+  if(inherits(CL, "list") && !is.null(CL$value)) { CL <- CL$value }
+  if(inherits(V, "list")  && !is.null(V$value)) { V <- V$value }
   kel <- CL / V
   t12 <- log(2) / kel
   return(t12)

@@ -53,16 +53,16 @@
 #' @param fail invoke `stop()` if not all covariates available?
 #' @param ... arguments passed on to `calc_abw` or `calc_dosing_weight`
 #' @references \itemize{
-#'   \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
-#'   \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
-#'   \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
+#'   \item Cockcroft-Gault: \href{https://pubmed.ncbi.nlm.nih.gov/1244564/}{Cockcroft & Gault, Nephron (1976)}
+#'   \item Cockcroft-Gault for spinal cord injury: \href{https://pubmed.ncbi.nlm.nih.gov/6835689/}{Mirahmadi et al., Paraplegia (1983)}
+#'   \item Revised Lund-Malmo: \href{https://pubmed.ncbi.nlm.nih.gov/24334413/}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
 #'   \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
 #'     and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
 #'   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
 #'   \item CKD-EPI (2021): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}.
-#'   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
-#'   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
-#'   \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
+#'   \item Schwartz: \href{https://pubmed.ncbi.nlm.nih.gov/951142/}{Schwartz et al., Pediatrics (1976)}
+#'   \item Schwartz revised / bedside: \href{https://pubmed.ncbi.nlm.nih.gov/19158356/}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
+#'   \item Jelliffe: \href{https://pubmed.ncbi.nlm.nih.gov/4748282/}{Jelliffe, Annals of Internal Medicine (1973)}
 #'   \item Jelliffe for unstable renal function: \href{https://pubmed.ncbi.nlm.nih.gov/12169862/}{Jelliffe, American Journal of Nephrology (2002)}
 #'   \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
 #' }

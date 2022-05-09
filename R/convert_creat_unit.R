@@ -9,7 +9,7 @@
 convert_creat_unit <- function(
   value = NULL,
   unit_in = "mg/dL") {
-  if(class(value) == "list" && !is.null(value$value) && !is.null(value$unit)) {
+  if(inherits(value, "list") && !is.null(value$value) && !is.null(value$unit)) {
     unit_in <- value$unit
     value <- value$value
   }

@@ -17,10 +17,10 @@ pk_2cmt_t12 <- function(
 ) {
   phase <- match.arg(phase)
   ## conversions, if necessary
-  if(class(CL) == "list" && !is.null(CL$value)) { CL <- CL$value }
-  if(class(V) == "list"  && !is.null(V$value)) { V <- V$value }
-  if(class(Q) == "list"  && !is.null(Q$value)) { Q <- Q$value }
-  if(class(V2) == "list" && !is.null(V2$value)) { V2 <- V2$value }
+  if(inherits(CL, "list") && !is.null(CL$value)) { CL <- CL$value }
+  if(inherits(V, "list")  && !is.null(V$value)) { V <- V$value }
+  if(inherits(Q, "list")  && !is.null(Q$value)) { Q <- Q$value }
+  if(inherits(V2, "list") && !is.null(V2$value)) { V2 <- V2$value }
   kel <- CL / V
   k12 <- Q / V
   k21 <- Q / V2
