@@ -56,7 +56,7 @@ nca <- function (
     tau = 24,
     method = c("log_linear", "log_log", "linear"),
     scale = list(auc = 1, conc = 1),
-    dv_min = 1e-3,
+    dv_min = 1e-6,
     t_inf = NULL,
     fit_samples = NULL,
     weights = NULL,
@@ -79,14 +79,15 @@ nca <- function (
     if(is.null(data$dv) || is.null(data$time)) {
       stop("No time ('time') or dependent variable ('dv') data in supplied dataset")
     }
-    mean_step <- function(x) { (x[1:(length(x)-1)] + x[2:length(x)]) / 2 }
     if(sum(is.na(data$dv)) > 0) {
       message(paste0("Removing ", sum(is.na(data$dv)), " datapoint(s) with missing concentration value."))
       data <- data[!is.na(data$dv),]
     }
     if (!is.null(dv_min)) { # protect against log <= 0
-      if(sum(data$dv < dv_min) > 0) {
-        data[data$dv < dv_min, ]$dv <- dv_min
+      if(method != "linear") {
+        if(sum(data$dv < dv_min) > 0) {
+          data[data$dv < dv_min, ]$dv <- dv_min
+        }
       }
     }
     if(is.null(t_inf)) {
@@ -161,7 +162,7 @@ nca <- function (
       if (method %in% c("log_linear", "log_log")) {
         auc_post <- nca_trapezoid(trap)
       } else {
-        auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
+        auc_post <- nca_linear(trap)
       }
       auc_t <- (auc_pre + auc_post)
       c_at_tau  <- utils::tail(data$time,1)
@@ -169,6 +170,9 @@ nca <- function (
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!
         c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
         if(extend) { # back-extrapolate to the true Cmax, to include that area too
+            if(method == "linear") {
+              stop("Back-extrapolation not available for linear method.")
+            }
             if(trap$time[1] > t_inf) {
               c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
             } else {
@@ -200,7 +204,11 @@ nca <- function (
               dv = c(c_at_tau)
             )
           )
-          auc_tau <- auc_pre + nca_trapezoid(trap_tau)
+          if(method == "linear") {
+            auc_tau <- auc_pre + nca_linear(trap_tau)
+          } else {
+            auc_tau <- auc_pre + nca_trapezoid(trap_tau)
+          }
         }
       } else {
         auc_tau <- auc_t
