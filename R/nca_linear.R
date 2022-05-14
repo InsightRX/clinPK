@@ -6,7 +6,10 @@ nca_linear <- function(data) {
   sum(diff(data$time) * (mean_step(data$dv)))
 }
 
-#' Calculate mean between two timepoints for a vector
+#' Calculate mean between two values in a vector
+#' Used in NCA for calculation of mean between two or more timepoints.
+#' 
+#' @x vector of numeric values
 #' 
 #' @returns a vector of length(x)-1 with the mean timepoints
 mean_step <- function(x) { 
