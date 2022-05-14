@@ -158,21 +158,15 @@ nca <- function (
     } else {
       auc_pre <- 0
     }
+    nca_method <- ifelse(method == "linear", nca_linear, nca_trapezoid)
     if (length(pre[,1]) > 0 & length(trap[,1]) >= 2) {
-      if (method %in% c("log_linear", "log_log")) {
-        auc_post <- nca_trapezoid(trap)
-      } else {
-        auc_post <- nca_linear(trap)
-      }
+      auc_post <- nca_method(trap)
       auc_t <- (auc_pre + auc_post)
       c_at_tau  <- utils::tail(data$time,1)
       if(tau > utils::tail(data$time,1) || extend) {
         # AUCtau is extrapolated to tau and back-extrapolated to tmax!
         c_at_tau <- utils::tail(trap$dv,1) * exp(-out$pk$kel * (tau-utils::tail(data$time,1)))
         if(extend) { # back-extrapolate to the true Cmax, to include that area too
-            if(method == "linear") {
-              stop("Back-extrapolation not available for linear method.")
-            }
             if(trap$time[1] > t_inf) {
               c_at_tmax <- trap$dv[1] * exp(-out$pk$kel * (t_inf - trap$time[1]))
             } else {
@@ -194,8 +188,8 @@ nca <- function (
             )
             trap_tau <- trap_tau[order(trap_tau$time), ]
             trap_t <- trap_t[order(trap_t$time), ]
-            auc_tau <- auc_pre + nca_trapezoid(trap_tau)
-            auc_t   <- auc_pre + nca_trapezoid(trap_t) # also recalculate auc_t
+            auc_tau <- auc_pre + nca_method(trap_tau)
+            auc_t   <- auc_pre + nca_method(trap_t) # also recalculate auc_t
         } else {
           trap_tau <- rbind(
             trap[,c("time", "dv")],
@@ -204,11 +198,7 @@ nca <- function (
               dv = c(c_at_tau)
             )
           )
-          if(method == "linear") {
-            auc_tau <- auc_pre + nca_linear(trap_tau)
-          } else {
-            auc_tau <- auc_pre + nca_trapezoid(trap_tau)
-          }
+          auc_tau <- auc_pre + nca_method(trap_tau)
         }
       } else {
         auc_tau <- auc_t
