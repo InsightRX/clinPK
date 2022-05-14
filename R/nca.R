@@ -56,7 +56,7 @@ nca <- function (
     tau = 24,
     method = c("log_linear", "log_log", "linear"),
     scale = list(auc = 1, conc = 1),
-    dv_min = 1e-6,
+    dv_min = 1e-3,
     t_inf = NULL,
     fit_samples = NULL,
     weights = NULL,
