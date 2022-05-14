@@ -83,11 +83,9 @@ nca <- function (
       message(paste0("Removing ", sum(is.na(data$dv)), " datapoint(s) with missing concentration value."))
       data <- data[!is.na(data$dv),]
     }
-    if (!is.null(dv_min)) { # protect against log <= 0
-      if(method != "linear") {
-        if(sum(data$dv < dv_min) > 0) {
-          data[data$dv < dv_min, ]$dv <- dv_min
-        }
+    if (!is.null(dv_min)) { # protect against log <= 0, but it's OK at first timepoint (t=0)
+      if(any(data$dv < dv_min & data$t > 0)) {
+        data[data$dv < dv_min & data$t > 0, ]$dv <- dv_min
       }
     }
     if(is.null(t_inf)) {
