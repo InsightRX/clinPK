@@ -13,6 +13,7 @@ nca_linear <- function(data) {
 #' 
 #' @returns a vector of length(x)-1 with the mean timepoints
 mean_step <- function(x) { 
-  (x[1:(length(x)-1)] + x[2:length(x)]) / 2 
+  x[-length(x)] + diff(x) / 2 
 }
+
 
