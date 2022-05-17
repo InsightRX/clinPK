@@ -291,3 +291,49 @@ test_that("NCA with log_log method handles first sample after EOI not being Cmax
     round(res$descriptive$auc_pre, 2), 1889.8
   )
 })
+
+test_that("linear method works", {
+  res <- nca(
+    data = data.frame(
+      time = c(0, 1, 2, 3), 
+      dv = c(0, 1, 0.5, 0.3)
+    ),
+    dose = 1000, 
+    tau = 24, 
+    t_inf = 0.5, 
+    scale = list(auc = 1, conc = 1), 
+    has_baseline = TRUE, 
+    method = "linear", 
+    fit_samples = NULL, 
+    extend = FALSE
+  )
+  expect_equal(
+    res,
+    structure(list(
+      pk = list(
+        kel = 0.601986402162968,
+        t_12 = 1.15143328498689,
+        v = 639.085023502056,
+        cl = 384.720493974238
+      ),
+      descriptive = list(
+        tmax = 1,
+        cav_t = 0.55,
+        cav_tau = 0.20000042449491,
+        c_min = 9.70274078943672e-07,
+        c_max = 1.35120015480703,
+        auc_inf = 4.8000117996652,
+        auc_24 = 4.80001018787783,
+        auc_tau = 4.80001018787783,
+        auc_t = 1.65,
+        auc_pre = 0.5
+      ),
+      settings = list(
+        dose = 1000,
+        interval = 24,
+        last_n = 4L,
+        weights = NULL
+      )
+    ), class = c("nca_output", "list"))
+  )
+})

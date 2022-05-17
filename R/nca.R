@@ -79,14 +79,13 @@ nca <- function (
     if(is.null(data$dv) || is.null(data$time)) {
       stop("No time ('time') or dependent variable ('dv') data in supplied dataset")
     }
-    mean_step <- function(x) { (x[1:(length(x)-1)] + x[2:length(x)]) / 2 }
     if(sum(is.na(data$dv)) > 0) {
       message(paste0("Removing ", sum(is.na(data$dv)), " datapoint(s) with missing concentration value."))
       data <- data[!is.na(data$dv),]
     }
-    if (!is.null(dv_min)) { # protect against log <= 0
-      if(sum(data$dv < dv_min) > 0) {
-        data[data$dv < dv_min, ]$dv <- dv_min
+    if (!is.null(dv_min)) { # protect against log <= 0, but it's OK at first timepoint (t=0)
+      if(any(data$dv < dv_min & data$t > 0)) {
+        data[data$dv < dv_min & data$t > 0, ]$dv <- dv_min
       }
     }
     if(is.null(t_inf)) {
@@ -157,12 +156,9 @@ nca <- function (
     } else {
       auc_pre <- 0
     }
+    nca_method <- ifelse(method == "linear", nca_linear, nca_trapezoid)
     if (length(pre[,1]) > 0 & length(trap[,1]) >= 2) {
-      if (method %in% c("log_linear", "log_log")) {
-        auc_post <- nca_trapezoid(trap)
-      } else {
-        auc_post <- sum(diff(trap$time) * (mean_step(trap$dv)))
-      }
+      auc_post <- nca_method(trap)
       auc_t <- (auc_pre + auc_post)
       c_at_tau  <- utils::tail(data$time,1)
       if(tau > utils::tail(data$time,1) || extend) {
@@ -190,8 +186,8 @@ nca <- function (
             )
             trap_tau <- trap_tau[order(trap_tau$time), ]
             trap_t <- trap_t[order(trap_t$time), ]
-            auc_tau <- auc_pre + nca_trapezoid(trap_tau)
-            auc_t   <- auc_pre + nca_trapezoid(trap_t) # also recalculate auc_t
+            auc_tau <- auc_pre + nca_method(trap_tau)
+            auc_t   <- auc_pre + nca_method(trap_t) # also recalculate auc_t
         } else {
           trap_tau <- rbind(
             trap[,c("time", "dv")],
@@ -200,7 +196,7 @@ nca <- function (
               dv = c(c_at_tau)
             )
           )
-          auc_tau <- auc_pre + nca_trapezoid(trap_tau)
+          auc_tau <- auc_pre + nca_method(trap_tau)
         }
       } else {
         auc_tau <- auc_t
