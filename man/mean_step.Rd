@@ -7,6 +7,9 @@ Used in NCA for calculation of mean between two or more timepoints.}
 \usage{
 mean_step(x)
 }
+\arguments{
+\item{x}{vector of numeric values}
+}
 \value{
 a vector of length(x)-1 with the mean timepoints
 }

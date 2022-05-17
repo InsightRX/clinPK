@@ -9,7 +9,7 @@ nca_linear <- function(data) {
 #' Calculate mean between two values in a vector
 #' Used in NCA for calculation of mean between two or more timepoints.
 #' 
-#' @x vector of numeric values
+#' @param x vector of numeric values
 #' 
 #' @returns a vector of length(x)-1 with the mean timepoints
 mean_step <- function(x) { 
