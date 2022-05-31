@@ -2,3 +2,87 @@ url: https://insightrx.github.io/clinPK/
 template:
   bootstrap: 5
 
+reference:
+  - title: Miscellaneous functions
+    contents:
+      - nca
+      - calc_kel_single_tdm
+      - calc_kel_double_tdm
+      - calc_t12
+      - calc_amts_for_conc
+      - find_nearest_dose
+      - find_nearest_interval
+  - title: Anthropomorphic equations
+    contents:
+      - calc_bsa
+      - calc_ffm
+      - calc_bmi
+      - calc_ibw
+      - calc_lbw
+      - calc_abw
+      - calc_dosing_weight
+      - pct_weight_for_age
+      - pct_height_for_age
+      - pct_bmi_for_age
+  - title: Clinical chemistry
+    contents:
+      - calc_egfr
+      - calc_egfr_cystatin
+      - calc_creat
+      - calc_creat_neo
+      - calc_aki_stage
+      - convert_creat_assay
+      - convert_creat_unit
+  - title: Conversions
+    contents:
+      - kg2lbs
+      - lbs2kg
+      - kg2oz
+      - oz2kg
+      - weight2kg
+      - cm2inch
+      - inch2cm
+      - conc2mol
+      - mol2conc
+  - title: PK compartmental equations
+    desc: Functions to simulate concentrations for linear PK models.
+    contents:
+     - pk_1cmt_inf
+     - pk_1cmt_inf_ss
+     - pk_1cmt_inf_cmin_ss
+     - pk_1cmt_inf_cmax_ss
+     - pk_2cmt_inf
+     - pk_2cmt_inf_ss
+     - pk_2cmt_inf_cmin_ss
+     - pk_2cmt_inf_cmax_ss
+     - pk_1cmt_bolus
+     - pk_1cmt_bolus_ss
+     - pk_1cmt_bolus_cmin_ss
+     - pk_1cmt_bolus_cmax_ss
+     - pk_1cmt_t12
+     - pk_1cmt_oral
+     - pk_2cmt_bolus
+     - pk_2cmt_bolus_ss
+     - pk_2cmt_bolus_cmin_ss
+     - pk_2cmt_bolus_cmax_ss
+     - pk_2cmt_t12
+     - pk_2cmt_t12_interval
+  - title: PK steady state equations
+    contents:
+      - accumulation_ratio
+      - fraction_of_ss
+      - time_to_ss
+  - title: Dose/TDM calculations
+    desc: Functions to calculate the dose expected to achieve a specific target exposure.
+    contents:
+     - pk_1cmt_inf_dose_from_cmin
+     - pk_1cmt_bolus_dose_from_cmin
+     - pk_2cmt_inf_dose_from_cmin
+     - pk_2cmt_bolus_dose_from_cmin
+     - pk_1cmt_inf_dose_from_cmax
+     - pk_1cmt_bolus_dose_from_cmax
+     - pk_2cmt_inf_dose_from_cmax
+     - pk_2cmt_bolus_dose_from_cmax
+     - pk_1cmt_inf_dose_for_range
+     - dose2auc
+     - auc2dose
