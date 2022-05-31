@@ -6,3 +6,7 @@ cran-comments.md
 Jenkinsfile
 git-hooks/*
 slack_notification.sh
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$

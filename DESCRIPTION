@@ -16,7 +16,8 @@ Description: Calculates equations commonly used in clinical
         chemistry, and conversion of common clinical parameters. Where
         possible and relevant, it provides multiple published and
         peer-reviewed equations within the respective R function.
-URL: https://github.com/InsightRX/clinPK
+URL: https://github.com/InsightRX/clinPK,
+    https://insightrx.github.io/clinPK/
 License: MIT + file LICENSE
 RoxygenNote: 7.1.2
 Suggests: testthat (>= 3.0.0)
