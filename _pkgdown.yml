@@ -3,15 +3,6 @@ template:
   bootstrap: 5
 
 reference:
-  - title: Miscellaneous functions
-    contents:
-      - nca
-      - calc_kel_single_tdm
-      - calc_kel_double_tdm
-      - calc_t12
-      - calc_amts_for_conc
-      - find_nearest_dose
-      - find_nearest_interval
   - title: Anthropomorphic equations
     contents:
       - calc_bsa
@@ -21,6 +12,7 @@ reference:
       - calc_lbw
       - calc_abw
       - calc_dosing_weight
+      - calc_baseline_scr
       - pct_weight_for_age
       - pct_height_for_age
       - pct_bmi_for_age
@@ -28,6 +20,7 @@ reference:
     contents:
       - calc_egfr
       - calc_egfr_cystatin
+      - calc_kgfr
       - calc_creat
       - calc_creat_neo
       - calc_aki_stage
@@ -44,6 +37,9 @@ reference:
       - inch2cm
       - conc2mol
       - mol2conc
+      - absolute2relative_bsa
+      - relative2absolute_bsa
+      - convert_flow_unit
   - title: PK compartmental equations
     desc: Functions to simulate concentrations for linear PK models.
     contents:
@@ -86,3 +82,17 @@ reference:
      - pk_1cmt_inf_dose_for_range
      - dose2auc
      - auc2dose
+  - title: Miscellaneous functions
+    contents:
+      - nca
+      - egfr_cov_reqs
+      - check_covs_available
+      - calc_kel_single_tdm
+      - calc_kel_double_tdm
+      - calc_t12
+      - calc_amts_for_conc
+      - find_nearest_dose
+      - find_nearest_interval
+      - read_who_table
+      - valid_units
+      - add_ruv

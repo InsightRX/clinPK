@@ -114,6 +114,7 @@ convert_flow_unit <- function(
 #' @param full_unit full unit, e.g. "mL/min/kg"
 #' @param units unit specification list, e.g. `list("ml" = 1/1000, "dl" = 1/10, "l" = 1)`
 #' @param prefix prefix used in matching units, e.g. "^" only matches at start of string while "_" matches units specified as "/"
+#' @keywords internal
 find_factor <- function(full_unit, units = NULL, prefix = "^") {
   unlist(units[vapply(names(units), function(x) { grepl(paste0(prefix, x), full_unit) }, FUN.VALUE = logical(1))], use.names = FALSE)  
 }

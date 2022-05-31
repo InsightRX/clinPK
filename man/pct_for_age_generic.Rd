@@ -27,3 +27,4 @@ pct_for_age_generic(
 This is the underlying function, the exposed functions are pct_weight_for_age() and pct_height_for_age()
 Based on tables from WHO: http://www.who.int/childgrowth/standards/height_for_age/en/
 }
+\keyword{internal}

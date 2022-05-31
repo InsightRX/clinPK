@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_covs_available.R
 \name{check_covs_available}
 \alias{check_covs_available}
-\title{Returns parameters needed to calculate eGFR according to the method specified.}
+\title{Checks whether required covariates for eGFR calculations are present}
 \usage{
 check_covs_available(
   cov_reqs = NULL,

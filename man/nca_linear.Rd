@@ -12,3 +12,4 @@ nca_linear(data)
 \description{
 NCA core function to perform linear trapezoid calculations for post-infusion
 }
+\keyword{internal}

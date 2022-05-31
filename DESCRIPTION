@@ -19,6 +19,7 @@ Description: Calculates equations commonly used in clinical
 URL: https://github.com/InsightRX/clinPK,
     https://insightrx.github.io/clinPK/
 License: MIT + file LICENSE
-RoxygenNote: 7.1.2
+Encoding: UTF-8
+RoxygenNote: 7.2.0
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
