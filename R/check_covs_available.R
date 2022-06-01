@@ -1,4 +1,5 @@
-#' Returns parameters needed to calculate eGFR according to the method specified.
+#' Checks whether required covariates for eGFR calculations are present
+#'
 #' @description returns true if all patient covs specified in required covs are non-null, non-NA and not a 0-character string. See `is.nil` for missing data types checked. Returns TRUE if no covariates are required.
 #' @param cov_reqs vector of covariates required for calculating derived covariatiate
 #' @param patient_covs named list of covariates

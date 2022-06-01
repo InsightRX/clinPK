@@ -23,3 +23,4 @@ timepoint
 \description{
 Calculate AKI stage according to KDIGO criteria
 }
+\keyword{internal}

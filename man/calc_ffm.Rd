@@ -2,13 +2,6 @@
 % Please edit documentation in R/calc_ffm.R
 \name{calc_ffm}
 \alias{calc_ffm}
-\alias{ffm_janmahasatian_green}
-\alias{ffm_al_sallami}
-\alias{ffm_storset}
-\alias{ffm_bucaloiu}
-\alias{ffm_hume}
-\alias{ffm_james}
-\alias{ffm_garrow_webster}
 \title{Calculate fat-free mass}
 \usage{
 calc_ffm(
@@ -21,20 +14,6 @@ calc_ffm(
     "james", "garrow_webster"),
   digits = 1
 )
-
-ffm_janmahasatian_green(weight, sex, height = NULL, bmi = NULL)
-
-ffm_al_sallami(weight, sex, age, height = NULL, bmi = NULL)
-
-ffm_storset(weight, sex, height, age)
-
-ffm_bucaloiu(weight, sex, height, age)
-
-ffm_hume(weight, sex, height)
-
-ffm_james(weight, sex, height)
-
-ffm_garrow_webster(weight, sex, height)
 }
 \arguments{
 \item{weight}{total body weight in kg}

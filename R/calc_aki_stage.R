@@ -210,7 +210,7 @@ calc_aki_stage <- function (
 #' @param baseline_scr Baseline serum creatinine value (numeric)
 #' @param age Patient age
 #' @md
-#'
+#' @keywords internal
 kdigo_stage <- function(dat, baseline_scr, age) {
   stage <- rep(NA, nrow(dat))
   for (i in seq_along(dat$t)) {

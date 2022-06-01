@@ -2,17 +2,6 @@
 % Please edit documentation in R/calc_egfr.R
 \name{calc_egfr}
 \alias{calc_egfr}
-\alias{egfr_wright}
-\alias{egfr_jelliffe}
-\alias{egfr_jelliffe_unstable}
-\alias{egfr_mdrd}
-\alias{egfr_ckd_epi}
-\alias{egfr_ckd_epi_as_2021}
-\alias{egfr_cockcroft_gault_sci}
-\alias{egfr_cockcroft_gault}
-\alias{egfr_malmo_lund}
-\alias{egfr_bedside_schwartz}
-\alias{egfr_schwartz}
 \title{Calculate eGFR}
 \usage{
 calc_egfr(
@@ -37,28 +26,6 @@ calc_egfr(
   fail = TRUE,
   ...
 )
-
-egfr_wright(age, bsa, sex, scr)
-
-egfr_jelliffe(age, sex, bsa, scr)
-
-egfr_jelliffe_unstable(weight, times, scr, age, sex)
-
-egfr_mdrd(sex, race, scr, age, use_race, original_expression)
-
-egfr_ckd_epi(sex, race, scr, age, use_race)
-
-egfr_ckd_epi_as_2021(sex, scr, age)
-
-egfr_cockcroft_gault_sci(sex, age, scr, weight)
-
-egfr_cockcroft_gault(sex, age, scr, weight)
-
-egfr_malmo_lund(sex, age, scr)
-
-egfr_bedside_schwartz(age, height, scr, verbose)
-
-egfr_schwartz(age, preterm, sex, height, scr)
 }
 \arguments{
 \item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
@@ -107,13 +74,6 @@ See Note section below for important considerations when using race as a predict
 \item{fail}{invoke `stop()` if not all covariates available?}
 
 \item{...}{arguments passed on to `calc_abw` or `calc_dosing_weight`}
-
-\item{use_race}{whether to include race as a factor in the calculation (TRUE
-or FALSE); see note}
-
-\item{original_expression}{whether the MDRD equation should use the 2001 
-coefficient (TRUE) or the 2006 coefficient (FALSE), which was updated for 
-standardization of the creatinine assay.}
 }
 \description{
 Calculate the estimated glomerular filtration rate (an indicator of renal 

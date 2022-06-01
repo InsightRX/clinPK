@@ -15,3 +15,7 @@
 - various minor fixes and updates
 - various documentation updates
 - added many unit tests, increase overall coverage to >86%
+
+# clinPK 0.9.0
+
+Initial CRAN version.
