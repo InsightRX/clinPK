@@ -34,9 +34,9 @@ convert_albumin_unit <- function(
     stop("albumin measurement 'to' unit not recognized")
   }
   if (to == "g_l") {
-    value[from == "g_dl"] <- value[from == "g_dl"] * 0.1
+    value[from == "g_dl"] <- value[from == "g_dl"] * 10
   } else {
-    value[from == "g_l"] <- value[from == "g_l"] * 10
+    value[from == "g_l"] <- value[from == "g_l"] * 0.1
   }
   value
 }

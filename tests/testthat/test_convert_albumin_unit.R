@@ -11,11 +11,11 @@ test_that("length mismatch throws error", {
 
 test_that("basic conversions work", {
   expect_equal(
-    convert_albumin_unit(c(60, 6), c("g_dl", "g_l"), "g_l"), 
+    convert_albumin_unit(c(60, 6), c("g_l", "g_dl"), "g_dl"), 
     c(6, 6)
   )
   expect_equal(
-    convert_albumin_unit(c(60, 6), c("g_dl", "g_l"), "g_dl"), 
+    convert_albumin_unit(c(60, 6), c("g_l", "g_dl"), "g_l"), 
     c(60, 60)
   )
 })
