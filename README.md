@@ -1,99 +1,59 @@
-# clinPK
+# clinPK: Clinical Pharmacokinetics Toolkit
 
-Equations and tools for clinical pharmacokinetics
+## Overview
 
-## Miscellaneous functions
+The clinPK package provides equations commonly used in clinical pharmacokinetics 
+and clinical pharmacology, such as equations for dose individualization, 
+compartmental pharmacokinetics, drug exposure, anthropomorphic calculations, 
+clinical chemistry, and conversion of common clinical parameters. Where possible 
+and relevant, it provides multiple published and peer-reviewed equations within 
+the respective R function.
 
-- `nca()`: Non-compartmental PK analysis, e.g. AUC, half-life, etc.
-- `calc_kel_single_tdm()`: calculate elimination rate based on single TDM sample and provided volume of distribution (assuming linear 1-cmt model).
-- `calc_kel_double_tdm()`: calculate elimination rate and other PK parameters based on two timed TDM samples (assuming on linear 1-cmt model).
-- `calc_t12()`: calculate effective half-life based on two TDM points.
-- `calc_amts_for_conc()`: Calculate the amounts in all compartments in a compartmental PK system based on a given concentration in the central compartment, and assuming steady state.
-- `find_nearest_dose()`: Find nearest available dose based on smallest available dosing unit
-- `find_nearest_interval()`: Find nearest (or nearest higher / nearest lower) dosing interval
+## Installation
 
-## Anthropomorphic equations
+The development version of clinPK always has the most up-to-date improvements
+and bug fixes. We aim to release clinPK on CRAN at least once a year,
+depending on the number and impact of updates made to the development version.
 
-- `calc_bsa()`: BSA calculation using various equations
-- `calc_ffm()`: Fat-free mass using various equations
-- `calc_bmi()`: Body mass index
-- `calc_ibw()`: Ideal body weight, using various equations for children and adults
-- `calc_lbw()`: Lean body weight
-- `calc_abw()`: Adjusted body weight (for obese patients)
-- `calc_dosing_weight()`: Dosing weight
-- `pct_weight_for_age()`: calculate percentile of weight given age (for kids <= 10 yrs)
-- `pct_height_for_age()`: calculate percentile of height given age (for kids <= 19 yrs)
-- `pct_bmi_for_age()`: calculate percentile of height given age (for kids <= 19 yrs)
+The CRAN version of clinPK can be installed using:
 
-## Clinical chemistry
+```
+install.packages("clinPK")
+```
 
-- `calc_egfr()`: eGFR calculation from serum creatinine using various equations (Cockcroft-Gault, MDRD, CKD-EPI, Jelliffe, Jelliffe for unstable patients, Wright, Lund-Malmo revised, Schwartz, Schwartz revised)
-- `calc_egfr_cystatin()`: eGFR calculation from Cystatin C concentrations using various equations (Grubb, Larsson)
-- `calc_creat()`: mean serum creatinine for children and adults (given age and sex)
-- `calc_creat_neo()`: typical serum creatinine for neonates given post-natal age
-- `calc_aki_stage`: detect and calculate stage of acute kidney injury based on serum creatinine history, based on various classification systems (RIFLE, pRIFLE, KDIGO)
-- `convert_creat_assay()`: convert between various creatinine assays (Jaffe, IDMS, etc)
-- `convert_creat_unit()`: convert between creatinine units (mmol/L, mg/dL)
+The development version of clinPK can be installed using:
 
-## Conversions
+```
+devtools::install_github("InsightRX/clinPK")
+```
 
-- `kg2lbs()`: kg to pounds
-- `lbs2kg()`: pounds to kg
-- `kg2oz()`: kg to ounces
-- `oz2kg()`: ounces to kg
-- `weight2kg()`: any weight unit to kg
-- `cm2inch()`: cm to inches
-- `inch2cm()`: inches to cm
-- `conc2mol()`: concentration to molar
-- `mol2conc()`: molar to concentration
+## Contributing
 
-## PK compartmental equations
+We welcome input from the community:
 
-Functions to simulate concentrations for linear PK models.
+- If you think you have encountered a bug, please [submit an issue](https://github.com/InsightRX/clinPK/issues) on the GitHub 
+page. Please include a reproducible example of the unexpected behavior.
 
-| function | compartments | administration | type | output |
-| --- | --- | --- | --- | --- |
-| `pk_1cmt_inf()` | 1 | infusion | single/multi dose | concentration table |
-| `pk_1cmt_inf_ss()` | 1 | infusion | steady state | concentration table |
-| `pk_1cmt_inf_cmin_ss()` | 1 | infusion | steady state | Cmin |
-| `pk_1cmt_inf_cmax_ss()` | 1 | infusion | steady state | Cmax |
-| `pk_2cmt_inf()` | 2 | infusion | single/multi dose | concentration table |
-| `pk_2cmt_inf_ss()` | 2 | infusion | steady state | concentration table |
-| `pk_2cmt_inf_cmin_ss()` | 2 | infusion | steady state | Cmin |
-| `pk_2cmt_inf_cmax_ss()` | 2 | infusion | steady state | Cmax |
-| `pk_1cmt_bolus()` | 1 | bolus | single/multi dose | concentration table |
-| `pk_1cmt_bolus_ss()` | 1 | bolus | steady state | concentration table |
-| `pk_1cmt_bolus_cmin_ss()` | 1 | bolus | steady state | Cmin |
-| `pk_1cmt_bolus_cmax_ss()` | 1 | bolus | steady state | Cmax |
-| `pk_1cmt_t12()` | 1 | - | - | half-life |
-| `pk_1cmt_oral()` | 1 | oral | - | concentration |
-| `pk_2cmt_bolus()` | 2 | bolus | single/multi dose | concentration table |
-| `pk_2cmt_bolus_ss()` | 2 | bolus | steady state | concentration table |
-| `pk_2cmt_bolus_cmin_ss()` | 2 | bolus | steady state | Cmin |
-| `pk_2cmt_bolus_cmax_ss()` | 2 | bolus | steady state | Cmax |
-| `pk_2cmt_t12()` | 2 | - | - | terminal half-life |
-| `pk_2cmt_t12_interval()` | 2 | - | - | effective half-life in given interval |
+- Please [open a pull request](https://github.com/InsightRX/clinPK/pulls) if you have a fix or updates that would improve the package. If you're not sure if your proposed 
+changes are useful or within  scope of the package, feel free to contact one 
+of the authors of this package.
 
-## PK steady state equations
+## Disclaimer
 
-- `accumulation_ratio()`: calculate the accumulation ratio for given halflife or elimination rate and dosing interval
-- `fraction_of_ss()`: calculate fraction of steady state reached after certain time or number of doses
-- `time_to_ss()`: calculate time to steady state in time units or number of doses
+The functionality in this R package is provided "as is". While its authors 
+adhere to software development best practices, the software may still contain 
+unintended errors.
 
-## Dose / TDM calculations
+InsightRX Inc. and the authors of this package can not be held liable for any
+damages resulting from any use of this software. By the use of this software 
+package, the user waives all warranties, expressed or implied, including any 
+warranties to the accuracy, quality or suitability of InsightRX for any 
+particular purpose, either medical or non-medical.
 
-Functions to calculate the dose expected to achieve a specific target exposure.
 
-| function | compartments | administration | target | output |
-| --- | --- | --- | --- | --- |
-| `pk_1cmt_inf_dose_for_cmin` | 1 | infusion | cmin | dose |
-| `pk_1cmt_bolus_dose_for_cmin` | 1 | bolus | cmin | dose |
-| `pk_2cmt_inf_dose_for_cmin()` | 2 | infusion | cmin | dose |
-| `pk_2cmt_bolus_dose_for_cmin()` | 2 | bolus | cmin | dose |
-| `pk_1cmt_inf_dose_for_cmax` | 1 | infusion | cmax | dose |
-| `pk_1cmt_bolus_dose_for_cmax` | 1 | bolus | cmax | dose |
-| `pk_2cmt_inf_dose_for_cmax()` | 2 | infusion | cmax | dose |
-| `pk_2cmt_bolus_dose_for_cmax()` | 2 | bolus | cmax | dose |
-| `pk_1cmt_inf_dose_for_range()` | 1 | infusion | auc/cmin + conc range | dose |
-| `dose2auc()` | 1 | - | auc | auc |
-| `auc2dose()` | 1 | - | auc | dose |
+
+---
+
+<div align="right">
+© <img src="man/figures/insightrx_logo_color.png" alt="InsightRX logo" width="120" />
+</div>

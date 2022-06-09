@@ -16,3 +16,4 @@ find_factor(full_unit, units = NULL, prefix = "^")
 \description{
 Helper function to grab the conversion factor from an input unit and given list
 }
+\keyword{internal}

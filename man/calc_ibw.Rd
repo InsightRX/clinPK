@@ -2,6 +2,8 @@
 % Please edit documentation in R/calc_ibw.R
 \name{calc_ibw}
 \alias{calc_ibw}
+\alias{ibw_standard}
+\alias{ibw_devine}
 \title{Calculate ideal body weight in kg for children and adults}
 \usage{
 calc_ibw(
@@ -12,6 +14,10 @@ calc_ibw(
   method_children = "standard",
   method_adults = "devine"
 )
+
+ibw_standard(age, height = NULL, sex = NULL)
+
+ibw_devine(age, height = NULL, sex = NULL)
 }
 \arguments{
 \item{weight}{weight in kg}

@@ -18,3 +18,4 @@ If non-numeric characters were successfully removed, returns a
 The following characters will be removed from strings: <, >, =, space. If
 string contains other characters, the original string will be returned.
 }
+\keyword{internal}

@@ -2,17 +2,6 @@
 % Please edit documentation in R/calc_egfr.R
 \name{calc_egfr}
 \alias{calc_egfr}
-\alias{egfr_wright}
-\alias{egfr_jelliffe}
-\alias{egfr_jelliffe_unstable}
-\alias{egfr_mdrd}
-\alias{egfr_ckd_epi}
-\alias{egfr_ckd_epi_as_2021}
-\alias{egfr_cockcroft_gault_sci}
-\alias{egfr_cockcroft_gault}
-\alias{egfr_malmo_lund}
-\alias{egfr_bedside_schwartz}
-\alias{egfr_schwartz}
 \title{Calculate eGFR}
 \usage{
 calc_egfr(
@@ -37,28 +26,6 @@ calc_egfr(
   fail = TRUE,
   ...
 )
-
-egfr_wright(age, bsa, sex, scr)
-
-egfr_jelliffe(age, sex, bsa, scr)
-
-egfr_jelliffe_unstable(weight, times, scr, age, sex)
-
-egfr_mdrd(sex, race, scr, age, use_race, original_expression)
-
-egfr_ckd_epi(sex, race, scr, age, use_race)
-
-egfr_ckd_epi_as_2021(sex, scr, age)
-
-egfr_cockcroft_gault_sci(sex, age, scr, weight)
-
-egfr_cockcroft_gault(sex, age, scr, weight)
-
-egfr_malmo_lund(sex, age, scr)
-
-egfr_bedside_schwartz(age, height, scr, verbose)
-
-egfr_schwartz(age, preterm, sex, height, scr)
 }
 \arguments{
 \item{method}{eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
@@ -107,13 +74,6 @@ See Note section below for important considerations when using race as a predict
 \item{fail}{invoke `stop()` if not all covariates available?}
 
 \item{...}{arguments passed on to `calc_abw` or `calc_dosing_weight`}
-
-\item{use_race}{whether to include race as a factor in the calculation (TRUE
-or FALSE); see note}
-
-\item{original_expression}{whether the MDRD equation should use the 2001 
-coefficient (TRUE) or the 2006 coefficient (FALSE), which was updated for 
-standardization of the creatinine assay.}
 }
 \description{
 Calculate the estimated glomerular filtration rate (an indicator of renal 
@@ -170,16 +130,16 @@ calc_egfr(sex = "male", age = 50, scr = 1.1,
 }
 \references{
 \itemize{
-  \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
-  \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
-  \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
+  \item Cockcroft-Gault: \href{https://pubmed.ncbi.nlm.nih.gov/1244564/}{Cockcroft & Gault, Nephron (1976)}
+  \item Cockcroft-Gault for spinal cord injury: \href{https://pubmed.ncbi.nlm.nih.gov/6835689/}{Mirahmadi et al., Paraplegia (1983)}
+  \item Revised Lund-Malmo: \href{https://pubmed.ncbi.nlm.nih.gov/24334413/}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
   \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
     and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
   \item CKD-EPI (2021): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}.
-  \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
-  \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
-  \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
+  \item Schwartz: \href{https://pubmed.ncbi.nlm.nih.gov/951142/}{Schwartz et al., Pediatrics (1976)}
+  \item Schwartz revised / bedside: \href{https://pubmed.ncbi.nlm.nih.gov/19158356/}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
+  \item Jelliffe: \href{https://pubmed.ncbi.nlm.nih.gov/4748282/}{Jelliffe, Annals of Internal Medicine (1973)}
   \item Jelliffe for unstable renal function: \href{https://pubmed.ncbi.nlm.nih.gov/12169862/}{Jelliffe, American Journal of Nephrology (2002)}
   \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
 }

@@ -14,3 +14,4 @@
 \description{
 Print function for output from nca()
 }
+\keyword{internal}

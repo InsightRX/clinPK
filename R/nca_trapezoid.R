@@ -1,7 +1,7 @@
 #' NCA core function to perform log-linear trapezoid calculations for post-infusion
 #'
 #' @param data dataset passed from nca() with `time` and `dv` columns
-#'
+#' @keywords internal
 nca_trapezoid <- function(data) {
   data <- data[!duplicated(data$time),]
   enum <- diff(data$time) * (diff(data$dv))

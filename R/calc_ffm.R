@@ -89,7 +89,6 @@ calc_ffm <- function (
   ))
 }
 
-#' @rdname calc_ffm
 ffm_janmahasatian_green <- function(weight, sex, height = NULL, bmi = NULL) {
   if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex)) {
     stop("Equation needs weight, BMI or height, and sex of patient!")
@@ -109,7 +108,6 @@ ffm_janmahasatian_green <- function(weight, sex, height = NULL, bmi = NULL) {
   ffm
 }
 
-#' @rdname calc_ffm
 ffm_al_sallami <- function(weight, sex, age, height = NULL, bmi = NULL) {
   if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex) || is.null(age)) {
     stop("Equation needs weight, BMI or height, sex, and age of patient!")
@@ -129,7 +127,6 @@ ffm_al_sallami <- function(weight, sex, age, height = NULL, bmi = NULL) {
   ffm
 }
 
-#' @rdname calc_ffm
 ffm_storset <- function(weight, sex, height, age) {
   if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
     stop("Equation needs weight, height, sex, and age of patient!")
@@ -146,7 +143,6 @@ ffm_storset <- function(weight, sex, height, age) {
   ffm
 }
 
-#' @rdname calc_ffm
 ffm_bucaloiu <- function(weight, sex, height, age) {
   if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
     stop("Equation needs weight, height, sex, and age of patient!")
@@ -159,7 +155,6 @@ ffm_bucaloiu <- function(weight, sex, height, age) {
   ffm
 }
 
-#' @rdname calc_ffm
 ffm_hume <- function(weight, sex, height) {
   if(is.null(weight) || is.null(height) || is.null(sex)) {
     stop("Equation needs weight, height, sex of patient!")
@@ -176,7 +171,6 @@ ffm_hume <- function(weight, sex, height) {
   ffm
 }
 
-#' @rdname calc_ffm
 ffm_james <- function(weight, sex, height) {
   if(is.null(weight) || is.null(height) || is.null(sex)) {
     stop("Equation needs weight, height, sex of patient!")
@@ -193,7 +187,6 @@ ffm_james <- function(weight, sex, height) {
   ffm
 }
 
-#' @rdname calc_ffm
 ffm_garrow_webster <- function(weight, sex, height) {
   if(is.null(weight) || is.null(height) || is.null(sex)) {
     stop("Equation needs weight, height, and sex of patient!")

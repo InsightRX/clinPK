@@ -84,7 +84,7 @@ calc_ibw <- function (
 
 #' Calculate IBW using "standard" equation
 #'
-#' @inheritParams calc_ibw
+#' @rdname calc_ibw
 ibw_standard <- function(age, height = NULL, sex = NULL) {
   if (is.null(age) || age >= 18 || age < 1) {
     warning("Age should be >=1 and <18 for the `standard` method.")
@@ -116,7 +116,7 @@ ibw_standard <- function(age, height = NULL, sex = NULL) {
 
 #' Calculate IBW using "devine" equation
 #'
-#' @inheritParams calc_ibw
+#' @rdname calc_ibw
 ibw_devine <- function(age, height = NULL, sex = NULL) {
   if (age < 18) {
     warning("Age should be >18 for the `devine` method.")

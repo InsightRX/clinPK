@@ -16,3 +16,4 @@ x \%>=\% y
 Greater-than-or-equal-to with a little room for floating point precision
 issues
 }
+\keyword{internal}

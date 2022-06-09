@@ -53,16 +53,16 @@
 #' @param fail invoke `stop()` if not all covariates available?
 #' @param ... arguments passed on to `calc_abw` or `calc_dosing_weight`
 #' @references \itemize{
-#'   \item Cockcroft-Gault: \href{http://www.ncbi.nlm.nih.gov/pubmed/1244564}{Cockcroft & Gault, Nephron (1976)}
-#'   \item Cockcroft-Gault for spinal cord injury: \href{https://www.ncbi.nlm.nih.gov/pubmed/6835689}{Mirahmadi et al., Paraplegia (1983)}
-#'   \item Revised Lund-Malmo: \href{http://www.ncbi.nlm.nih.gov/pubmed/24334413}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
+#'   \item Cockcroft-Gault: \href{https://pubmed.ncbi.nlm.nih.gov/1244564/}{Cockcroft & Gault, Nephron (1976)}
+#'   \item Cockcroft-Gault for spinal cord injury: \href{https://pubmed.ncbi.nlm.nih.gov/6835689/}{Mirahmadi et al., Paraplegia (1983)}
+#'   \item Revised Lund-Malmo: \href{https://pubmed.ncbi.nlm.nih.gov/24334413/}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
 #'   \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
 #'     and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
 #'   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
 #'   \item CKD-EPI (2021): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}.
-#'   \item Schwartz: \href{https://www.ncbi.nlm.nih.gov/pubmed/951142}{Schwartz et al., Pediatrics (1976)}
-#'   \item Schwartz revised / bedside: \href{https://www.ncbi.nlm.nih.gov/pubmed/19158356}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
-#'   \item Jelliffe: \href{https://www.ncbi.nlm.nih.gov/pubmed/4748282}{Jelliffe, Annals of Internal Medicine (1973)}
+#'   \item Schwartz: \href{https://pubmed.ncbi.nlm.nih.gov/951142/}{Schwartz et al., Pediatrics (1976)}
+#'   \item Schwartz revised / bedside: \href{https://pubmed.ncbi.nlm.nih.gov/19158356/}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
+#'   \item Jelliffe: \href{https://pubmed.ncbi.nlm.nih.gov/4748282/}{Jelliffe, Annals of Internal Medicine (1973)}
 #'   \item Jelliffe for unstable renal function: \href{https://pubmed.ncbi.nlm.nih.gov/12169862/}{Jelliffe, American Journal of Nephrology (2002)}
 #'   \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
 #' }
@@ -393,7 +393,6 @@ calc_egfr <- function (
   ))
 }
 
-#' @rdname calc_egfr
 egfr_wright <- function(age, bsa, sex, scr) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -402,7 +401,6 @@ egfr_wright <- function(age, bsa, sex, scr) {
   ((6580 - (38.8 * age)) * bsa * (1-(0.168 * (sex == "female"))))/(scr * 88.42)
 }
 
-#' @rdname calc_egfr
 egfr_jelliffe <- function(age, sex, bsa, scr) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -411,7 +409,6 @@ egfr_jelliffe <- function(age, sex, bsa, scr) {
   ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
 }
 
-#' @rdname calc_egfr
 egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -452,7 +449,7 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
   100 * (P_adj - vol * scr_diff/dt) / (scr_av * 1440)
 }
 
-#' @rdname calc_egfr
+#' @noRd
 #' @param use_race whether to include race as a factor in the calculation (TRUE
 #'   or FALSE); see note
 #' @param original_expression whether the MDRD equation should use the 2001 
@@ -469,7 +466,6 @@ egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
   coeff * scr^(-1.154) * f_sex * f_race * age^(-0.203)
 }
 
-#' @rdname calc_egfr
 egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -482,7 +478,6 @@ egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
   141 * ((scr/K) ^ ifelse(scr < K, a1, -1.209)) * 0.993^age * f_sex * f_race
 }
 
-#' @rdname calc_egfr
 egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -494,7 +489,6 @@ egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
   142 * ((scr/K) ^ ifelse(scr < K, a1, -1.200)) * 0.9938^age * f_sex
 }
 
-#' @rdname calc_egfr
 egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -504,7 +498,6 @@ egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
   0.7 * (f_sex * (140-age) / scr * (weight/72))
 }
 
-#' @rdname calc_egfr
 egfr_cockcroft_gault <- function(sex, age, scr, weight) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -514,7 +507,6 @@ egfr_cockcroft_gault <- function(sex, age, scr, weight) {
   f_sex * (140-age) / scr * (weight/72)
 }
 
-#' @rdname calc_egfr
 egfr_malmo_lund <- function(sex, age, scr) {
   if (!sex %in% c("male", "female")) {
     warning("This method requires sex to be one of 'male' or 'female'.")
@@ -532,14 +524,12 @@ egfr_malmo_lund <- function(sex, age, scr) {
   exp(x - 0.0158*age + 0.438*log(age))
 }
 
-#' @rdname calc_egfr
 egfr_bedside_schwartz <- function(age, height, scr, verbose) {
   if(age < 1 && verbose) warning("This equation is not meant for patients < 1 years of age.")
   k <- 0.413
   (k * height) / scr
 }
 
-#' @rdname calc_egfr
 egfr_schwartz <- function(age, preterm, sex, height, scr) {
   if (age < 1 ) {
     k <- ifelse(preterm, 0.33, 0.45)
