@@ -11,11 +11,11 @@
 #' @examples 
 #' 
 #' ## single values
-#' convert_albumin_unit(60, "g_dl", "g_l")
+#' convert_albumin_unit(0.6, "g_dl", "g_l")
 #' 
 #' ## vectorized
-#' convert_flow_unit(
-#'   c(10, 2, 30), 
+#' convert_albumin_unit(
+#'   c(0.4, 2, 0.3), 
 #'   from = c("g_dl", "g_l", "g_dl"), 
 #'   to = c("g_l") 
 #')
