@@ -24,8 +24,6 @@ reference:
       - calc_creat
       - calc_creat_neo
       - calc_aki_stage
-      - convert_creat_assay
-      - convert_creat_unit
   - title: Conversions
     contents:
       - kg2lbs
@@ -40,6 +38,9 @@ reference:
       - absolute2relative_bsa
       - relative2absolute_bsa
       - convert_flow_unit
+      - convert_albumin_unit
+      - convert_creat_assay
+      - convert_creat_unit
   - title: PK compartmental equations
     desc: Functions to simulate concentrations for linear PK models.
     contents:

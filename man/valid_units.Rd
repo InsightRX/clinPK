@@ -4,16 +4,17 @@
 \alias{valid_units}
 \title{Valid units}
 \usage{
-valid_units(covariate = c("height", "weight", "age", "scr"))
+valid_units(covariate = c("height", "weight", "age", "scr", "serum_albumin"))
 }
 \arguments{
-\item{covariate}{Covariate (one of "height", "weight", "age", "scr")}
+\item{covariate}{Covariate (one of "height", "weight", "age", "scr",
+"serum_albumin")}
 }
 \value{
 Vector of valid units for the given covariate
 }
 \description{
-Return recognized units for height, weight, age, scr.
+Return recognized units for height, weight, age, scr, serum_albumin.
 }
 \examples{
 valid_units("height")
