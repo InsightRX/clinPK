@@ -58,16 +58,27 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>t</dt>
 <dd><p>vector of time</p></dd>
+
+
 <dt>dose</dt>
 <dd><p>dose</p></dd>
+
+
 <dt>tau</dt>
 <dd><p>dosing interval</p></dd>
+
+
 <dt>CL</dt>
 <dd><p>clearance</p></dd>
+
+
 <dt>V</dt>
 <dd><p>volume of distribution</p></dd>
+
+
 <dt>ruv</dt>
 <dd><p>residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. `list(prop=0.1, add=1, exp=0)`</p></dd>
+
 </dl></div>
 
     <div class="section level2">
@@ -103,31 +114,31 @@
 <span class="r-in">  dose <span class="op">=</span> <span class="fl">500</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">5</span>, V <span class="op">=</span> <span class="fl">50</span>,</span>
 <span class="r-in">  ruv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fl">0.1</span>, add <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     t        dv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0 16.271291</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1 10.757018</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2 13.720101</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   3 10.894479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   4 10.278120</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   5  9.062861</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   6  7.459997</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   7  6.060367</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   8  7.465733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  9  4.631482</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 10  4.980569</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 11  4.443168</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 12 11.338500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 13 11.905502</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 14 10.817839</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 15  9.023668</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 16  8.349396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 17  8.667446</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 18  7.894255</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 19  8.244659</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 20  6.768500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 21  5.726791</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 22  5.617366</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 23  4.441337</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25 24 13.739699</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0 12.014723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1 12.388522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2 11.743829</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   3 13.013192</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   4  8.988682</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   5 10.727789</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   6  7.544052</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   7  5.764231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   8  6.660337</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  9  5.853128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 10  4.850424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 11  4.618961</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 12 13.609437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 13 12.880750</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 14 12.368846</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 15  9.537693</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 16  9.921871</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 17  8.161199</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 18  8.034544</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 19  7.886613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 20  6.115017</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 21  6.556115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 22  5.170627</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 23  4.974838</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 24 13.928718</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -139,7 +150,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>

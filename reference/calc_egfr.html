@@ -145,47 +145,86 @@ approaches:</p><ul><li><p>Cockcroft-Gault (using weight, ideal body weight, or a
 `mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`, 
 `ckd_epi`, `ckd_epi_ignore_race`, `ckd_epi_as_2021`,
 `malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.</p></dd>
+
+
 <dt>sex</dt>
 <dd><p>sex</p></dd>
+
+
 <dt>age</dt>
 <dd><p>age, in years</p></dd>
+
+
 <dt>scr</dt>
 <dd><p>serum creatinine (mg/dL)</p></dd>
+
+
 <dt>scr_unit, </dt>
 <dd><p>`mg/dL` or `micromol/L` (==`umol/L`)</p></dd>
+
+
 <dt>race</dt>
 <dd><p>`black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. 
 To use these methods without race, use `method = "ckd_epi_ignore_race"`,  `method = "ckd_epi_as_2021"`,
 `method = "mdrd_ignore_race"` or `method = "mdrd_original_ignore_race"`.
 See Note section below for important considerations when using race as a predictive factor in eGFR.</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>weight, in `kg`</p></dd>
+
+
 <dt>height</dt>
 <dd><p>height, in `cm`, used for converting to/from BSA-normalized units.</p></dd>
+
+
 <dt>bsa</dt>
 <dd><p>body surface area</p></dd>
+
+
 <dt>preterm</dt>
 <dd><p>is patient preterm? Used for Schwartz method.</p></dd>
+
+
 <dt>ckd</dt>
 <dd><p>chronic kidney disease? Used for Schwartz method.</p></dd>
+
+
 <dt>times</dt>
 <dd><p>vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)</p></dd>
+
+
 <dt>bsa_method</dt>
 <dd><p>BSA estimation method, see `calc_bsa()` for details</p></dd>
+
+
 <dt>relative</dt>
 <dd><p>`TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.</p></dd>
+
+
 <dt>unit_out</dt>
 <dd><p>`ml/min` (default), `L/hr`, or `mL/hr`</p></dd>
+
+
 <dt>verbose</dt>
 <dd><p>verbosity, show guidance and warnings. `TRUE` by default</p></dd>
+
+
 <dt>min_value</dt>
 <dd><p>minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.</p></dd>
+
+
 <dt>max_value</dt>
 <dd><p>maximum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.</p></dd>
+
+
 <dt>fail</dt>
 <dd><p>invoke `stop()` if not all covariates available?</p></dd>
+
+
 <dt>...</dt>
 <dd><p>arguments passed on to `calc_abw` or `calc_dosing_weight`</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -393,7 +432,7 @@ See Note section below for important considerations when using race as a predict
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
     </footer></div>
