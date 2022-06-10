@@ -22,12 +22,15 @@
 #'   
 #' @export
 convert_albumin_unit <- function(
-  value = NULL,
-  from = NULL,
+  value,
+  from,
   to
 ) {
   accept_units <- c("g_l", "g_dl")
-  if (!isTRUE(length(from) == length(value)) || !all(from %in% accept_units)) {
+  if (!isTRUE(length(from) == length(value))) {
+    stop("length of 'from' units and number of albumin values should be equal")
+  } 
+  if (!all(from %in% accept_units)) {
     stop("albumin measurement 'from' unit not recognized")
   }
   if (length(to) != 1 || !to %in% accept_units) {
