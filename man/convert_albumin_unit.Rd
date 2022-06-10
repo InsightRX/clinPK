@@ -4,7 +4,7 @@
 \alias{convert_albumin_unit}
 \title{Convert albumin from / to units}
 \usage{
-convert_albumin_unit(value = NULL, from = NULL, to)
+convert_albumin_unit(value, from, to)
 }
 \arguments{
 \item{value}{albumin measurements}
