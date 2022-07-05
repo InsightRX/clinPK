@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">clinPK</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,7 +51,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">pk_1cmt_bolus</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">24</span><span class="op">)</span>, dose <span class="op">=</span> <span class="fl">100</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">3</span>, V <span class="op">=</span> <span class="fl">30</span>, ruv <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pk_1cmt_bolus</span><span class="op">(</span>t <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span><span class="op">:</span><span class="fl">24</span><span class="op">)</span>, dose <span class="op">=</span> <span class="fl">100</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">3</span>, V <span class="op">=</span> <span class="fl">30</span>, ruv <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -83,7 +83,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">pk_1cmt_bolus</span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">500</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">5</span>, V <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">pk_1cmt_bolus</span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">500</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">5</span>, V <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     t        dv</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   0 10.000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   1  9.048374</span>
@@ -110,38 +110,38 @@
 <span class="r-out co"><span class="r-pr">#&gt;</span> 23 22  4.786826</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 24 23  4.331299</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 25 24 13.919122</span>
-<span class="r-in"><span class="fu">pk_1cmt_bolus</span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">500</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">5</span>, V <span class="op">=</span> <span class="fl">50</span>, t <span class="op">=</span> <span class="fl">24</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">pk_1cmt_bolus</span><span class="op">(</span>dose <span class="op">=</span> <span class="fl">500</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">5</span>, V <span class="op">=</span> <span class="fl">50</span>, t <span class="op">=</span> <span class="fl">24</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    t       dv</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1 24 13.91912</span>
-<span class="r-in"><span class="fu">pk_1cmt_bolus</span><span class="op">(</span></span>
-<span class="r-in">  dose <span class="op">=</span> <span class="fl">500</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">5</span>, V <span class="op">=</span> <span class="fl">50</span>,</span>
-<span class="r-in">  ruv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fl">0.1</span>, add <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">pk_1cmt_bolus</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  dose <span class="op">=</span> <span class="fl">500</span>, tau <span class="op">=</span> <span class="fl">12</span>, CL <span class="op">=</span> <span class="fl">5</span>, V <span class="op">=</span> <span class="fl">50</span>,</span></span>
+<span class="r-in"><span>  ruv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>prop <span class="op">=</span> <span class="fl">0.1</span>, add <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     t        dv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0  9.294410</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1  8.453685</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2  7.503457</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   3  7.097919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   4  6.242308</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   5  6.226286</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   6  5.327202</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   7  5.407076</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   8  4.446561</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  9  3.908247</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 10  3.873839</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 11  3.208860</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 12 12.174243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 13 12.343378</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 14 10.963299</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 15  9.914380</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 16  8.796854</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 17  6.897339</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 18  6.849426</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 19  7.501874</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 20  5.539344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 21  5.976172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 22  4.913940</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 23  4.102237</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25 24 13.501788</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0 11.357541</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2   1 10.364270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   2  7.283245</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4   3  8.814479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5   4  5.994511</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6   5  5.143146</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7   6  5.896594</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8   7  5.047385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9   8  4.467122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10  9  3.537488</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 10  3.616967</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 11  3.438942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 12 14.213816</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 13 10.581368</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 14 11.859589</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 15 10.604768</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 16  7.609663</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 17  8.561397</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 18  6.911913</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 19  5.807066</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 20  6.169522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 21  5.197545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 22  4.685586</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 23  4.393170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 24 12.654996</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -153,7 +153,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

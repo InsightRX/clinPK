@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">clinPK</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,12 +51,12 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">calc_egfr_cystatin</span><span class="op">(</span>
-  cystatin <span class="op">=</span> <span class="cn">NULL</span>,
-  cystatin_unit <span class="op">=</span> <span class="st">"mg/L"</span>,
-  method <span class="op">=</span> <span class="st">"grubb"</span>,
-  unit_out <span class="op">=</span> <span class="st">"mL/min"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calc_egfr_cystatin</span><span class="op">(</span></span>
+<span>  cystatin <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cystatin_unit <span class="op">=</span> <span class="st">"mg/L"</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"grubb"</span>,</span>
+<span>  unit_out <span class="op">=</span> <span class="st">"mL/min"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,21 +80,21 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">calc_egfr_cystatin</span><span class="op">(</span><span class="fl">1.0</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">calc_egfr_cystatin</span><span class="op">(</span><span class="fl">1.0</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 83.93</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unit</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mL/min"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">calc_egfr_cystatin</span><span class="op">(</span><span class="fl">1.0</span>, method <span class="op">=</span> <span class="st">"larsson"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">calc_egfr_cystatin</span><span class="op">(</span><span class="fl">1.0</span>, method <span class="op">=</span> <span class="st">"larsson"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 77.239</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unit</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mL/min"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">calc_egfr_cystatin</span><span class="op">(</span><span class="fl">1.0</span>, unit_out <span class="op">=</span> <span class="st">"l/hr"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">calc_egfr_cystatin</span><span class="op">(</span><span class="fl">1.0</span>, unit_out <span class="op">=</span> <span class="st">"l/hr"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.0358</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -112,7 +112,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

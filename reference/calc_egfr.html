@@ -52,7 +52,7 @@ Equations for estimation of eGFR from Cystatin C concentrations are available fr
     
     <a class="navbar-brand me-2" href="../index.html">clinPK</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,28 +113,28 @@ approaches:</p><ul><li><p>Cockcroft-Gault (using weight, ideal body weight, or a
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">calc_egfr</span><span class="op">(</span>
-  method <span class="op">=</span> <span class="st">"cockcroft_gault"</span>,
-  sex <span class="op">=</span> <span class="cn">NULL</span>,
-  age <span class="op">=</span> <span class="cn">NULL</span>,
-  scr <span class="op">=</span> <span class="cn">NULL</span>,
-  scr_unit <span class="op">=</span> <span class="cn">NULL</span>,
-  race <span class="op">=</span> <span class="st">"other"</span>,
-  weight <span class="op">=</span> <span class="cn">NULL</span>,
-  height <span class="op">=</span> <span class="cn">NULL</span>,
-  bsa <span class="op">=</span> <span class="cn">NULL</span>,
-  preterm <span class="op">=</span> <span class="cn">FALSE</span>,
-  ckd <span class="op">=</span> <span class="cn">FALSE</span>,
-  times <span class="op">=</span> <span class="cn">NULL</span>,
-  bsa_method <span class="op">=</span> <span class="st">"dubois"</span>,
-  relative <span class="op">=</span> <span class="cn">NULL</span>,
-  unit_out <span class="op">=</span> <span class="st">"mL/min"</span>,
-  verbose <span class="op">=</span> <span class="cn">TRUE</span>,
-  min_value <span class="op">=</span> <span class="cn">NULL</span>,
-  max_value <span class="op">=</span> <span class="cn">NULL</span>,
-  fail <span class="op">=</span> <span class="cn">TRUE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calc_egfr</span><span class="op">(</span></span>
+<span>  method <span class="op">=</span> <span class="st">"cockcroft_gault"</span>,</span>
+<span>  sex <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  age <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scr <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  scr_unit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  race <span class="op">=</span> <span class="st">"other"</span>,</span>
+<span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bsa <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  preterm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  ckd <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  times <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  bsa_method <span class="op">=</span> <span class="st">"dubois"</span>,</span>
+<span>  relative <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  unit_out <span class="op">=</span> <span class="st">"mL/min"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  min_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  max_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fail <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -262,7 +262,7 @@ See Note section below for important considerations when using race as a predict
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>, weight <span class="op">=</span> <span class="fl">70</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>, weight <span class="op">=</span> <span class="fl">70</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creatinine unit not specified, assuming mg/dL.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 79.54545</span>
@@ -288,7 +288,7 @@ See Note section below for important considerations when using race as a predict
 <span class="r-out co"><span class="r-pr">#&gt;</span> $capped</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>, weight <span class="op">=</span> <span class="fl">70</span>, unit_out <span class="op">=</span> <span class="st">"L/hr"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>, weight <span class="op">=</span> <span class="fl">70</span>, unit_out <span class="op">=</span> <span class="st">"L/hr"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creatinine unit not specified, assuming mg/dL.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.772727</span>
@@ -314,7 +314,7 @@ See Note section below for important considerations when using race as a predict
 <span class="r-out co"><span class="r-pr">#&gt;</span> $capped</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>, weight <span class="op">=</span> <span class="fl">70</span>, bsa <span class="op">=</span> <span class="fl">1.8</span>, method <span class="op">=</span> <span class="st">"ckd_epi"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>, weight <span class="op">=</span> <span class="fl">70</span>, bsa <span class="op">=</span> <span class="fl">1.8</span>, method <span class="op">=</span> <span class="st">"ckd_epi"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creatinine unit not specified, assuming mg/dL.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 77.86046</span>
@@ -340,8 +340,8 @@ See Note section below for important considerations when using race as a predict
 <span class="r-out co"><span class="r-pr">#&gt;</span> $capped</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">0.8</span><span class="op">)</span>,</span>
-<span class="r-in">  weight <span class="op">=</span> <span class="fl">70</span>, height <span class="op">=</span> <span class="fl">170</span>, method <span class="op">=</span> <span class="st">"jelliffe"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">0.8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  weight <span class="op">=</span> <span class="fl">70</span>, height <span class="op">=</span> <span class="fl">170</span>, method <span class="op">=</span> <span class="st">"jelliffe"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creatinine unit not specified, assuming mg/dL.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 70.37224 96.76183</span>
@@ -367,8 +367,8 @@ See Note section below for important considerations when using race as a predict
 <span class="r-out co"><span class="r-pr">#&gt;</span> $capped</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">0.8</span><span class="op">)</span>,</span>
-<span class="r-in">  weight <span class="op">=</span> <span class="fl">70</span>, height <span class="op">=</span> <span class="fl">170</span>, method <span class="op">=</span> <span class="st">"jelliffe_unstable"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1.1</span>, <span class="fl">0.8</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  weight <span class="op">=</span> <span class="fl">70</span>, height <span class="op">=</span> <span class="fl">170</span>, method <span class="op">=</span> <span class="st">"jelliffe_unstable"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creatinine unit not specified, assuming mg/dL.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 80.41714 99.72645</span>
@@ -394,8 +394,8 @@ See Note section below for important considerations when using race as a predict
 <span class="r-out co"><span class="r-pr">#&gt;</span> $capped</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> list()</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>,</span>
-<span class="r-in">  weight <span class="op">=</span> <span class="fl">70</span>, bsa <span class="op">=</span> <span class="fl">1.6</span>, method <span class="op">=</span> <span class="st">"malmo_lund_revised"</span>, relative <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">calc_egfr</span><span class="op">(</span>sex <span class="op">=</span> <span class="st">"male"</span>, age <span class="op">=</span> <span class="fl">50</span>, scr <span class="op">=</span> <span class="fl">1.1</span>,</span></span>
+<span class="r-in"><span>  weight <span class="op">=</span> <span class="fl">70</span>, bsa <span class="op">=</span> <span class="fl">1.6</span>, method <span class="op">=</span> <span class="st">"malmo_lund_revised"</span>, relative <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creatinine unit not specified, assuming mg/dL.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 67.11891</span>
@@ -432,7 +432,7 @@ See Note section below for important considerations when using race as a predict
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
