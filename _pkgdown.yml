@@ -2,6 +2,15 @@ url: https://insightrx.github.io/clinPK/
 template:
   bootstrap: 5
 
+navbar:
+  structure:
+    right: [search, github, ds]
+  components:
+    ds:
+      href: https://ds.insight-rx.com/
+      icon: fa-home
+      aria-label: Home
+
 reference:
   - title: Anthropomorphic equations
     contents:
