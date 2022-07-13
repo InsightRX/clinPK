@@ -33,6 +33,7 @@ reference:
       - calc_creat
       - calc_creat_neo
       - calc_aki_stage
+      - calc_neutropenia_grade
   - title: Conversions
     contents:
       - kg2lbs
