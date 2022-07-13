@@ -8,7 +8,7 @@
 #' @param anc absolute neutrophil count (ANC), in number per microliter
 #' 
 #' @references \itemize{
-#'   \item \href{link.springer.com/referenceworkentry/10.1007/978-3-642-16483-5_4052}{Neutropenia}: US National Cancer Institute's Common Toxicity Criteria
+#'   \item \href{https://link.springer.com/referenceworkentry/10.1007/978-3-642-16483-5_4052}{Neutropenia}: US National Cancer Institute's Common Toxicity Criteria
 #' }
 #'
 #' @examples
