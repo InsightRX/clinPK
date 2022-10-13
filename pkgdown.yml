@@ -1,8 +1,8 @@
 pandoc: 2.7.3
-pkgdown: 2.0.5
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-07-13T19:31Z
+last_built: 2022-10-13T21:08Z
 urls:
   reference: https://insightrx.github.io/clinPK/reference
   article: https://insightrx.github.io/clinPK/articles
