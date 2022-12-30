@@ -44,7 +44,7 @@ calc_egfr_cystatin <- function (
   }
   if(method == "hoek") {
     crcl <- -4.32 + (80.35/cystatin)
-    if(unit_out != "ml/min/1.73m2") {
+    if(tolower(unit_out) != "ml/min/1.73m2") {
       stop("For Hoek method, the `unit_out` needs to be mL/min/1.73m2.")
     }
   }
