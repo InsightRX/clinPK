@@ -7,8 +7,8 @@
 calc_egfr_cystatin(
   cystatin = NULL,
   cystatin_unit = "mg/L",
-  method = "grubb",
-  unit_out = "mL/min"
+  method = c("grubb", "larsson", "hoek"),
+  unit_out = c("ml/min", "ml/hr", "l/min", "l/hr", "ml/min/1.73m2")
 )
 }
 \arguments{
@@ -16,7 +16,7 @@ calc_egfr_cystatin(
 
 \item{cystatin_unit, }{only `mg/L` available}
 
-\item{method}{eGFR estimation method, choose from `grubb`, `larsson`}
+\item{method}{eGFR estimation method, choose from `grubb`, `larsson`, `hoek`}
 
 \item{unit_out}{eGFR output unit, choose from `ml/min`, `ml/hr`, `l/min`, `l/hr`}
 }
