@@ -1,6 +1,6 @@
 #' Calculate eGFR based on Cystatin C measurements
 #'
-#' @param method eGFR estimation method, choose from `grubb`, `larsson`
+#' @param method eGFR estimation method, choose from `grubb`, `larsson`, `hoek`
 #' @param cystatin serum cystatin concentration (mg/L)
 #' @param cystatin_unit, only `mg/L` available
 #' @param unit_out eGFR output unit, choose from `ml/min`, `ml/hr`, `l/min`, `l/hr`
@@ -12,28 +12,32 @@
 calc_egfr_cystatin <- function (
   cystatin = NULL,
   cystatin_unit = "mg/L",
-  method = "grubb",
-  unit_out = "mL/min"
+  method = c("grubb", "larsson", "hoek"),
+  unit_out = c("ml/min", "ml/hr", "l/min", "l/hr", "ml/min/1.73m2")
 ) {
-  available_methods <- c(
-    "grubb", "larsson")
-  available_units <- c(
-    "ml/min", "ml/hr", "l/min", "l/hr"
-  )
   method <- gsub("-", "_", tolower(method))
-  if(!method %in% available_methods) {
-    stop(paste0("Sorry, eGFR calculation method not recognized! Please choose from: ", paste0(available_methods, collapse=" ")))
-  }
-  if(!tolower(unit_out) %in% available_units) {
-    stop(paste0("Sorry, output unit not recognized! Please choose from: ", paste0(available_units, collapse=" ")))
-  }
+  unit_out <- tolower(unit_out)
+  method <- match.arg(method)
+  unit_out <- match.arg(unit_out)
   crcl <- NULL
   unit <- cystatin_unit
   if(method == "grubb") {
     crcl <- 83.93 * cystatin^(-1.676)
+    if(unit_out == "ml/min/1.73m2") {
+      stop("Output unit not supported for this method.")
+    }
   }
   if(method == "larsson") {
     crcl <- 77.239 * cystatin^(-1.2623)
+    if(unit_out == "ml/min/1.73m2") {
+      stop("Output unit not supported for this method.")
+    }
+  }
+  if(method == "hoek") {
+    crcl <- -4.32 + (80.35/cystatin)
+    if(tolower(unit_out) != "ml/min/1.73m2") {
+      stop("For Hoek method, the `unit_out` needs to be mL/min/1.73m2.")
+    }
   }
   if (length(grep("^l/min", tolower(unit_out))) > 0) {
     crcl <- crcl / 1000

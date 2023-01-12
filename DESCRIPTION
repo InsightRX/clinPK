@@ -1,8 +1,8 @@
 Package: clinPK
 Type: Package
 Title: Clinical Pharmacokinetics Toolkit
-Version: 0.12.1
-Date: 2022-10-13
+Version: 0.12.4
+Date: 2023-01-12
 Authors@R: c(person("Ron", "Keizer", email = "ron@insight-rx.com", role
         = "aut"), person("Jasmine", "Hughes", email =
         "jasmine@insight-rx.com", role = "aut"), person("Dominic",
@@ -17,9 +17,9 @@ Description: Provides equations commonly used in clinical
         possible and relevant, it provides multiple published and
         peer-reviewed equations within the respective R function.
 URL: https://github.com/InsightRX/clinPK,
-    https://insightrx.github.io/clinPK/
+        https://insightrx.github.io/clinPK/
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
