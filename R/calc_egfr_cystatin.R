@@ -12,22 +12,13 @@
 calc_egfr_cystatin <- function (
   cystatin = NULL,
   cystatin_unit = "mg/L",
-  method = "grubb",
-  unit_out = "mL/min"
+  method = c("grubb", "larsson", "hoek"),
+  unit_out = c("ml/min", "ml/hr", "l/min", "l/hr", "ml/min/1.73m2")
 ) {
-  available_methods <- c(
-    "grubb", "larsson", "hoek"
-  )
-  available_units <- c(
-    "ml/min", "ml/hr", "l/min", "l/hr", "ml/min/1.73m2"
-  )
   method <- gsub("-", "_", tolower(method))
-  if(!method %in% available_methods) {
-    stop(paste0("Sorry, eGFR calculation method not recognized! Please choose from: ", paste0(available_methods, collapse=" ")))
-  }
-  if(!tolower(unit_out) %in% available_units) {
-    stop(paste0("Sorry, output unit not recognized! Please choose from: ", paste0(available_units, collapse=" ")))
-  }
+  unit_out <- tolower(unit_out)
+  method <- match.arg(method)
+  unit_out <- match.arg(unit_out)
   crcl <- NULL
   unit <- cystatin_unit
   if(method == "grubb") {

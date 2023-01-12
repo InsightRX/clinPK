@@ -17,7 +17,7 @@ test_that("calculate egfr based on cystatin works", {
   )
   expect_equal(
     round(
-      calc_egfr_cystatin(1.3, unit_out = "ml/min/1.73m2", method = "hoek")$value,
+      calc_egfr_cystatin(1.3, unit_out = "mL/min/1.73m2", method = "Hoek")$value,
       1
     ), 57.5
   )
