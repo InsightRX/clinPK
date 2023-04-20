@@ -4,18 +4,23 @@
 \alias{convert_albumin_unit}
 \title{Convert albumin from / to units}
 \usage{
-convert_albumin_unit(value, from, to)
+convert_albumin_unit(
+  value,
+  unit_in = c("g_l", "g_dl"),
+  unit_out = c("g_l", "g_dl")
+)
 }
 \arguments{
 \item{value}{albumin measurements}
 
-\item{from}{from unit, e.g. `"g_l"`.}
+\item{unit_in}{from unit, e.g. `"g_l"`.}
 
-\item{to}{to flow unit, e.g. `"g_dl"`}
+\item{unit_out}{to flow unit, e.g. `"g_dl"`}
 }
 \description{
-Accepted units are "g_l" or "g_dl". Arguments supplied to `value` and `from`
-units must be of the same length. "To" unit must be of length 1.
+Accepted units are "g_l" or "g_dl". Arguments supplied to `value` and
+`unit_in` units must be of the same length. "To" unit must be of length 1.
+#'
 }
 \examples{
 
@@ -25,8 +30,8 @@ convert_albumin_unit(0.6, "g_dl", "g_l")
 ## vectorized
 convert_albumin_unit(
   c(0.4, 2, 0.3), 
-  from = c("g_dl", "g_l", "g_dl"), 
-  to = c("g_l") 
+  unit_in = c("g_dl", "g_l", "g_dl"),
+  unit_out = c("g_l")
 )
   
 }
