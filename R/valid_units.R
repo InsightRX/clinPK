@@ -19,6 +19,6 @@ valid_units <- function(
     weight = c("kg", "lb", "lbs", "pound", "pounds", "oz", "ounce", "ounces", "g", "gram", "grams"),
     scr = c("mg/dl", "mg_dl", "micromol/l", "micromol_l", "micromol", "mmol", "mumol/l", "umol/l"),
     age = c("yrs", "weeks", "days", "years"),
-    serum_albumin = c("g_l", "g/l", "g_dl", "g/dl")
+    serum_albumin = c("g_l", "g/l", "g_dl", "g/dl", "micromol/l", "micromol_l", "micromol", "mmol", "mumol/l", "umol/l")
   )
 }

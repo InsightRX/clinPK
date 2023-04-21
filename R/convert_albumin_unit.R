@@ -35,7 +35,18 @@ convert_albumin_unit <- function(value,
     stop("length of unit_in must be either 1 or the same as values")
   }
 
-  conv <- c(g_dl = 1, `g/dl` = 1, g_l = .1, `g/l` = .1)
+  conv <- c(
+    g_dl         = 10,
+    `g/dl`       = 10,
+    g_l          = 1,
+    `g/l`        = 1,
+    `micromol/l` = 66.5,
+    micromol_l   = 66.5,
+    micromol     = 66.5,
+    mmol         = 66.5,
+    `mumol/l`    = 66.5,
+    `umol/l`     = 66.5
+  )
 
   list(
     value = value * unname(conv[unit_in]) / unname(conv[unit_out]),
