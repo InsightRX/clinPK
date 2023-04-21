@@ -6,8 +6,8 @@
 \usage{
 convert_albumin_unit(
   value,
-  unit_in = c("g_l", "g_dl"),
-  unit_out = c("g_l", "g_dl")
+  unit_in = valid_units("serum_albumin"),
+  unit_out = valid_units("serum_albumin")
 )
 }
 \arguments{
