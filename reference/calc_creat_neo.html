@@ -79,19 +79,13 @@ Rudd et al. (http://www.ncbi.nlm.nih.gov/pubmed/6838252)</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">calc_creat_neo</span><span class="op">(</span>pma <span class="op">=</span> <span class="fl">36</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 63.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $unit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "micromol/L"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="convert_creat_unit.html">convert_creat_unit</a></span><span class="op">(</span><span class="fu">calc_creat_neo</span><span class="op">(</span>pma <span class="op">=</span> <span class="fl">36</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">cr</span> <span class="op">&lt;-</span> <span class="fu">calc_creat_neo</span><span class="op">(</span>pma <span class="op">=</span> <span class="fl">36</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="convert_creat_unit.html">convert_creat_unit</a></span><span class="op">(</span><span class="va">cr</span><span class="op">$</span><span class="va">value</span>, unit_in <span class="op">=</span> <span class="va">cr</span><span class="op">$</span><span class="va">unit</span>, unit_out <span class="op">=</span> <span class="st">"mg/dL"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7226872</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $unit</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mg/dL"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "mg/dl"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
