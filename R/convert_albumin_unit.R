@@ -1,12 +1,11 @@
 #' Convert albumin from / to units
 #' 
-#' Accepted units are "g_l" or "g_dl". Arguments supplied to `value` and `from`
-#' units must be of the same length. "To" unit must be of length 1.
-#' 
-#' 
+#' Accepted units are "g_l" or "g_dl". Arguments supplied to `value` and
+#' `unit_in` units must be of the same length. "To" unit must be of length 1.
+#' #'
 #' @param value albumin measurements
-#' @param from from unit, e.g. `"g_l"`. 
-#' @param to to flow unit, e.g. `"g_dl"`
+#' @param unit_in from unit, e.g. `"g_l"`.
+#' @param unit_out to flow unit, e.g. `"g_dl"`
 #' 
 #' @examples 
 #' 
@@ -16,30 +15,41 @@
 #' ## vectorized
 #' convert_albumin_unit(
 #'   c(0.4, 2, 0.3), 
-#'   from = c("g_dl", "g_l", "g_dl"), 
-#'   to = c("g_l") 
+#'   unit_in = c("g_dl", "g_l", "g_dl"),
+#'   unit_out = c("g_l")
 #')
 #'   
 #' @export
-convert_albumin_unit <- function(
-  value,
-  from,
-  to
-) {
-  accept_units <- c("g_l", "g_dl")
-  if (!isTRUE(length(from) == length(value))) {
-    stop("length of 'from' units and number of albumin values should be equal")
-  } 
-  if (!all(from %in% accept_units)) {
-    stop("albumin measurement 'from' unit not recognized")
+convert_albumin_unit <- function(value,
+                                 unit_in = valid_units("serum_albumin"),
+                                 unit_out = valid_units("serum_albumin")) {
+  unit_in <- tolower(unit_in)
+  unit_out <- tolower(unit_out)
+  from <- match.arg(unit_in, several.ok = TRUE)
+  to <- match.arg(unit_out)
+  if (is.null(unit_out)) {
+    stop("Please provide output unit")
   }
-  if (length(to) != 1 || !to %in% accept_units) {
-    stop("albumin measurement 'to' unit not recognized")
+
+  if (length(unit_in) != length(value) && length(unit_in) != 1) {
+    stop("length of unit_in must be either 1 or the same as values")
   }
-  if (to == "g_l") {
-    value[from == "g_dl"] <- value[from == "g_dl"] * 10
-  } else {
-    value[from == "g_l"] <- value[from == "g_l"] * 0.1
-  }
-  value
+
+  conv <- c(
+    g_dl         = 10,
+    `g/dl`       = 10,
+    g_l          = 1,
+    `g/l`        = 1,
+    `micromol/l` = 66.5,
+    micromol_l   = 66.5,
+    micromol     = 66.5,
+    mmol         = 66.5,
+    `mumol/l`    = 66.5,
+    `umol/l`     = 66.5
+  )
+
+  list(
+    value = value * unname(conv[unit_in]) / unname(conv[unit_out]),
+    unit = unit_out
+  )
 }
