@@ -11,19 +11,18 @@ weight2kg <- function(value = NULL, unit = NULL) {
   if(is.null(value)) {
     stop("No weight value specified.")
   }
-  if(!is.null(unit) && !is.na(unit)) {
-    if(tolower(unit) %in% valid_units("weight")) {
-      if(tolower(unit) %in% c("lb", "lbs", "pound", "pounds")) {
-        value <- value / 2.20462
-      }
-      if(tolower(unit) %in% c("oz", "ounce", "ounces")) {
-        value <- value / 35.274
-      }
-      if (tolower(unit) %in% c("g", "gram", "grams")) {
-        value <- value / 1000
-      }
+  if(!is.null(unit) && !any(is.na(unit))) {
+    if(all(tolower(unit) %in% valid_units("weight"))) {
+      div <- vector(mode = "numeric", length = length(unit))
+      div[which(tolower(unit) %in% c("lb", "lbs", "pound", "pounds"))] <- 2.20462
+      div[which(tolower(unit) %in% c("oz", "ounce", "ounces"))] <- 35.274
+      div[which(tolower(unit) %in% c("g", "gram", "grams"))] <- 1000
+      div[which(tolower(unit) %in% c("kg"))] <- 1
+
+      value <- value / div
     } else {
-      stop(paste0("Unit (", unit,") not recognized."))
+      invalid <- setdiff(unit, valid_units("weight"))
+      stop(paste0("Unit(s) (", paste0(invalid, collapse = ", "), ") not recognized."))
     }
   } else {
     stop("Weight unit not specified.")
