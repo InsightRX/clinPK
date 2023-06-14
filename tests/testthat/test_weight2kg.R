@@ -49,3 +49,25 @@ test_that("weight2kg supports capitalized units", {
   expect_equal(weight2kg(10, "LB"), 4.53592909)
   expect_equal(weight2kg(5, "KG"), 5)
 })
+
+test_that("weight2kg is vectorized over units", {
+  expect_equal(weight2kg(c(1000, 100), c("g", "lb")), c(1, 45.3592909))
+  expect_equal(weight2kg(c(400, 500), c("oz", "oz")), c(11.3397970176, 14.1747462720))
+})
+
+test_that("weight2kg errors if any units are invalid", {
+  expect_error(weight2kg(c(100, 100, 100), c("lb", "foo", "bar")))
+})
+
+test_that("normal R recycling happens if values and units are different length", {
+  expect_warning(
+    expect_equal(
+      weight2kg(c(100, 100, 100), c("lb", "kg")),
+      c(45.3592909, 100, 45.3592909)
+    )
+  )
+  expect_equal(
+    weight2kg(100, c("g", "kg")),
+    c(0.1, 100)
+  )
+})
