@@ -16,3 +16,22 @@ test_that("calvert eqn with egfr supplied", {
     577.27273
   )
 })
+
+test_that("calvert eqn uses absolute egfr", {
+  expect_equal(
+    round(
+      calc_carboplatin_calvert(
+        5, 
+        sex = "male", 
+        age = 5, 
+        scr = 1.1, 
+        weight = 15,
+        height = 90,
+        method = "schwartz_revised",
+        verbose = FALSE
+      ),
+      2
+    ), 
+    169.49
+  )
+})
