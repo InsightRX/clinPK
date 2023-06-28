@@ -98,6 +98,7 @@ reference:
       - nca
       - egfr_cov_reqs
       - check_covs_available
+      - calc_carboplatin_calvert
       - calc_kel_single_tdm
       - calc_kel_double_tdm
       - calc_t12
