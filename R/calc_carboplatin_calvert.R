@@ -20,6 +20,6 @@
 #' @export
 
 calc_carboplatin_calvert <- function(target_auc, gfr = NULL, ...) {
-  if (is.null(gfr)) gfr <- calc_egfr(...)[["value"]]
+  if (is.null(gfr)) gfr <- calc_egfr(..., relative=FALSE)[["value"]]
   target_auc * (1.2 * gfr + 20)
 }
