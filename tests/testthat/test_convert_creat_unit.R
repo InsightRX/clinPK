@@ -30,8 +30,8 @@ test_that("convert_creat_unit supports vectorized input", {
     unit_out = "mg/dL"
   )
   res2 <- convert_creat_unit(
-    c(84, 85, 1),
-    unit_in = c("micromol/L", "micromol/L", "mg/dL"),
+    c(84, 85, 1, 84),
+    unit_in = c("micromol/L", "micromol/L", "mg/dL", "umol_l"),
     unit_out = "mg/dL"
   )
   expect_equal(
@@ -43,7 +43,7 @@ test_that("convert_creat_unit supports vectorized input", {
   )
   expect_equal(
     res2,
-    list(value = c(0.950011309658448, 0.961320968106763, 1), unit = "mg/dl")
+    list(value = c(0.950011309658448, 0.961320968106763, 1, 0.950011309658448), unit = "mg/dl")
   )
 })
 
