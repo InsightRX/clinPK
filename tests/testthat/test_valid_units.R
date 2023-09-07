@@ -18,7 +18,9 @@ test_that("valid units for scr are consistent", {
       "micromol",
       "mmol",
       "mumol/l",
-      "umol/l"
+      "umol/l",
+      "mumol_l",
+      "umol_l"
     )
   )
   ## If this test is failing it is because we have updated the valid units for
@@ -39,7 +41,9 @@ test_that("valid units for alb are consistent", {
       "micromol",
       "mmol",
       "mumol/l",
-      "umol/l"
+      "umol/l",
+      "mumol_l",
+      "umol_l"
     )
   )
   ## If this test is failing it is because we have updated the valid units for
