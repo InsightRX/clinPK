@@ -25,7 +25,9 @@ convert_creat_unit <- function(value,
     micromol     = 1 / 88.42,
     mmol         = 1 / 88.42,
     `mumol/l`    = 1 / 88.42,
-    `umol/l`     = 1 / 88.42
+    `mumol_l`    = 1 / 88.42,
+    `umol/l`     = 1 / 88.42,
+    `umol_l`     = 1 / 88.42
   )
 
   list(

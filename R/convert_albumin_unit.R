@@ -45,7 +45,9 @@ convert_albumin_unit <- function(value,
     micromol     = 66.5,
     mmol         = 66.5,
     `mumol/l`    = 66.5,
-    `umol/l`     = 66.5
+    `umol/l`     = 66.5,
+    mumol_l      = 66.5,
+    umol_l       = 66.5
   )
 
   list(

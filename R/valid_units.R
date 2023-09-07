@@ -17,8 +17,8 @@ valid_units <- function(
     cov,
     height = c("cm", "inch", "inches", "in"),
     weight = c("kg", "lb", "lbs", "pound", "pounds", "oz", "ounce", "ounces", "g", "gram", "grams"),
-    scr = c("mg/dl", "mg_dl", "micromol/l", "micromol_l", "micromol", "mmol", "mumol/l", "umol/l"),
+    scr = c("mg/dl", "mg_dl", "micromol/l", "micromol_l", "micromol", "mmol", "mumol/l", "umol/l", "mumol_l", "umol_l"),
     age = c("yrs", "weeks", "days", "years"),
-    serum_albumin = c("g_l", "g/l", "g_dl", "g/dl", "micromol/l", "micromol_l", "micromol", "mmol", "mumol/l", "umol/l")
+    serum_albumin = c("g_l", "g/l", "g_dl", "g/dl", "micromol/l", "micromol_l", "micromol", "mmol", "mumol/l", "umol/l", "mumol_l", "umol_l")
   )
 }

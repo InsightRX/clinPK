@@ -30,4 +30,8 @@ test_that("basic conversions work", {
     convert_albumin_unit(1, "micromol_l", "g_l"),
     list(value = 66.5, unit = "g_l")
   )
+  expect_equal(
+    convert_albumin_unit(c(1, 1), c("mumol_l", "umol_l"), "g_l"),
+    list(value = c(66.5, 66.5), unit = "g_l")
+  )
 })
