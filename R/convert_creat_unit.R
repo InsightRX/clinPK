@@ -14,5 +14,5 @@ convert_creat_unit <- function(value,
   unit_in <- match.arg(unit_in, several.ok = TRUE)
   unit_out <- match.arg(unit_out)
 
-  convert_conc_unit(value, unit_in, unit_out, 1/88.42 * 10000)
+  convert_conc_unit(value, unit_in, unit_out, 113.12)
 }
