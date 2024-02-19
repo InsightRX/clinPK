@@ -3,6 +3,7 @@
 #' Lower-level function called by `convert_creat_unit()`,
 #' `convert_albumin_unit()`, and others.
 #'
+#' @keywords internal
 #' @seealso valid_units
 #' @param value Value to convert
 #' @param unit_in Input unit

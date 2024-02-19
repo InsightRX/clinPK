@@ -51,6 +51,7 @@ reference:
       - convert_albumin_unit
       - convert_creat_assay
       - convert_creat_unit
+      - convert_bilirubin_unit
   - title: PK compartmental equations
     desc: Functions to simulate concentrations for linear PK models.
     contents:

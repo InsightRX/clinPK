@@ -22,3 +22,4 @@ Lower-level function called by `convert_creat_unit()`,
 \seealso{
 valid_units
 }
+\keyword{internal}
