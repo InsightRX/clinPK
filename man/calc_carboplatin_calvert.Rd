@@ -20,6 +20,12 @@ target AUC given their glomerular filtration rate (GFR). The original
 equation was developed on a data set of 18 individuals with GFR of 
 33-136 ml/min.
 }
+\examples{
+calc_carboplatin_calvert(5, 100)
+calc_carboplatin_calvert(4, 30)
+calc_carboplatin_calvert(2, sex = "male", age = 50, scr = 1.1, weight = 70)
+
+}
 \references{
 \href{https://ascopubs.org/doi/abs/10.1200/JCO.1989.7.11.1748}{
 Calvert et al., Journal of Clinical Oncology (1976)}

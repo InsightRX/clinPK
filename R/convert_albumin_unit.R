@@ -1,6 +1,6 @@
 #' Convert albumin from / to units
 #' 
-#' Accepted units are "g_l" or "g_dl". Arguments supplied to `value` and
+#' Accepted units are "g_l", "g_dl", or "micromol_l". Arguments supplied to `value` and
 #' `unit_in` units must be of the same length. "To" unit must be of length 1.
 #' #'
 #' @param value albumin measurements
@@ -31,27 +31,5 @@ convert_albumin_unit <- function(value,
     stop("Please provide output unit")
   }
 
-  if (length(unit_in) != length(value) && length(unit_in) != 1) {
-    stop("length of unit_in must be either 1 or the same as values")
-  }
-
-  conv <- c(
-    g_dl         = 10,
-    `g/dl`       = 10,
-    g_l          = 1,
-    `g/l`        = 1,
-    `micromol/l` = 66.5,
-    micromol_l   = 66.5,
-    micromol     = 66.5,
-    mmol         = 66.5,
-    `mumol/l`    = 66.5,
-    `umol/l`     = 66.5,
-    mumol_l      = 66.5,
-    umol_l       = 66.5
-  )
-
-  list(
-    value = value * unname(conv[unit_in]) / unname(conv[unit_out]),
-    unit = unit_out
-  )
+  convert_conc_unit(value, unit_in, unit_out, 66500)
 }

@@ -27,11 +27,11 @@ test_that("basic conversions work", {
     list(value = c(60, 60), unit = "g_l")
   )
   expect_equal(
-    convert_albumin_unit(1, "micromol_l", "g_l"),
-    list(value = 66.5, unit = "g_l")
+    convert_albumin_unit(10, "micromol_l", "g_l"),
+    list(value = .665, unit = "g_l")
   )
   expect_equal(
-    convert_albumin_unit(c(1, 1), c("mumol_l", "umol_l"), "g_l"),
-    list(value = c(66.5, 66.5), unit = "g_l")
+    convert_albumin_unit(c(10, 10), c("mumol_l", "umol_l"), "g_l"),
+    list(value = c(.665, .665), unit = "g_l")
   )
 })

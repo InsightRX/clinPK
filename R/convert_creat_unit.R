@@ -11,27 +11,8 @@ convert_creat_unit <- function(value,
                                unit_out = valid_units("scr")) {
   unit_in <- tolower(unit_in)
   unit_out <- tolower(unit_out)
-  if (length(unit_in) != length(value) && length(unit_in) != 1) {
-    stop("length of unit_in must be either 1 or the same as values")
-  }
   unit_in <- match.arg(unit_in, several.ok = TRUE)
   unit_out <- match.arg(unit_out)
 
-  conv <- c(
-    `mg/dl`      = 1,
-    mg_dl        = 1,
-    `micromol/l` = 1 / 88.42,
-    micromol_l   = 1 / 88.42,
-    micromol     = 1 / 88.42,
-    mmol         = 1 / 88.42,
-    `mumol/l`    = 1 / 88.42,
-    `mumol_l`    = 1 / 88.42,
-    `umol/l`     = 1 / 88.42,
-    `umol_l`     = 1 / 88.42
-  )
-
-  list(
-    value = value * unname(conv[unit_in]) / unname(conv[unit_out]),
-    unit = unit_out
-  )
+  convert_conc_unit(value, unit_in, unit_out, 113.12)
 }

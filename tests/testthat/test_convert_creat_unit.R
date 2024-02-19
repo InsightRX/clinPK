@@ -19,7 +19,7 @@ test_that("convert_creat_unit converts correctly", {
       )$value,
       3
     ),
-    106.104
+    106.082
   )
 })
 
@@ -36,14 +36,11 @@ test_that("convert_creat_unit supports vectorized input", {
   )
   expect_equal(
     res1,
-    list(
-      value = c(0.950011309658448, 0.961320968106763, 0.972630626555078),
-      unit = "mg/dl"
-    )
+    list(value = c(0.950208, 0.96152, 0.972832), unit = "mg/dl")
   )
   expect_equal(
     res2,
-    list(value = c(0.950011309658448, 0.961320968106763, 1, 0.950011309658448), unit = "mg/dl")
+    list(value = c(0.950208, 0.96152, 1, 0.950208), unit = "mg/dl")
   )
 })
 

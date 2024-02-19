@@ -18,7 +18,7 @@ convert_albumin_unit(
 \item{unit_out}{to flow unit, e.g. `"g_dl"`}
 }
 \description{
-Accepted units are "g_l" or "g_dl". Arguments supplied to `value` and
+Accepted units are "g_l", "g_dl", or "micromol_l". Arguments supplied to `value` and
 `unit_in` units must be of the same length. "To" unit must be of length 1.
 #'
 }
