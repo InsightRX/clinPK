@@ -1,14 +1,14 @@
 Package: clinPK
 Type: Package
 Title: Clinical Pharmacokinetics Toolkit
-Version: 0.12.4
-Date: 2023-01-12
+Version: 0.13.0
+Date: 2024-02-22
 Authors@R: c(person("Ron", "Keizer", email = "ron@insight-rx.com", role
-        = "aut"), person("Jasmine", "Hughes", email =
+        = c("aut",  "cre")), person("Jasmine", "Hughes", email =
         "jasmine@insight-rx.com", role = "aut"), person("Dominic",
         "Tong", email = "dominic@insight-rx.com", role = "aut"),
         person("Kara", "Woo", email = "kara@insight-rx.com", role =
-        c("aut", "cre")), person("InsightRX", role = c("cph", "fnd")))
+        c("aut")), person("InsightRX", role = c("cph", "fnd")))
 Description: Provides equations commonly used in clinical
         pharmacokinetics and clinical pharmacology, such as equations
         for dose individualization, compartmental pharmacokinetics,
