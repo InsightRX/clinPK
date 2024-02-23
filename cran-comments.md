@@ -1,43 +1,35 @@
-## Test environments
-- R-hub windows-x86_64-devel (r-devel)
-- R-hub ubuntu-gcc-release (r-release)
-- R-hub fedora-clang-devel (r-devel)
-- Winbuilder (r-release)
-
 ## R CMD check results
-❯ On windows-x86_64-devel (r-devel), ubuntu-gcc-release (r-release), fedora-clang-devel (r-devel)
-  checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Kara Woo <kara@insight-rx.com>'
+
+0 errors | 0 warnings | 1 note
+
+❯ checking CRAN incoming feasibility ... [5s/30s] NOTE
+  Maintainer: ‘Ron Keizer <ron@insight-rx.com>’
   
   New maintainer:
-    Kara Woo <kara@insight-rx.com>
+    Ron Keizer <ron@insight-rx.com>
   Old maintainer(s):
-    Ron Keizer <ronkeizer@gmail.com>
-  
+    Kara Woo <kara@insight-rx.com>
+    
   Found the following (possibly) invalid URLs:
-    URL: https://academic.oup.com/clinchem/article/53/4/766/5627682
-      From: man/calc_egfr.Rd
-      Status: 403
-      Message: Forbidden
-    URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/
-      From: man/calc_egfr.Rd
-      Status: 403
-      Message: Forbidden
-    URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4238883/
-      From: man/calc_aki_stage.Rd
-      Status: 403
-      Message: Forbidden
-
-❯ On windows-x86_64-devel (r-devel)
-  checking for detritus in the temp directory ... NOTE
-  Found the following files/directories:
-    'lastMiKTeXException'
-
-0 errors ✔ | 0 warnings ✔ | 2 notes ✖
+  URL: https://ascopubs.org/doi/abs/10.1200/JCO.1989.7.11.1748
+    From: man/calc_carboplatin_calvert.Rd
+    Status: 403
+    Message: Forbidden
+  URL: https://www.nejm.org/doi/10.1056/NEJMms2004740
+    From: man/calc_egfr.Rd
+    Status: 403
+    Message: Forbidden
+  URL: https://www.nejm.org/doi/full/10.1056/NEJMoa2102953
+    From: man/calc_egfr.Rd
+    Status: 403
+    Message: Forbidden
+  URL: https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext
+    From: man/calc_egfr.Rd
+    Status: 403
+    Message: Forbidden
 
 ## Maintainer notes
 
-This release involves a change in maintainer from Ron Keizer to Kara Woo.
+This release involves a change in maintainer from Kara Woo to Ron Keizer.
 
-The three URLs that show 403 responses are valid and correct, but forbid
-requests with `curl` in the User-Agent header.
+The four URLs that show 403 responses are valid and correct, but may forbid requests with curl in the User-Agent header.
