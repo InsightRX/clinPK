@@ -35,7 +35,7 @@ pk_2cmt_inf <- function(
   A <- (1/V) * (alpha - (Q/V2))/(alpha-beta)
   B <- (1/V) * ((beta - Q/V2)/(beta-alpha))
 
-  for(i in 1:(length(unq_dos)-1)) {
+  for(i in seq(unq_dos)) {
     sel <- n_dos >= i-1
     tmp <- dat[sel,]
     tmp$t <- tmp$t - (i-1)*tau
