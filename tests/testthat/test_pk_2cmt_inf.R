@@ -12,7 +12,17 @@ test_that("PK 2cmt infusion over time", {
     Q = 2.28,
     V2 = 58.56
   )
-  expect_named(res, c("t", "dv"))
+  res_t24 <- pk_2cmt_inf(
+    t = 24,
+    dose = 1000,
+    tau = 12,
+    t_inf = 2,
+    CL = 2.99,
+    V = 54,
+    Q = 2.28,
+    V2 = 58.56
+  )
+expect_named(res, c("t", "dv"))
   expect_s3_class(res, "data.frame")
   expect_equal(res$t, 0:24)
   expect_equal(
@@ -22,6 +32,14 @@ test_that("PK 2cmt infusion over time", {
   expect_equal(
     round(res$dv[13:18], 2), 
     c(7.14, 15.46, 23.03, 21.09, 19.36, 17.81)
+  )
+  expect_equal(
+    res[res$t ==  24,]$dv,
+    res_t24$dv
+  )
+  expect_equal(
+    res[res$t ==  24,]$t,
+    res_t24$t
   )
 })
 
