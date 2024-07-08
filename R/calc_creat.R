@@ -43,7 +43,7 @@ calc_creat <- function (
       sex = sex,
       weight = weight,
       height = height,
-      adult_method=adult_method
+      adult_method = adult_method
     )
   )
   return(list(
