@@ -36,7 +36,7 @@ calc_creat <- function (
     "johanssen" = calc_creat_johanssen(
       age = age,
       sex = sex,
-      adult_method=adult_method
+      adult_method = adult_method
     ),
     "brooks" = calc_creat_brooks(
       age = age,
