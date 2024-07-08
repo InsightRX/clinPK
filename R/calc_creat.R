@@ -31,6 +31,48 @@ calc_creat <- function (
   adult_method = c("johanssen", "brooks"),
   digits = 1 ) {
   adult_method <- match.arg(adult_method)
+  
+  calc_creat_johanssen <- function(age, sex, adult_method) {
+    if(is.null(sex) || !all(sex %in% c("male", "female"))) {
+      stop("Sex needs to be either male or female!")
+    }
+    if(is.null(age)) {
+      stop("Age required")
+    }
+    scr <- rep(0, length(age))
+    scr[age <= 15] <- -2.37330 -(12.91367 * log(age[age <= 15])) + 23.93581 * sqrt(age[age <= 15])
+    sel1 <- (age > 15 & age < 18) & sex == "male"
+    scr[sel1] <- 9.5471 * age[sel1] - 87.847
+    sel2 <- (age > 15 & age < 18) & sex == "female"
+    scr[sel2] <- 4.7137 * age[sel2] - 15.347
+    scr[age >= 18 & sex == "male"]   <- 84
+    scr[age >= 18 & sex == "female"] <- 69.5
+    scr
+  }
+  
+  calc_creat_brooks <- function(age, sex, weight, height, adult_method) {
+    if(is.null(sex) || !all(sex %in% c("male", "female"))) {
+      stop("Sex needs to be either male or female!")
+    }
+    if(is.null(age)) {
+      stop("Age required")
+    }
+    if(is.null(weight) && adult_method == "brooks") {
+      stop("Weight is required")
+    }
+    if(is.null(height) && adult_method == "brooks") {
+      stop("Height is required")
+    }
+    scr <- rep(0, length(age))
+    scr[age <= 15] <- -2.37330 -(12.91367 * log(age[age <= 15])) + 23.93581 * sqrt(age[age <= 15])
+    sel1 <- (age > 15 & age < 18) & sex == "male"
+    scr[sel1]   <- 9.5471 * age[sel1] - 87.847
+    sel2 <- (age > 15 & age < 18) & sex == "female"
+    scr[sel2] <- 4.7137 * age[sel2] - 15.347
+    scr[age>18] <- (-0.1364288 + (0.0041581*age) + (0.1741357*ifelse(sex=="male",1,0)) + (0.0006403*weight) + (0.0039543*height)) * 88.4
+    scr
+  }
+  
   scr <- switch(
     adult_method,
     "johanssen" = calc_creat_johanssen(
@@ -52,45 +94,6 @@ calc_creat <- function (
     method = tolower(adult_method)
   ))
   
-  calc_creat_johanssen <- function(age, sex, adult_method) {
-    if(is.null(sex) || !all(sex %in% c("male", "female"))) {
-      stop("Sex needs to be either male or female!")
-    }
-    if(is.null(age)) {
-      stop("Age required.")
-    }
-    scr <- rep(0, length(age))
-    scr[age <= 15] <- -2.37330 -(12.91367 * log(age[age <= 15])) + 23.93581 * sqrt(age[age <= 15])
-    sel1 <- (age > 15 & age < 18) & sex == "male"
-    scr[sel1] <- 9.5471 * age[sel1] - 87.847
-    sel2 <- (age > 15 & age < 18) & sex == "female"
-    scr[sel2] <- 4.7137 * age[sel2] - 15.347
-    scr[age >= 18 & sex == "male"]   <- 84
-    scr[age >= 18 & sex == "female"] <- 69.5
-    scr
-  }
-  
-  calc_creat_brooks <- function(age, sex, weight, height, adult_method) {
-  if(is.null(sex) || !all(sex %in% c("male", "female"))) {
-    stop("Sex needs to be either male or female!")
-  }
-  if(is.null(age)) {
-    stop("Age required.")
-  }
-  if(is.null(weight) && adult_method == "brooks") {
-    stop("Weight is required")
-  }
-  if(is.null(height) && adult_method == "brooks") {
-    stop("Height is required")
-  }
-    scr <- rep(0, length(age))
-    scr[age <= 15] <- -2.37330 -(12.91367 * log(age[age <= 15])) + 23.93581 * sqrt(age[age <= 15])
-    sel1 <- (age > 15 & age < 18) & sex == "male"
-    scr[sel1]   <- 9.5471 * age[sel1] - 87.847
-    sel2 <- (age > 15 & age < 18) & sex == "female"
-    scr[sel2] <- 4.7137 * age[sel2] - 15.347
-    scr[age>18] <- (-0.1364288 + (0.0041581*age) + (0.1741357*ifelse(sex=="male",1,0)) + (0.0006403*weight) + (0.0039543*height)) * 88.4
-    scr
-  }
+
 }
 
