@@ -62,7 +62,7 @@ calc_creat <- function (
     scr <- rep(0, length(age))
     scr[age <= 15] <- -2.37330 -(12.91367 * log(age[age <= 15])) + 23.93581 * sqrt(age[age <= 15])
     sel1 <- (age > 15 & age < 18) & sex == "male"
-    scr[sel1]   <- 9.5471 * age[sel1] - 87.847
+    scr[sel1] <- 9.5471 * age[sel1] - 87.847
     sel2 <- (age > 15 & age < 18) & sex == "female"
     scr[sel2] <- 4.7137 * age[sel2] - 15.347
     scr[age >= 18 & sex == "male"]   <- 84
