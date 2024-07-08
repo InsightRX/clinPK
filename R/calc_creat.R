@@ -51,6 +51,7 @@ calc_creat <- function (
     unit = "micromol/L",
     method = tolower(adult_method)
   ))
+  
   calc_creat_johanssen <- function(age, sex, adult_method) {
     if(is.null(sex) || !all(sex %in% c("male", "female"))) {
       stop("Sex needs to be either male or female!")
