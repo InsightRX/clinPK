@@ -69,6 +69,7 @@ calc_creat <- function (
     scr[age >= 18 & sex == "female"] <- 69.5
     scr
   }
+  
   calc_creat_brooks <- function(age, sex, weight, height, adult_method) {
   if(is.null(sex) || !all(sex %in% c("male", "female"))) {
     stop("Sex needs to be either male or female!")
