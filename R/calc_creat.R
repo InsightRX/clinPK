@@ -10,7 +10,7 @@
 #' which describes a flat serum creatinine dependent on sex, and Brooks et al 
 #' (unpublished) which is a linear regression built on the NHANES open-source
 #' data and takes into account sex, age, weight, and height. 
-Equation: `lm(SCr~Age+Sex+Weight+Height, data=NHANES)`
+#' Equation: `lm(SCr~Age+Sex+Weight+Height, data=NHANES)`
 #'
 #'
 #' @param sex sex, either `male` or `female`
@@ -21,7 +21,7 @@ Equation: `lm(SCr~Age+Sex+Weight+Height, data=NHANES)`
 #' @param digits number of digits to round to
 #' @examples
 #' calc_creat(sex = "male", age = 40)
-#' calc_creat(sex = "male", age = 40, wt = 100, ht = 175, method="Brooks)
+#' calc_creat(sex = "male", age = 40, wt = 100, ht = 175, method="brooks)
 #' calc_creat(sex = "male", age = c(10, 17, 60))
 #' @export
 calc_creat <- function (
