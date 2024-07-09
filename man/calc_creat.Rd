@@ -4,12 +4,25 @@
 \alias{calc_creat}
 \title{Estimate serum creatinine}
 \usage{
-calc_creat(sex = NULL, age = NULL, digits = 1)
+calc_creat(
+  sex = NULL,
+  age = NULL,
+  weight = NULL,
+  height = NULL,
+  adult_method = c("johanssen", "brooks"),
+  digits = 1
+)
 }
 \arguments{
 \item{sex}{sex, either `male` or `female`}
 
 \item{age}{age in years}
+
+\item{weight}{weight in kg (default 75 kg)}
+
+\item{height}{height in cm (default 165 cm)}
+
+\item{adult_method}{estimation adult method, `johanssen` (default) or `brooks`,}
 
 \item{digits}{number of digits to round to}
 }
@@ -17,12 +30,13 @@ calc_creat(sex = NULL, age = NULL, digits = 1)
 Calculate an estimated serum creatinine. Function takes vectorized input as well.
 }
 \details{
-Uses equations described in Ceriotti et al. Clin Chem. 2008, and Junge W et al.
-Clin Chim Acta. 2004. For age 15-18, a linear interpolation is used between
-equations for <15 and >18 years as described in Johanssen A et al. Ther Drug
-Monit 2011.
-}
-\examples{
-calc_creat(sex = "male", age = 40)
-calc_creat(sex = "male", age = c(10, 17, 60))
+For children and adolescents: Uses equations described in Ceriotti et al. 
+Clin Chem. 2008, and Junge W et al. Clin Chim Acta. 2004. For age 15-18, 
+a linear interpolation is used between equations for <15 Johanssen A et al. 
+Ther Drug Monit 2011.
+For adults:  Two methods are available Johanssen et al. Ther Drug Monit 2011.
+which describes a flat serum creatinine dependent on sex, and Brooks et al 
+(unpublished) which is a linear regression built on the NHANES open-source
+data and takes into account sex, age, weight, and height. 
+Equation: `lm(SCr~Age+Sex+Weight+Height, data=NHANES)`
 }

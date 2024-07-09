@@ -2,10 +2,19 @@
 % Please edit documentation in R/clinPK-package.R
 \docType{package}
 \name{clinPK-package}
+\alias{clinPK}
 \alias{clinPK-package}
 \title{clinPK}
 \description{
 Equations and tool for clinical pharmacokinetics
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/InsightRX/clinPK}
+  \item \url{https://insightrx.github.io/clinPK/}
+}
+
 }
 \author{
 Ron Keizer \email{ronkeizer@gmail.com}
