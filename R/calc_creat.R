@@ -10,11 +10,7 @@
 #' which describes a flat serum creatinine dependent on sex, and Brooks et al 
 #' (unpublished) which is a linear regression built on the NHANES open-source
 #' data and takes into account sex, age, weight, and height. 
-<<<<<<< HEAD
-Equation: 'lm(SCr~Age+Sex+Weight+Height, data=NHANES)'
-=======
 Equation: `lm(SCr~Age+Sex+Weight+Height, data=NHANES)`
->>>>>>> d16766dd6a05e5b29ec295c6d0208371db2624e0
 #'
 #'
 #' @param sex sex, either `male` or `female`
