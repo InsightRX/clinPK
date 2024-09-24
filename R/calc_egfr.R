@@ -156,8 +156,7 @@ calc_egfr <- function (
     scr_unit <- rep(scr_unit, length(scr))
   }
   scr_unit <- tolower(gsub("%2F", "/", scr_unit))
-  mol_unit <- grepl("mol", scr_unit)
-  scr[mol_unit] <- scr[mol_unit] / 88.4
+  scr <- convert_creat_unit(scr, scr_unit, "mg/dl")$value
 
   # ---- Format Sex
   sex <- ifelse(is.nil(sex), '', tolower(sex))

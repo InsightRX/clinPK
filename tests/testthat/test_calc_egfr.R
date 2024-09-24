@@ -713,7 +713,7 @@ test_that("calc_egfr converts scr appropriately", {
     age = 40,
     sex = "female",
     weight = 80,
-    scr = 1 * 88.4,
+    scr = 1 * 10e3/113.12,
     scr_unit = "micromol_l",
     method = "cockcroft_gault",
     verbose = FALSE
