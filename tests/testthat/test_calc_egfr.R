@@ -689,3 +689,36 @@ test_that("calc_egfr warns and returns NULL if sex isn't supported", {
   )
   expect_null(res$value)
 })
+
+test_that("calc_egfr converts scr appropriately", {
+  res1 <- calc_egfr(
+    age = 40,
+    sex = "female",
+    weight = 80,
+    scr = 1,
+    scr_unit = "MG/DL",
+    method = "cockcroft_gault",
+    verbose = FALSE
+  )
+  res2 <- calc_egfr(
+    age = 40,
+    sex = "female",
+    weight = 80,
+    scr = 1,
+    scr_unit = "mg_dl",
+    method = "cockcroft_gault",
+    verbose = FALSE
+  )
+  res3 <- calc_egfr(
+    age = 40,
+    sex = "female",
+    weight = 80,
+    scr = 1 * 88.4,
+    scr_unit = "micromol_l",
+    method = "cockcroft_gault",
+    verbose = FALSE
+  )
+  expect_equal(res1$value, 94.444444)
+  expect_equal(res2$value, 94.444444)
+  expect_equal(res3$value, 94.444444)
+})
