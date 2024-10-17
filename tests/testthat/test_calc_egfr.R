@@ -722,3 +722,63 @@ test_that("calc_egfr converts scr appropriately", {
   expect_equal(res2$value, 94.444444)
   expect_equal(res3$value, 94.444444)
 })
+
+test_that("missing scr_units handled well", {
+  # with unit specified as default
+  expect_res <- calc_egfr(
+    age = 40,
+    sex = "male",
+    weight = 80,
+    scr = 3,
+    scr_unit = NA,
+    method = "cockcroft_gault",
+    verbose = FALSE,
+    max_value = 150,
+  )$value
+  
+  # with character(0)
+  expect_message(
+    res1 <- calc_egfr(
+      age = 40,
+      sex = "male",
+      weight = 80,
+      scr = 3,
+      scr_unit = character(0),
+      method = "cockcroft_gault",
+      max_value = 150,
+    )$value,
+    "Creatinine unit not specified, assuming mg/dL."
+  )
+  
+  # with NA
+  expect_message(
+    res2 <- calc_egfr(
+      age = 40,
+      sex = "male",
+      weight = 80,
+      scr = 3,
+      scr_unit = NA,
+      method = "cockcroft_gault",
+      max_value = 150,
+    )$value,
+    "Creatinine unit not specified, assuming mg/dL."
+  )
+  
+  # with NULL
+  expect_message(
+    res3 <- calc_egfr(
+      age = 40,
+      sex = "male",
+      weight = 80,
+      scr = 3,
+      scr_unit = NULL,
+      method = "cockcroft_gault",
+      max_value = 150,
+    )$value,
+    "Creatinine unit not specified, assuming mg/dL."
+  )
+  
+  expect_equal(res1, expect_res)
+  expect_equal(res2, expect_res)
+  expect_equal(res3, expect_res)
+})
