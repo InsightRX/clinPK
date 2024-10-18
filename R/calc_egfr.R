@@ -146,7 +146,7 @@ calc_egfr <- function (
   }
 
   # ---- Convert Creatinine
-  if (is.null(scr_unit)) {
+  if (is.null(scr_unit) || length(scr_unit) == 0 || all(is.na(scr_unit))) {
     if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
     scr_unit <- "mg/dl"
   } else if (!(all(tolower(scr_unit) %in% valid_units("scr")))) {
