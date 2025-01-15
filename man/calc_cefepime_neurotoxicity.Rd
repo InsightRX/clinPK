@@ -17,7 +17,7 @@ Calculate probability of cefepime-associated neurotoxicity as a function of
 cefepime plasma trough concentrations.
 }
 \examples{
-calc_cefepime_neurotoxicity(trough_concentration = c(12, 16))
+calc_cefepime_neurotoxicity(trough_concentration = c(13.7, 17.8))
 }
 \references{
 \href{https://doi.org/10.1016/j.cmi.2019.06.028}{
