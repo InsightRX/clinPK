@@ -21,7 +21,7 @@
 #' @param digits number of digits to round to
 #' @examples
 #' calc_creat(sex = "male", age = 40)
-#' calc_creat(sex = "male", age = 40, wt = 100, ht = 175, method="brooks)
+#' calc_creat(sex = "male", age = 40, weight = 100, height = 175, adult_method = "brooks")
 #' calc_creat(sex = "male", age = c(10, 17, 60))
 #' @export
 calc_creat <- function (

@@ -40,3 +40,8 @@ which describes a flat serum creatinine dependent on sex, and Brooks et al
 data and takes into account sex, age, weight, and height. 
 Equation: `lm(SCr~Age+Sex+Weight+Height, data=NHANES)`
 }
+\examples{
+calc_creat(sex = "male", age = 40)
+calc_creat(sex = "male", age = 40, weight = 100, height = 175, adult_method = "brooks")
+calc_creat(sex = "male", age = c(10, 17, 60))
+}
