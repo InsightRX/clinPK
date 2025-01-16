@@ -7,8 +7,10 @@ Authors@R: c(person("Ron", "Keizer", email = "ron@insight-rx.com", role
         = c("aut",  "cre")), person("Jasmine", "Hughes", email =
         "jasmine@insight-rx.com", role = "aut"), person("Dominic",
         "Tong", email = "dominic@insight-rx.com", role = "aut"),
-        person("Kara", "Woo", email = "kara@insight-rx.com", role =
-        c("aut")), person("InsightRX", role = c("cph", "fnd")))
+        person("Kara", "Woo", email = "kara@insight-rx.com", role = c("aut")), 
+        person("Michael", "McCarthy", email = "michael.mccarthy@insight-rx.com", 
+        role = "aut"),
+        person("InsightRX", role = c("cph", "fnd")))
 Description: Provides equations commonly used in clinical
         pharmacokinetics and clinical pharmacology, such as equations
         for dose individualization, compartmental pharmacokinetics,
@@ -20,6 +22,6 @@ URL: https://github.com/InsightRX/clinPK,
         https://insightrx.github.io/clinPK/
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
