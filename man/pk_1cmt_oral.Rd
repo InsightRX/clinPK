@@ -46,5 +46,5 @@ Bialer M. A simple method for determining whether absorption and elimination rat
 
 Nielsen JC, Hutmacher MM et al. J Pharmacokinet Pharmacodyn. 2012 Dec;39(6):619-34. doi: 10.1007/s10928-012-9274-0. Epub 2012 Sep 23.
 
-https://static-content.springer.com/esm/art%3A10.1007%2Fs10928-012-9274-0/MediaObjects/10928_2012_9274_MOESM1_ESM.docx
+https://static-content.springer.com/esm/art\%3A10.1007\%2Fs10928-012-9274-0/MediaObjects/10928_2012_9274_MOESM1_ESM.docx
 }

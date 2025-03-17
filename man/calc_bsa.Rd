@@ -15,7 +15,7 @@ calc_bsa(
 
 \item{height}{height}
 
-\item{method}{estimation method, choose from `dubois`, `mosteller`, `haycock`, `gehan_george`, `boyd`}
+\item{method}{estimation method, choose from \code{dubois}, \code{mosteller}, \code{haycock}, \code{gehan_george}, \code{boyd}}
 }
 \value{
 Returns a list of the following elements:

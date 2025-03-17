@@ -18,10 +18,10 @@ check_covs_available(
 
 \item{verbose}{stop and describe missing covariate(s)?}
 
-\item{fail}{invoke `stop()` if not all covariates available?}
+\item{fail}{invoke \code{stop()} if not all covariates available?}
 }
 \description{
-returns true if all patient covs specified in required covs are non-null, non-NA and not a 0-character string. See `is.nil` for missing data types checked. Returns TRUE if no covariates are required.
+returns true if all patient covs specified in required covs are non-null, non-NA and not a 0-character string. See \code{is.nil} for missing data types checked. Returns TRUE if no covariates are required.
 }
 \examples{
 check_covs_available(

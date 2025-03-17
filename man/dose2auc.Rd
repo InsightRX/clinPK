@@ -13,7 +13,7 @@ dose2auc(dose, CL, V, t_auc = NULL)
 
 \item{V}{Volume of distribution}
 
-\item{t_auc}{if AUC_t is desired, `t_auc` specifies time until which AUC_t is calculated}
+\item{t_auc}{if AUC_t is desired, \code{t_auc} specifies time until which AUC_t is calculated}
 }
 \description{
 Convert dose to expected AUCinf or AUCt for 1 compartment linear PK model

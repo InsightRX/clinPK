@@ -9,11 +9,11 @@ conc2mol(conc = NULL, unit_conc = NULL, mol_weight = NULL, unit_mol = NULL)
 \arguments{
 \item{conc}{concentration in e.g. g/L}
 
-\item{unit_conc, }{one of `g/l`, `mg/l`, `microg/l`, `mcg/l", `ng/l`, `mg/ml`, `microg/ml`, `mcg/ml`, `ng/ml`}
+\item{unit_conc, }{one of \code{g/l}, \code{mg/l}, \code{microg/l}, \verb{mcg/l", }ng/l\verb{, }mg/ml\verb{, }microg/ml\verb{, }mcg/ml\verb{, }ng/ml`}
 
 \item{mol_weight}{concentration in g/mol}
 
-\item{unit_mol}{one of `mol/L`, `mmol/mL`, `mmol/L`}
+\item{unit_mol}{one of \code{mol/L}, \code{mmol/mL}, \code{mmol/L}}
 }
 \description{
 Convert concentration to molar

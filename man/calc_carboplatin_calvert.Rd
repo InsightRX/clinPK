@@ -9,15 +9,15 @@ calc_carboplatin_calvert(target_auc, gfr = NULL, ...)
 \arguments{
 \item{target_auc}{target AUC, in mg/ml-min, typically between 2-8 mg/ml-min}
 
-\item{gfr}{glomerular filtration rate, in ml/min. See also 
-`clinPK::calc_egfr`.}
+\item{gfr}{glomerular filtration rate, in ml/min. See also
+\code{clinPK::calc_egfr}.}
 
-\item{...}{arguments passed on to `calc_egfr` if gfr is not supplied}
+\item{...}{arguments passed on to \code{calc_egfr} if gfr is not supplied}
 }
 \description{
 The Calvert equation calculates a dose expected to bring the patient to the
-target AUC given their glomerular filtration rate (GFR). The original 
-equation was developed on a data set of 18 individuals with GFR of 
+target AUC given their glomerular filtration rate (GFR). The original
+equation was developed on a data set of 18 individuals with GFR of
 33-136 ml/min.
 }
 \examples{

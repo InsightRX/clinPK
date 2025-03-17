@@ -11,8 +11,8 @@ remove_lt_gt(x)
 }
 \value{
 If non-numeric characters were successfully removed, returns a
-  numeric vector. If some elements of `x` contained other characters, their
-  original value will be returned and the result will be a character vector.
+numeric vector. If some elements of \code{x} contained other characters, their
+original value will be returned and the result will be a character vector.
 }
 \description{
 The following characters will be removed from strings: <, >, =, space. If

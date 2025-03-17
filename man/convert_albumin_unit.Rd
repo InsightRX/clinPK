@@ -13,13 +13,13 @@ convert_albumin_unit(
 \arguments{
 \item{value}{albumin measurements}
 
-\item{unit_in}{from unit, e.g. `"g_l"`.}
+\item{unit_in}{from unit, e.g. \code{"g_l"}.}
 
-\item{unit_out}{to flow unit, e.g. `"g_dl"`}
+\item{unit_out}{to flow unit, e.g. \code{"g_dl"}}
 }
 \description{
-Accepted units are "g_l", "g_dl", or "micromol_l". Arguments supplied to `value` and
-`unit_in` units must be of the same length. "To" unit must be of length 1.
+Accepted units are "g_l", "g_dl", or "micromol_l". Arguments supplied to \code{value} and
+\code{unit_in} units must be of the same length. "To" unit must be of length 1.
 #'
 }
 \examples{

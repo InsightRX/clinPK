@@ -10,7 +10,7 @@ accumulation_ratio(kel = NULL, halflife = NULL, tau = 24)
 \arguments{
 \item{kel}{drug elimination rate}
 
-\item{halflife}{halflife. Either `kel` or `halflife` is required.}
+\item{halflife}{halflife. Either \code{kel} or \code{halflife} is required.}
 
 \item{tau}{dosing interval}
 }

@@ -20,7 +20,7 @@ other dosing intervals or patient populations.
 }
 \note{
 The intercept and slope used in this function match Figure 2 in the cited
-paper, but differ slightly from the values provided in the text. This 
+paper, but differ slightly from the values provided in the text. This
 interpretation was confirmed via correspondence with the authors.
 }
 \examples{

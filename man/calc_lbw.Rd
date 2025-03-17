@@ -18,11 +18,11 @@ calc_lbw(
 
 \item{bmi}{bmi}
 
-\item{sex}{sex, either `male` of `female`}
+\item{sex}{sex, either \code{male} of \code{female}}
 
 \item{height}{height in cm}
 
-\item{method}{estimation method, either `green` (default), `boer`, `james`, `hume`}
+\item{method}{estimation method, either \code{green} (default), \code{boer}, \code{james}, \code{hume}}
 
 \item{digits}{round to number of digits}
 }
@@ -38,11 +38,11 @@ Get an estimate of lean body weight (LBW, in kg) based on weight, height, and se
 Note: technically not the same as fat-free mass, although difference is small.
 
 References:
-`green`: Green and Duffull. Clin Pharmacol Ther 2002;
-`james`: Absalom AR et al. Br J Anaesth 2009; 103:26-37.
-         James W. Research on obesity. London: Her Majesty's Stationary Office, 1976.
-`hume` : Hume R et al. J Clin Pathol. 1966 Jul; 19(4):389-91.
-`boer` : Boer P et al. Am J Physiol 1984; 247: F632-5
+\code{green}: Green and Duffull. Clin Pharmacol Ther 2002;
+\code{james}: Absalom AR et al. Br J Anaesth 2009; 103:26-37.
+James W. Research on obesity. London: Her Majesty's Stationary Office, 1976.
+\code{hume} : Hume R et al. J Clin Pathol. 1966 Jul; 19(4):389-91.
+\code{boer} : Boer P et al. Am J Physiol 1984; 247: F632-5
 }
 \examples{
 calc_lbw(weight = 80, height = 170, sex = "male")

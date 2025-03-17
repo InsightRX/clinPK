@@ -15,7 +15,7 @@ find_nearest_interval(
 
 \item{possible}{available increments of dose}
 
-\item{type}{pick either `nearest` absolute interval, or nearest `lower`, or nearest `higher` interval.}
+\item{type}{pick either \code{nearest} absolute interval, or nearest \code{lower}, or nearest \code{higher} interval.}
 }
 \description{
 Generic function to calculate the interval nearest to a possible dosing interval

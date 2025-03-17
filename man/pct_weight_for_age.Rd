@@ -15,13 +15,13 @@ pct_weight_for_age(
 \arguments{
 \item{age}{age in years}
 
-\item{weight}{weight in kg. Optional, if specified, will calculate closest percentile and return in list as `percentile`}
+\item{weight}{weight in kg. Optional, if specified, will calculate closest percentile and return in list as \code{percentile}}
 
-\item{sex}{either `male` or `female`}
+\item{sex}{either \code{male} or \code{female}}
 
 \item{return_median}{just return the median expected value}
 
-\item{...}{parameters passed to `read_who_table()`}
+\item{...}{parameters passed to \code{read_who_table()}}
 }
 \description{
 Based on tables from WHO: http://www.who.int/childgrowth/standards/weight_for_age/en/

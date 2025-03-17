@@ -18,17 +18,17 @@ pk_1cmt_inf_dose_for_range(
 \arguments{
 \item{target}{numeric value of target}
 
-\item{type}{target type, one of `auc`, `auc24`, `ctrough`, `cmin`}
+\item{type}{target type, one of \code{auc}, \code{auc24}, \code{ctrough}, \code{cmin}}
 
 \item{conc_range}{concentration range to stay within, vector of length 2}
 
-\item{parameters}{list of `CL` and `V`, or `KEL` and `CL`}
+\item{parameters}{list of \code{CL} and \code{V}, or \code{KEL} and \code{CL}}
 
 \item{interval}{dosing interval}
 
 \item{t_inf}{infusion time}
 
-\item{optimize_interval}{find optimal interval (to stay within `conc_range`?}
+\item{optimize_interval}{find optimal interval (to stay within \code{conc_range}?}
 
 \item{round_interval}{round interval to nearest nominal interval?}
 }

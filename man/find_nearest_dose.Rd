@@ -11,7 +11,7 @@ find_nearest_dose(dose = NULL, increment = 250, type = "round")
 
 \item{increment}{available increments of dose}
 
-\item{type}{how to round, one of `round`, `floor`, or `ceiling`}
+\item{type}{how to round, one of \code{round}, \code{floor}, or \code{ceiling}}
 }
 \description{
 Generic function to calculate the dose nearest to a specific dose unit increment

@@ -15,9 +15,9 @@ calc_dosing_weight(weight, height, age, sex, verbose = TRUE, ...)
 
 \item{sex}{sex}
 
-\item{verbose}{verbosity (`TRUE` or `FALSE`)}
+\item{verbose}{verbosity (\code{TRUE} or \code{FALSE})}
 
-\item{...}{pased to `calc_abw()` function}
+\item{...}{pased to \code{calc_abw()} function}
 }
 \value{
 Returns a list of the following elements:
@@ -26,14 +26,16 @@ Returns a list of the following elements:
 \item{type}{Type of dosing weight selected, e.g., total body weight, ideal body weight.}
 }
 \description{
-Dosing weight is determined based on total (TBW), ideal (IBW), or 
+Dosing weight is determined based on total (TBW), ideal (IBW), or
 adjusted (ABW) body weight in kg.
 }
 \details{
 This is derived using following:
-- In principle, use IBW
-- If total body weight (TBW) > 1.2*IBW, then use ABW
-- If TBW < IBW, use TBW
+\itemize{
+\item In principle, use IBW
+\item If total body weight (TBW) > 1.2*IBW, then use ABW
+\item If TBW < IBW, use TBW
+}
 }
 \examples{
 calc_dosing_weight(weight = 50, height = 170, sex = "female", age = 50)

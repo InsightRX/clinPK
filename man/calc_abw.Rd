@@ -15,13 +15,13 @@ calc_abw(weight = NULL, ibw = NULL, factor = 0.4, verbose = TRUE, ...)
 
 \item{verbose}{show output?}
 
-\item{...}{parameters passed to ibw function (if `ibw` not specified)}
+\item{...}{parameters passed to ibw function (if \code{ibw} not specified)}
 }
 \value{
 adjusted body weight in kg
 }
 \description{
-Often used for chemotherapy calculations when actual weight > 120% of IBW.
+Often used for chemotherapy calculations when actual weight > 120\% of IBW.
 Adjusted body weight is returned in units of kg.
 }
 \examples{

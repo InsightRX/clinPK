@@ -13,7 +13,7 @@ auc2dose(auc, CL, V, t_auc = NA)
 
 \item{V}{Volume of distribution}
 
-\item{t_auc}{if AUCtau is not known but only AUCt, `t_auc` specifies time until which AUC_t is calculated to be able to calculate dose}
+\item{t_auc}{if AUCtau is not known but only AUCt, \code{t_auc} specifies time until which AUC_t is calculated to be able to calculate dose}
 }
 \description{
 Convert AUCtau or AUCt to dose (for 1-compartment linear PK model)

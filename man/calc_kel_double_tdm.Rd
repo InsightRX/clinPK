@@ -26,7 +26,7 @@ calc_kel_double_tdm(
 
 \item{t_inf}{infusion time}
 
-\item{V}{if specified, use that (empiric) value and don't estimate from data. Default `NULL`.}
+\item{V}{if specified, use that (empiric) value and don't estimate from data. Default \code{NULL}.}
 
 \item{steady_state}{samples taken at steady state? Only influences AUCtau.}
 

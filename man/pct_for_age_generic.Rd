@@ -15,13 +15,13 @@ pct_for_age_generic(
 \arguments{
 \item{age}{age in years}
 
-\item{value}{height in kg. Optional, if specified, will calculate closest percentile and return in list as `percentile`}
+\item{value}{height in kg. Optional, if specified, will calculate closest percentile and return in list as \code{percentile}}
 
-\item{sex}{either `male` or `female`}
+\item{sex}{either \code{male} or \code{female}}
 
 \item{variable}{weight or height?}
 
-\item{...}{parameters passed to `read_who_table()`}
+\item{...}{parameters passed to \code{read_who_table()}}
 }
 \description{
 This is the underlying function, the exposed functions are pct_weight_for_age() and pct_height_for_age()

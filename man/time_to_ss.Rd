@@ -10,11 +10,11 @@ time_to_ss(kel = NULL, halflife = NULL, ss = 0.9, in_doses = FALSE, tau = NULL)
 \arguments{
 \item{kel}{drug elimination rate}
 
-\item{halflife}{halflife. Either `kel` or `halflife` is required.}
+\item{halflife}{halflife. Either \code{kel} or \code{halflife} is required.}
 
-\item{ss}{level considered "steady state", e.g. `0.9` is 90\% of true steady state.}
+\item{ss}{level considered "steady state", e.g. \code{0.9} is 90\% of true steady state.}
 
-\item{in_doses}{return the number of doses instead of time unit? Default `FALSE`. Requires `tau` as well.}
+\item{in_doses}{return the number of doses instead of time unit? Default \code{FALSE}. Requires \code{tau} as well.}
 
 \item{tau}{dosing interval}
 }

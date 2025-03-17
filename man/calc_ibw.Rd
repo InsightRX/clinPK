@@ -29,38 +29,39 @@ ibw_devine(age, height = NULL, sex = NULL)
 \item{sex}{sex}
 
 \item{method_children}{method to use for children >1 and <18 years. Currently
-`"standard"` is the only method that is supported.}
+\code{"standard"} is the only method that is supported.}
 
-\item{method_adults}{method to use for >=18 years. Currently `"devine"` is
+\item{method_adults}{method to use for >=18 years. Currently \code{"devine"} is
 the only method that is supported (Devine BJ. Drug Intell Clin Pharm.
 1974;8:650-655).}
 }
 \description{
-Get an estimate of ideal body weight. This function allows several commonly used equations
+Get an estimate of ideal body weight. This function allows several commonly
+used equations
 }
 \details{
 Equations:
 
-<1yo Use actual body weight
+For <1yo Use actual body weight
 
-1-17 years old ('standard'):
-  if height < 5ft:
-    IBW= (height in cm2 x 1.65)/1000
-  if height > 5ft:
-    IBW (male) = 39 + (2.27 x height in inches over 5 feet)
-    IBW (female) = 42.2 + (2.27 x height in inches over 5 feet)
+For 1-17 years old ('standard'):
+if height < 5ft:
+IBW= (height in cm2 x 1.65)/1000
+if height > 5ft:
+IBW (male) = 39 + (2.27 x height in inches over 5 feet)
+IBW (female) = 42.2 + (2.27 x height in inches over 5 feet)
 
-  Methods not implemented yet:
-  McLaren: IBW =
-    - step1:   x = 50th percentile height for given age
-    - step2: IBW = 50th percentile weight for x on weight-for-height scale
-  Moore: IBW = weight at percentile x for given age, where x is percentile of height for given age
-  BMI: IBW = 50th percentile of BMI for given age x (height in m)^2
-  ADA: IBW = 50th percentile of WT for given age
+Methods not implemented yet:
+McLaren: IBW =
+- step1:   x = 50th percentile height for given age
+- step2: IBW = 50th percentile weight for x on weight-for-height scale
+Moore: IBW = weight at percentile x for given age, where x is percentile of height for given age
+BMI: IBW = 50th percentile of BMI for given age x (height in m)^2
+ADA: IBW = 50th percentile of WT for given age
 
->= 18 years old (Devine equation)
-  IBW (male) = 50 + (2.3 x height in inches over 5 feet)
-  IBW (female) = 45.5 + (2.3 x height in inches over 5 feet)
+For >= 18 years old (Devine equation)
+IBW (male) = 50 + (2.3 x height in inches over 5 feet)
+IBW (female) = 45.5 + (2.3 x height in inches over 5 feet)
 }
 \examples{
 calc_ibw(weight = 70, height = 170, age = 40, sex = "female")

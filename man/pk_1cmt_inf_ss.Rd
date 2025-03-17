@@ -27,7 +27,7 @@ pk_1cmt_inf_ss(
 
 \item{V}{volume of distribution}
 
-\item{ruv}{residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. `list(prop=0.1, add=1, exp=0)`}
+\item{ruv}{residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. \code{list(prop=0.1, add=1, exp=0)}}
 }
 \description{
 Concentration predictions for 2-compartmental PK model with infusion dosing at steady state
