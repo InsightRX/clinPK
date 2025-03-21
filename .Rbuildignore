@@ -11,3 +11,4 @@ slack_notification.sh
 ^pkgdown$
 ^\.github$
 ^CRAN-SUBMISSION$
+^data-raw$
