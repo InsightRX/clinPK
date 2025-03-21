@@ -25,6 +25,8 @@ reference:
       - pct_weight_for_age
       - pct_height_for_age
       - pct_bmi_for_age
+      - pct_weight_for_age_v
+      - lms
   - title: Clinical chemistry
     contents:
       - calc_egfr
@@ -110,3 +112,6 @@ reference:
       - read_who_table
       - valid_units
       - add_ruv
+  - title: Data sets
+    contents:
+      - growth-charts
