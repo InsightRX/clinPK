@@ -239,7 +239,7 @@ pct_growth_generic <- function(
         # we do not need to crawl through every value in the `y` column.
         y_round <- round(.y)
         y_below <- ifelse(y_round == y_min, y_min, y_round - 0.5)
-        y_above <- ifelse(y_round == y_min, y_max, y_round + 0.5) 
+        y_above <- ifelse(y_round == y_max, y_max, y_round + 0.5) 
         sex_char <- ifelse(.sex == "male", 1, 2)
         growth_chart <- growth_chart[
           growth_chart$sex == sex_char & growth_chart[[y_col]] == y_below |
