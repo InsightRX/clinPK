@@ -235,11 +235,11 @@ pct_growth_generic <- function(
     FUN = function(.y, .exact_match, .sex) {
       if (isFALSE(.exact_match)) {
         # For interpolation, just take the rows above and below the `y` value.
-        # We know these will be .5 values, so we do not need to crawl through
-        # every value in the `y` column.
+        # We know these will be .5 values or the `y_min` or `y_max` values, so
+        # we do not need to crawl through every value in the `y` column.
         y_round <- round(.y)
-        y_below <- y_round - 0.5
-        y_above <- y_round + 0.5
+        y_below <- ifelse(y_round == y_min, y_min, y_round - 0.5)
+        y_above <- ifelse(y_round == y_min, y_max, y_round + 0.5) 
         sex_char <- ifelse(.sex == "male", 1, 2)
         growth_chart <- growth_chart[
           growth_chart$sex == sex_char & growth_chart[[y_col]] == y_below |

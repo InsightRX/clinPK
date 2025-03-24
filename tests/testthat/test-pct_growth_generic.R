@@ -30,6 +30,28 @@ test_that("out of range y values throw an error", {
   )
 })
 
+test_that("y values that round to the y min or max can be interpolated", {
+  # y_min:
+  expect_no_error(
+    pct_growth_generic(
+      x = 3.5,
+      y = 0.1,
+      sex = "male",
+      growth_chart = weight_for_age
+    )
+  )
+  # y_max:
+  expect_no_error(
+    pct_growth_generic(
+      x = 60,
+      y = 19.9,
+      y_units = "years",
+      sex = "male",
+      growth_chart = weight_for_age
+    )
+  )
+})
+
 test_that("a vector is returned by default, otherwise data.frame", {
   expect_type(
     pct_growth_generic(
@@ -127,7 +149,7 @@ test_that("unit conversion works for age", {
   expect_equal(out_months, out_days)
 })
 
-test_that("unit conversion works for age", {
+test_that("unit conversion works for height", {
   out_cm <- pct_growth_generic(
     x = weight_for_height_infants$P50,
     y = weight_for_height_infants$height,
