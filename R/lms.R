@@ -44,7 +44,7 @@ lms_for_x <- function(l, m, s, z = NULL, p = NULL) {
   if (!is.null(z) & !is.null(p)) {
     stop("Only one of `z` or `p` can be provided, not both.")
   } else if (!is.null(p)) {
-    z <- qnorm(p)
+    z <- stats::qnorm(p)
   }
   x <- ifelse(
     l == 0,
@@ -63,6 +63,6 @@ lms_for_z <- function(l, m, s, x, value = c("z", "p")) {
     log(x/m)/s,
     (((x/m)^l) - 1) / (l*s)
   )
-  if (value == "p") z <- pnorm(z) * 100
+  if (value == "p") z <- stats::pnorm(z) * 100
   z
 }

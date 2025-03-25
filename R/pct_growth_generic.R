@@ -250,13 +250,13 @@ pct_growth_generic <- function(
         # interpolated row to be passed to the growth curve equations.
         growth_chart_interp <- data.frame(
           sex = ifelse(.sex == "male", 1, 2),
-          L = approx(
+          L = stats::approx(
             x = growth_chart[[y_col]], y = growth_chart$L, xout = .y
           )$y,
-          M = approx(
+          M = stats::approx(
             x = growth_chart[[y_col]], y = growth_chart$M, xout = .y
           )$y,
-          S = approx(
+          S = stats::approx(
             x = growth_chart[[y_col]], y = growth_chart$S, xout = .y
           )$y
         )
