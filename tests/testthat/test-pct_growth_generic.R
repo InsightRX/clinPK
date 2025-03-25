@@ -68,7 +68,7 @@ test_that("a vector is returned by default, otherwise data.frame", {
       y = 3.5,
       sex = "male",
       growth_chart = weight_for_age,
-      return_vector = FALSE
+      return_numeric = FALSE
     ),
     "data.frame"
   )

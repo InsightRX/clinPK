@@ -9,7 +9,7 @@ pct_growth_generic(
   y,
   sex,
   growth_chart,
-  return_vector = TRUE,
+  return_numeric = TRUE,
   x_argname = "x",
   y_argname = "y",
   y_units = "raw"
@@ -25,18 +25,18 @@ pct_growth_generic(
 
 \item{growth_chart}{A CDC growth chart data frame (see \link{growth-charts}).}
 
-\item{return_vector}{Return a vector of percentiles for the given physical
-measurement? Defaults to \code{TRUE}. If \code{FALSE}, a data frame is returned with
-the observed percentile for the given physical measurement (\code{P_obs}), along
-with a select distribution of physical measurements at particular
-percentiles (\code{P01} to \code{P999}; the 0.1st to 99.9th percentiles).}
+\item{return_numeric}{Return a numeric vector of percentiles for the given
+physical measurement? Defaults to \code{TRUE}. If \code{FALSE}, a data frame is
+returned with the observed percentile for the given physical measurement
+(\code{P_obs}), along with a select distribution of physical measurements at
+particular percentiles (\code{P01} to \code{P999}; the 0.1st to 99.9th percentiles).}
 
 \item{x_argname, y_argname}{A character string for naming the \code{x} and \code{y}
 arguments in relevant output.}
 }
 \value{
-When \code{return_vector = TRUE}, a vector of percentile for the given
-physical measurement; when \code{return_vector = FALSE}, a growth chart data
+When \code{return_numeric = TRUE}, a vector of percentiles for the given
+physical measurement; when \code{return_numeric = FALSE}, a growth chart data
 frame.
 }
 \description{

@@ -17,17 +17,17 @@
 #' @param population A character string specifying the population table to use
 #'   for [pct_weight_for_height_v()]. Either `"infants"` (birth to 36 months) or
 #'   `"children"` (2 to 20 years).
-#' @param return_vector Return a vector of percentiles for the given physical
-#'   measurement? Defaults to `TRUE`. If `FALSE`, a data frame is returned with
-#'   the observed percentile for the given physical measurement (`P_obs`), along
-#'   with a select distribution of physical measurements at particular
-#'   percentiles (`P01` to `P999`; the 0.1st to 99.9th percentiles).
+#' @param return_numeric Return a numeric vector of percentiles for the given
+#'   physical measurement? Defaults to `TRUE`. If `FALSE`, a data frame is
+#'   returned with the observed percentile for the given physical measurement
+#'   (`P_obs`), along with a select distribution of physical measurements at
+#'   particular percentiles (`P01` to `P999`; the 0.1st to 99.9th percentiles).
 #'
 #' @seealso CDC Growth Charts data: [weight_for_age], [height_for_age],
 #'   [bmi_for_age_children], [weight_for_height_infants],
 #'   [weight_for_height_children]
-#' @returns When `return_vector = TRUE`, a vector of percentile for the given
-#'   physical measurement; when `return_vector = FALSE`, a growth chart data
+#' @returns When `return_numeric = TRUE`, a vector of percentiles for the given
+#'   physical measurement; when `return_numeric = FALSE`, a growth chart data
 #'   frame.
 #' @export
 #'
@@ -35,9 +35,9 @@
 #' # Returns a vector of percentiles for the given physical measurement:
 #' pct_weight_for_age_v(weight = 20, age = 5, sex = "female")
 #' 
-#' # Set `return_vector = FALSE` to return a data frame with additional info:
+#' # Set `return_numeric = FALSE` to return a data frame with additional info:
 #' pct_weight_for_age_v(
-#'   weight = 20, age = 5, sex = "female", return_vector = FALSE
+#'   weight = 20, age = 5, sex = "female", return_numeric = FALSE
 #' )
 #' 
 #' # Supply vectors of equal length to return information for each observation.
@@ -53,7 +53,7 @@ pct_weight_for_age_v <- function(
     age,
     age_units = c("years", "months", "weeks", "days"),
     sex,
-    return_vector = TRUE
+    return_numeric = TRUE
 ) {
   age_units <- match.arg(age_units)
   sex <- match.arg(sex, choices = c("male", "female"), several.ok = TRUE)
@@ -62,7 +62,7 @@ pct_weight_for_age_v <- function(
     y = age,
     sex = sex,
     growth_chart = clinPK::weight_for_age,
-    return_vector = return_vector,
+    return_numeric = return_numeric,
     x_argname = "weight",
     y_argname = "age",
     y_units = age_units
@@ -76,7 +76,7 @@ pct_height_for_age_v <- function(
     age,
     age_units = c("years", "months", "weeks", "days"),
     sex,
-    return_vector = TRUE
+    return_numeric = TRUE
 ) {
   age_units <- match.arg(age_units)
   sex <- match.arg(sex, choices = c("male", "female"), several.ok = TRUE)
@@ -85,7 +85,7 @@ pct_height_for_age_v <- function(
     y = age,
     sex = sex,
     growth_chart = clinPK::height_for_age,
-    return_vector = return_vector,
+    return_numeric = return_numeric,
     x_argname = "height",
     y_argname = "age",
     y_units = age_units
@@ -99,7 +99,7 @@ pct_bmi_for_age_v <- function(
     age,
     age_units = c("years", "months", "weeks", "days"),
     sex,
-    return_vector = TRUE
+    return_numeric = TRUE
 ) {
   age_units <- match.arg(age_units)
   sex <- match.arg(sex, choices = c("male", "female"), several.ok = TRUE)
@@ -108,7 +108,7 @@ pct_bmi_for_age_v <- function(
     y = age,
     sex = sex,
     growth_chart = clinPK::bmi_for_age_children,
-    return_vector = return_vector,
+    return_numeric = return_numeric,
     x_argname = "bmi",
     y_argname = "age",
     y_units = age_units
@@ -123,7 +123,7 @@ pct_weight_for_height_v <- function(
     height_units = c("centimetres", "metres", "feet", "inches"),
     sex,
     population = c("infants", "children"),
-    return_vector = TRUE
+    return_numeric = TRUE
 ) {
   population <- match.arg(population)
   if (population == "infants") {
@@ -138,7 +138,7 @@ pct_weight_for_height_v <- function(
     y = height,
     sex = sex,
     growth_chart = growth_chart,
-    return_vector = return_vector,
+    return_numeric = return_numeric,
     x_argname = "weight",
     y_argname = "height",
     y_units = height_units
@@ -157,8 +157,8 @@ pct_weight_for_height_v <- function(
 #' @param x_argname,y_argname A character string for naming the `x` and `y`
 #'   arguments in relevant output.
 #' @inheritParams pct_weight_for_age_v
-#' @returns When `return_vector = TRUE`, a vector of percentile for the given
-#'   physical measurement; when `return_vector = FALSE`, a growth chart data
+#' @returns When `return_numeric = TRUE`, a vector of percentiles for the given
+#'   physical measurement; when `return_numeric = FALSE`, a growth chart data
 #'   frame.
 #' @keywords internal
 pct_growth_generic <- function(
@@ -166,7 +166,7 @@ pct_growth_generic <- function(
     y, # x_for_y
     sex, # = c("male", "female")
     growth_chart,
-    return_vector = TRUE,
+    return_numeric = TRUE,
     x_argname = "x",
     y_argname = "y",
     y_units = "raw"
@@ -274,7 +274,7 @@ pct_growth_generic <- function(
   
   out_for_p <- lms_for_z(l = out$L, m = out$M, s = out$S, x = x, value = "p")
   
-  if (isTRUE(return_vector)) {
+  if (isTRUE(return_numeric)) {
     return(out_for_p)
   } else {
     out[[x_argname]] <- x

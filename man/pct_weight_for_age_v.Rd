@@ -12,7 +12,7 @@ pct_weight_for_age_v(
   age,
   age_units = c("years", "months", "weeks", "days"),
   sex,
-  return_vector = TRUE
+  return_numeric = TRUE
 )
 
 pct_height_for_age_v(
@@ -20,7 +20,7 @@ pct_height_for_age_v(
   age,
   age_units = c("years", "months", "weeks", "days"),
   sex,
-  return_vector = TRUE
+  return_numeric = TRUE
 )
 
 pct_bmi_for_age_v(
@@ -28,7 +28,7 @@ pct_bmi_for_age_v(
   age,
   age_units = c("years", "months", "weeks", "days"),
   sex,
-  return_vector = TRUE
+  return_numeric = TRUE
 )
 
 pct_weight_for_height_v(
@@ -37,7 +37,7 @@ pct_weight_for_height_v(
   height_units = c("centimetres", "metres", "feet", "inches"),
   sex,
   population = c("infants", "children"),
-  return_vector = TRUE
+  return_numeric = TRUE
 )
 }
 \arguments{
@@ -50,11 +50,11 @@ pct_weight_for_height_v(
 \item{sex}{A character vector specifying patient sex. Either \code{"male"} or
 \code{"female"}.}
 
-\item{return_vector}{Return a vector of percentiles for the given physical
-measurement? Defaults to \code{TRUE}. If \code{FALSE}, a data frame is returned with
-the observed percentile for the given physical measurement (\code{P_obs}), along
-with a select distribution of physical measurements at particular
-percentiles (\code{P01} to \code{P999}; the 0.1st to 99.9th percentiles).}
+\item{return_numeric}{Return a numeric vector of percentiles for the given
+physical measurement? Defaults to \code{TRUE}. If \code{FALSE}, a data frame is
+returned with the observed percentile for the given physical measurement
+(\code{P_obs}), along with a select distribution of physical measurements at
+particular percentiles (\code{P01} to \code{P999}; the 0.1st to 99.9th percentiles).}
 
 \item{height}{A numeric vector of heights in centimetres. For
 \code{\link[=pct_weight_for_height_v]{pct_weight_for_height_v()}}, the units should match those specified in
@@ -70,8 +70,8 @@ for \code{\link[=pct_weight_for_height_v]{pct_weight_for_height_v()}}. Either \c
 \code{"children"} (2 to 20 years).}
 }
 \value{
-When \code{return_vector = TRUE}, a vector of percentile for the given
-physical measurement; when \code{return_vector = FALSE}, a growth chart data
+When \code{return_numeric = TRUE}, a vector of percentiles for the given
+physical measurement; when \code{return_numeric = FALSE}, a growth chart data
 frame.
 }
 \description{
@@ -82,9 +82,9 @@ infants and children using CDC Growth Charts data and equations.
 # Returns a vector of percentiles for the given physical measurement:
 pct_weight_for_age_v(weight = 20, age = 5, sex = "female")
 
-# Set `return_vector = FALSE` to return a data frame with additional info:
+# Set `return_numeric = FALSE` to return a data frame with additional info:
 pct_weight_for_age_v(
-  weight = 20, age = 5, sex = "female", return_vector = FALSE
+  weight = 20, age = 5, sex = "female", return_numeric = FALSE
 )
 
 # Supply vectors of equal length to return information for each observation.
