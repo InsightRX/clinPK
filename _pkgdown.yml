@@ -26,6 +26,7 @@ reference:
       - pct_height_for_age
       - pct_bmi_for_age
       - pct_weight_for_age_v
+      - median_weight_for_age
       - lms
   - title: Clinical chemistry
     contents:

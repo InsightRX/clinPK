@@ -10,6 +10,7 @@ pct_growth_generic(
   sex,
   growth_chart,
   return_numeric = TRUE,
+  return_median = FALSE,
   x_argname = "x",
   y_argname = "y",
   y_units = "raw"
