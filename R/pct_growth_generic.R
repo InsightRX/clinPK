@@ -61,7 +61,7 @@ pct_weight_for_age_v <- function(
     x = weight,
     y = age,
     sex = sex,
-    growth_chart = weight_for_age,
+    growth_chart = clinPK::weight_for_age,
     return_vector = return_vector,
     x_argname = "weight",
     y_argname = "age",
@@ -84,7 +84,7 @@ pct_height_for_age_v <- function(
     x = height,
     y = age,
     sex = sex,
-    growth_chart = height_for_age,
+    growth_chart = clinPK::height_for_age,
     return_vector = return_vector,
     x_argname = "height",
     y_argname = "age",
@@ -107,7 +107,7 @@ pct_bmi_for_age_v <- function(
     x = bmi,
     y = age,
     sex = sex,
-    growth_chart = bmi_for_age_children,
+    growth_chart = clinPK::bmi_for_age_children,
     return_vector = return_vector,
     x_argname = "bmi",
     y_argname = "age",
@@ -127,9 +127,9 @@ pct_weight_for_height_v <- function(
 ) {
   population <- match.arg(population)
   if (population == "infants") {
-    growth_chart <- weight_for_height_infants
+    growth_chart <- clinPK::weight_for_height_infants
   } else if (population == "children") {
-    growth_chart <- weight_for_height_children
+    growth_chart <- clinPK::weight_for_height_children
   }
   height_units <- match.arg(height_units)
   sex <- match.arg(sex, choices = c("male", "female"), several.ok = TRUE)
