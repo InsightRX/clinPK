@@ -22,9 +22,6 @@ reference:
       - calc_abw
       - calc_dosing_weight
       - calc_baseline_scr
-      - pct_weight_for_age
-      - pct_height_for_age
-      - pct_bmi_for_age
       - pct_weight_for_age_v
       - median_weight_for_age
       - lms
