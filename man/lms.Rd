@@ -53,6 +53,6 @@ CDC Growth Charts data with LMS parameters: \link{weight_for_age},
 \link{height_for_age}, \link{bmi_for_age_children}, \link{weight_for_height_infants},
 \link{weight_for_height_children}
 
-Functions to calculate growth metrics: \link{pct_weight_for_age_v}, \link{pct_height_for_age_v},
-\link{pct_bmi_for_age_v}, \link{pct_weight_for_height_v}
+Functions to calculate growth metrics: \link{pct_weight_for_age}, \link{pct_height_for_age},
+\link{pct_bmi_for_age}, \link{pct_weight_for_height}
 }

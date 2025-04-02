@@ -22,7 +22,7 @@ reference:
       - calc_abw
       - calc_dosing_weight
       - calc_baseline_scr
-      - pct_weight_for_age_v
+      - pct_weight_for_age
       - median_weight_for_age
       - lms
   - title: Clinical chemistry

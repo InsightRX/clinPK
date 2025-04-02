@@ -22,8 +22,8 @@
 #' [height_for_age], [bmi_for_age_children], [weight_for_height_infants],
 #' [weight_for_height_children]
 #' 
-#' Functions to calculate growth metrics: [pct_weight_for_age_v], [pct_height_for_age_v],
-#' [pct_bmi_for_age_v], [pct_weight_for_height_v]
+#' Functions to calculate growth metrics: [pct_weight_for_age], [pct_height_for_age],
+#' [pct_bmi_for_age], [pct_weight_for_height]
 #' @returns `lms_for_x()` returns the value of a given physical measurement (X)
 #'   at a particular z-score (Z) or percentile. `lms_for_z()` returns the
 #'   z-score (Z) or corresponding percentile for a given measurement (X).

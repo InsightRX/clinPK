@@ -14,8 +14,8 @@
 #' @source 
 #' National Center for Health Statistics. (n.d.). CDC Growth Charts Data Files.
 #' <https://www.cdc.gov/growthcharts/cdc-growth-charts.htm>
-#' @seealso Functions to calculate growth metrics: [pct_weight_for_age_v],
-#'   [pct_height_for_age_v], [pct_bmi_for_age_v], [pct_weight_for_height_v]
+#' @seealso Functions to calculate growth metrics: [pct_weight_for_age],
+#'   [pct_height_for_age], [pct_bmi_for_age], [pct_weight_for_height]
 #'   
 #' LMS growth chart equations: [lms]
 #' @name growth-charts
