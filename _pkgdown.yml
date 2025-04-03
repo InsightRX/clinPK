@@ -106,7 +106,6 @@ reference:
       - calc_amts_for_conc
       - find_nearest_dose
       - find_nearest_interval
-      - read_who_table
       - valid_units
       - add_ruv
   - title: Data sets
