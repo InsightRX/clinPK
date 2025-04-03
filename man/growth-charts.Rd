@@ -74,7 +74,5 @@ percentile values by sex (1 = male; 2 = female) and single month of age
 \seealso{
 Functions to calculate growth metrics: \link{pct_weight_for_age},
 \link{pct_height_for_age}, \link{pct_bmi_for_age}, \link{pct_weight_for_height}
-
-LMS growth chart equations: \link{lms}
 }
 \keyword{datasets}

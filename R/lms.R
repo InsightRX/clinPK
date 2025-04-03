@@ -36,10 +36,10 @@
 #' lms_for_z(
 #'   l = -0.1600954, m = 9.476500305, s = 0.11218624, x = 9.7, value = "p"
 #' )
+#' @noRd
 NULL
 
-#' @rdname lms
-#' @export
+# @rdname lms
 lms_for_x <- function(l, m, s, z = NULL, p = NULL) {
   if (!is.null(z) & !is.null(p)) {
     stop("Only one of `z` or `p` can be provided, not both.")
@@ -54,8 +54,7 @@ lms_for_x <- function(l, m, s, z = NULL, p = NULL) {
   x
 }
 
-#' @rdname lms
-#' @export
+# @rdname lms
 lms_for_z <- function(l, m, s, x, value = c("z", "p")) {
   value <- match.arg(value)
   z <- ifelse(

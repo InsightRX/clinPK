@@ -24,7 +24,6 @@ reference:
       - calc_baseline_scr
       - pct_weight_for_age
       - median_weight_for_age
-      - lms
   - title: Clinical chemistry
     contents:
       - calc_egfr
