@@ -23,6 +23,6 @@ calc_neutropenia_grade(
 }
 \references{
 \itemize{
-  \item \href{https://link.springer.com/referenceworkentry/10.1007/978-3-642-16483-5_4052}{Neutropenia}: US National Cancer Institute's Common Toxicity Criteria
+\item \href{https://link.springer.com/referenceworkentry/10.1007/978-3-642-16483-5_4052}{Neutropenia}: US National Cancer Institute's Common Toxicity Criteria
 }
 }

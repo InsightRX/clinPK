@@ -15,7 +15,7 @@ pk_2cmt_t12(CL = 3, V = 30, Q = 2, V2 = 20, phase = c("both", "alpha", "beta"))
 
 \item{V2}{volume of peripheral compartment}
 
-\item{phase}{`alpha`, `beta` (default) or `both` to indicate initial (distribution) or terminal (elimination) phase.}
+\item{phase}{\code{alpha}, \code{beta} (default) or \code{both} to indicate initial (distribution) or terminal (elimination) phase.}
 }
 \description{
 Calculate half-life(s) for 2-compartment model

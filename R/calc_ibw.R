@@ -1,12 +1,13 @@
 #' Calculate ideal body weight in kg for children and adults
 #'
-#' Get an estimate of ideal body weight. This function allows several commonly used equations
+#' Get an estimate of ideal body weight. This function allows several commonly
+#' used equations
 #'
 #' Equations:
 #'
-#' <1yo Use actual body weight
+#' For <1yo Use actual body weight
 #'
-#' 1-17 years old ('standard'):
+#' For 1-17 years old ('standard'):
 #'   if height < 5ft:
 #'     IBW= (height in cm2 x 1.65)/1000
 #'   if height > 5ft:
@@ -21,7 +22,7 @@
 #'   BMI: IBW = 50th percentile of BMI for given age x (height in m)^2
 #'   ADA: IBW = 50th percentile of WT for given age
 #'
-#' >= 18 years old (Devine equation)
+#' For >= 18 years old (Devine equation)
 #'   IBW (male) = 50 + (2.3 x height in inches over 5 feet)
 #'   IBW (female) = 45.5 + (2.3 x height in inches over 5 feet)
 #'

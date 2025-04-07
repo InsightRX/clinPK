@@ -17,7 +17,7 @@ pk_1cmt_inf_cmax_ss(dose, tau, CL, V, t_inf, ruv = NULL)
 
 \item{t_inf}{infusion time}
 
-\item{ruv}{residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. `list(prop=0.1, add=1, exp=0)`}
+\item{ruv}{residual variability, specified as list with optional arguments for proportional, additive, or exponential components, e.g. \code{list(prop=0.1, add=1, exp=0)}}
 }
 \description{
 Takes single values for dose or model parameters, or vector of either dose or parameters (but not both).

@@ -16,8 +16,8 @@ convert_conc_unit(value, unit_in, unit_out, mol_weight = NULL)
 \item{mol_weight}{Molecular weight in g/mol (required if converting to/from molar units)}
 }
 \description{
-Lower-level function called by `convert_creat_unit()`,
-`convert_albumin_unit()`, and others.
+Lower-level function called by \code{convert_creat_unit()},
+\code{convert_albumin_unit()}, and others.
 }
 \seealso{
 valid_units

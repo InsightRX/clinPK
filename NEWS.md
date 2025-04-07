@@ -1,3 +1,14 @@
+# clinPK 0.14.0
+
+## Major changes
+- Refactored `pct_*_for_*()` functions. As input, they now accept vectors of values. They now return either a vector of percentiles for the given physical measurement, or a data frame with the observed percentile for the given physical measurement, along with a select distribution of physical measurements at particular percentiles. These functions also use updated CDC growth charts instead of WHO growth charts.
+- Added `median_*_for_*()` functions for calculating median growth values for infants and children. These functions replace the now-deprecated `return_median` argument in the `pct_*_for_*()` functions.
+- Added CDC growth chart data sets as package data (see `?"growth-charts"`).
+- Removed `read_who_table()` function, as part of the refactor for the `pct_*_for_*()` functions.
+
+## Minor updates
+- Activated roxygen's markdown parser for improved function documentation
+
 # clinPK 0.13.0
 
 ## Major changes

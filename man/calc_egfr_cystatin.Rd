@@ -14,11 +14,11 @@ calc_egfr_cystatin(
 \arguments{
 \item{cystatin}{serum cystatin concentration (mg/L)}
 
-\item{cystatin_unit, }{only `mg/L` available}
+\item{cystatin_unit, }{only \code{mg/L} available}
 
-\item{method}{eGFR estimation method, choose from `grubb`, `larsson`, `hoek`}
+\item{method}{eGFR estimation method, choose from \code{grubb}, \code{larsson}, \code{hoek}}
 
-\item{unit_out}{eGFR output unit, choose from `ml/min`, `ml/hr`, `l/min`, `l/hr`}
+\item{unit_out}{eGFR output unit, choose from \code{ml/min}, \code{ml/hr}, \code{l/min}, \code{l/hr}}
 }
 \description{
 Calculate eGFR based on Cystatin C measurements

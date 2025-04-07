@@ -9,11 +9,11 @@ fraction_of_ss(kel = NULL, halflife = NULL, t = NULL, n = NULL, tau = NULL)
 \arguments{
 \item{kel}{drug elimination rate}
 
-\item{halflife}{halflife. Either `kel` or `halflife` is required.}
+\item{halflife}{halflife. Either \code{kel} or \code{halflife} is required.}
 
 \item{t}{time at which to calculate fraction of steady state}
 
-\item{n}{number of dosing intervals after which to calculate fraction of steady state. Requires `tau` as well, cannot be used together with `t` argument.}
+\item{n}{number of dosing intervals after which to calculate fraction of steady state. Requires \code{tau} as well, cannot be used together with \code{t} argument.}
 
 \item{tau}{dosing interval}
 }

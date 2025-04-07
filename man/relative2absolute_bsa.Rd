@@ -11,7 +11,7 @@ relative2absolute_bsa(quantity, bsa = NULL, ...)
 
 \item{bsa}{ideal body weight in kg}
 
-\item{...}{arguments passed on to `calc_bsa`, if bsa is NULL}
+\item{...}{arguments passed on to \code{calc_bsa}, if bsa is NULL}
 }
 \value{
 quantity expressed in absolute units

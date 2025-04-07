@@ -9,9 +9,9 @@ mol2conc(mol = NULL, unit_mol = NULL, unit_conc = NULL, mol_weight = NULL)
 \arguments{
 \item{mol}{concentration in molars}
 
-\item{unit_mol}{unit of input concentration (molar), one of `mol/L`, `mmol/mL`, `mmol/L`}
+\item{unit_mol}{unit of input concentration (molar), one of \code{mol/L}, \code{mmol/mL}, \code{mmol/L}}
 
-\item{unit_conc, }{output unit, one of `g/l`, `mg/l`, `microg/l`, `mcg/l", `ng/l`, `mg/ml`, `microg/ml`, `mcg/ml`, `ng/ml`}
+\item{unit_conc, }{output unit, one of \code{g/l}, \code{mg/l}, \code{microg/l}, \verb{mcg/l", }ng/l\verb{, }mg/ml\verb{, }microg/ml\verb{, }mcg/ml\verb{, }ng/ml`}
 
 \item{mol_weight}{concentration in g/mol}
 }

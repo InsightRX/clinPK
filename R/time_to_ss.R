@@ -3,7 +3,7 @@
 #'
 #' @param kel drug elimination rate
 #' @param halflife halflife. Either `kel` or `halflife` is required.
-#' @param ss level considered "steady state", e.g. `0.9` is 90\% of true steady state.
+#' @param ss level considered "steady state", e.g. `0.9` is 90% of true steady state.
 #' @param in_doses return the number of doses instead of time unit? Default `FALSE`. Requires `tau` as well.
 #' @param tau dosing interval
 #' @examples

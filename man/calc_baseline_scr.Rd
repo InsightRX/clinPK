@@ -16,17 +16,17 @@ calc_baseline_scr(
 \arguments{
 \item{baseline_scr}{baseline serum creatinine method (character). See calc_aki_stage() for availabloptions.}
 
-\item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from
+\item{scr}{serum creatinine in mg/dL. Use \code{convert_creat()} to convert from
 mmol/L. Values below the detection limit ("<0.2") will be converted to
 numeric (0.2)}
 
 \item{times}{creatinine sample times in hours}
 
-\item{method}{classification method, one of `KDIGO`, `RIFLE`, `pRIFLE` (case insensitive)}
+\item{method}{classification method, one of \code{KDIGO}, \code{RIFLE}, \code{pRIFLE} (case insensitive)}
 
-\item{first_dose_time}{time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in `median_before_treatment` approach.}
+\item{first_dose_time}{time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in \code{median_before_treatment} approach.}
 
-\item{verbose}{verbose (`TRUE` or `FALSE`)}
+\item{verbose}{verbose (\code{TRUE} or \code{FALSE})}
 }
 \description{
 Calculate baseline sCr

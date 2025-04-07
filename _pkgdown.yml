@@ -22,9 +22,8 @@ reference:
       - calc_abw
       - calc_dosing_weight
       - calc_baseline_scr
-      - pct_weight_for_age
-      - pct_height_for_age
-      - pct_bmi_for_age
+      - pct_x_for_y
+      - median_x_for_y
   - title: Clinical chemistry
     contents:
       - calc_egfr
@@ -107,6 +106,8 @@ reference:
       - calc_amts_for_conc
       - find_nearest_dose
       - find_nearest_interval
-      - read_who_table
       - valid_units
       - add_ruv
+  - title: Data sets
+    contents:
+      - growth-charts

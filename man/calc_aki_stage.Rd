@@ -22,35 +22,35 @@ calc_aki_stage(
 )
 }
 \arguments{
-\item{scr}{serum creatinine in mg/dL. Use `convert_creat()` to convert from
+\item{scr}{serum creatinine in mg/dL. Use \code{convert_creat()} to convert from
 mmol/L. Values below the detection limit ("<0.2") will be converted to
 numeric (0.2)}
 
 \item{times}{creatinine sample times in hours}
 
-\item{method}{classification method, one of `KDIGO`, `RIFLE`, `pRIFLE` (case insensitive)}
+\item{method}{classification method, one of \code{KDIGO}, \code{RIFLE}, \code{pRIFLE} (case insensitive)}
 
-\item{baseline_scr}{baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median`, `median_before_treatment`, `lowest`, or `first`.}
+\item{baseline_scr}{baseline serum creatinine, required for \code{RIFLE} classifation. Will use value if numeric. If \code{character}, can be either \code{median}, \code{median_before_treatment}, \code{lowest}, or \code{first}.}
 
-\item{baseline_egfr}{baseline eGFR, required for `RIFLE` classifations. Will take median of `egfr` values if `NULL`.}
+\item{baseline_egfr}{baseline eGFR, required for \code{RIFLE} classifations. Will take median of \code{egfr} values if \code{NULL}.}
 
-\item{first_dose_time}{time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in `median_before_treatment` approach.}
+\item{first_dose_time}{time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in \code{median_before_treatment} approach.}
 
 \item{age}{age in years, needed when eGFR is used in the classification method}
 
-\item{egfr}{eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.}
+\item{egfr}{eGFR in ml/min/1.73m^2. Optional, can also be calcualted if \code{age}, \code{weight}, \code{height}, \code{sex}, \code{egfr_method} are specified as arguments.}
 
-\item{egfr_method}{eGFR calculation method, used by `calc_egfr()`. If NULL, will pick default based on classification system (`cockroft_gault` for RIFLE / kDIGO, `revised_schwartz` for pRIFLE).}
+\item{egfr_method}{eGFR calculation method, used by \code{calc_egfr()}. If NULL, will pick default based on classification system (\code{cockroft_gault} for RIFLE / kDIGO, \code{revised_schwartz} for pRIFLE).}
 
-\item{force_numeric}{keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.}
+\item{force_numeric}{keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default \code{FALSE}.}
 
-\item{override_prifle_baseline}{by default, `pRIFLE` compares eGFR to 120 ml/min. Override by setting to TRUE.}
+\item{override_prifle_baseline}{by default, \code{pRIFLE} compares eGFR to 120 ml/min. Override by setting to TRUE.}
 
-\item{verbose}{verbose (`TRUE` or `FALSE`)}
+\item{verbose}{verbose (\code{TRUE} or \code{FALSE})}
 
-\item{return_object}{return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.}
+\item{return_object}{return object with detailed data (default \code{TRUE}). If \code{FALSE}, will just return maximum stage.}
 
-\item{...}{arguments passed on to `calc_egfr()`}
+\item{...}{arguments passed on to \code{calc_egfr()}}
 }
 \description{
 Calculate AKI class based on serum creatinine values over time, using various
@@ -66,9 +66,9 @@ calc_aki_stage(
 }
 \references{
 \itemize{
-  \item \href{https://pubmed.ncbi.nlm.nih.gov/17396113/}{pRIFLE}: Ackan-Arikan et al. "Modified RIFLE criteria in critically ill children with acute kidney injury." Kidney Int. (2007)
-  \item \href{https://pubmed.ncbi.nlm.nih.gov/15312219/}{RIFLE}: Bellomo et al. "Acute renal failure - definition, outcome measures, animal models, fluid therapy and information technology needs: the Second International Consensus Conference of the Acute Dialysis Quality Initiative (ADQI) Group." Critical Care. (2004)
-  \item \href{https://pubmed.ncbi.nlm.nih.gov/22890468/}{KDIGO}: Khwaja. "KDIGO clinical practice guidelines for acute kidney injury." Nephron Clinical Practice. (2012)
-  \item \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4238883/}{pRIFLE baseline eGFR}: Soler et al. "pRIFLE (Pediatric Risk, Injury, Failure, Loss, End Stage Renal Disease) score identifies Acute Kidney Injury and predicts mortality in critically ill children : a prospective study." Pediatric Critical Care Medicine. (2014)
+\item \href{https://pubmed.ncbi.nlm.nih.gov/17396113/}{pRIFLE}: Ackan-Arikan et al. "Modified RIFLE criteria in critically ill children with acute kidney injury." Kidney Int. (2007)
+\item \href{https://pubmed.ncbi.nlm.nih.gov/15312219/}{RIFLE}: Bellomo et al. "Acute renal failure - definition, outcome measures, animal models, fluid therapy and information technology needs: the Second International Consensus Conference of the Acute Dialysis Quality Initiative (ADQI) Group." Critical Care. (2004)
+\item \href{https://pubmed.ncbi.nlm.nih.gov/22890468/}{KDIGO}: Khwaja. "KDIGO clinical practice guidelines for acute kidney injury." Nephron Clinical Practice. (2012)
+\item \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4238883/}{pRIFLE baseline eGFR}: Soler et al. "pRIFLE (Pediatric Risk, Injury, Failure, Loss, End Stage Renal Disease) score identifies Acute Kidney Injury and predicts mortality in critically ill children : a prospective study." Pediatric Critical Care Medicine. (2014)
 }
 }

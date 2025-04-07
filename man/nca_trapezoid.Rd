@@ -7,7 +7,7 @@
 nca_trapezoid(data)
 }
 \arguments{
-\item{data}{dataset passed from nca() with `time` and `dv` columns}
+\item{data}{dataset passed from nca() with \code{time} and \code{dv} columns}
 }
 \description{
 NCA core function to perform log-linear trapezoid calculations for post-infusion

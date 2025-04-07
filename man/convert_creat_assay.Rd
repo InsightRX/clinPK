@@ -9,9 +9,9 @@ convert_creat_assay(scr, from = "idms", to = "jaffe")
 \arguments{
 \item{scr}{vector of serum creatinine values}
 
-\item{from}{assay type, either `jaffe`, `enzymatic` or `idms`}
+\item{from}{assay type, either \code{jaffe}, \code{enzymatic} or \code{idms}}
 
-\item{to}{assay type, either `jaffe`, `enzymatic` or `idms`}
+\item{to}{assay type, either \code{jaffe}, \code{enzymatic} or \code{idms}}
 }
 \description{
 Based on equations as reported in Srivastava et al. 2009 (Pediatr Res. 2009 Jan;65(1):113-6. doi: 10.1203/PDR.0b013e318189a6e8)
