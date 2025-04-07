@@ -18,10 +18,14 @@
 #' [weight_for_height_children]
 #' @returns A numeric vector of median weight, height, or BMI values for the
 #'   given ages/heights.
-#' @export
+#' @name median_x_for_y
 #'
 #' @examples
 #' median_weight_for_age(3.5, "months", sex = "male")
+NULL
+
+#' @rdname median_x_for_y
+#' @export
 median_weight_for_age <- function(
     age,
     age_units = c("years", "months", "weeks", "days"),
@@ -40,7 +44,7 @@ median_weight_for_age <- function(
   )
 }
 
-#' @rdname median_weight_for_age
+#' @rdname median_x_for_y
 #' @export
 median_height_for_age <- function(
     age,
@@ -60,7 +64,7 @@ median_height_for_age <- function(
   )
 }
 
-#' @rdname median_weight_for_age
+#' @rdname median_x_for_y
 #' @export
 median_bmi_for_age <- function(
     age,
@@ -80,7 +84,7 @@ median_bmi_for_age <- function(
   )
 }
 
-#' @rdname median_weight_for_age
+#' @rdname median_x_for_y
 #' @export
 median_weight_for_height <- function(
     height,

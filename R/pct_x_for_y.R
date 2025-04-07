@@ -29,7 +29,7 @@
 #' @returns When `return_numeric = TRUE`, a vector of percentiles for the given
 #'   physical measurement; when `return_numeric = FALSE`, a growth chart data
 #'   frame.
-#' @export
+#' @name pct_x_for_y
 #'
 #' @examples
 #' # Returns a vector of percentiles for the given physical measurement:
@@ -48,6 +48,10 @@
 #'   age_units = "months",
 #'   sex = c("male", "female", "male", "male", "female")
 #' )
+NULL
+
+#' @rdname pct_x_for_y
+#' @export
 pct_weight_for_age <- function(
     weight,
     age,
@@ -69,7 +73,7 @@ pct_weight_for_age <- function(
   )
 }
 
-#' @rdname pct_weight_for_age
+#' @rdname pct_x_for_y
 #' @export
 pct_height_for_age <- function(
     height,
@@ -92,7 +96,7 @@ pct_height_for_age <- function(
   )
 }
 
-#' @rdname pct_weight_for_age
+#' @rdname pct_x_for_y
 #' @export
 pct_bmi_for_age <- function(
     bmi,
@@ -115,7 +119,7 @@ pct_bmi_for_age <- function(
   )
 }
 
-#' @rdname pct_weight_for_age
+#' @rdname pct_x_for_y
 #' @export
 pct_weight_for_height <- function(
     weight,
