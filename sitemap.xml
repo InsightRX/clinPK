@@ -48,6 +48,7 @@
 <url><loc>https://insightrx.github.io/clinPK/reference/fraction_of_ss.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/grapes-greater-than-equals-grapes.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/grapes-less-than-equals-grapes.html</loc></url>
+<url><loc>https://insightrx.github.io/clinPK/reference/growth-charts.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/inch2cm.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/index.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/is.nil.html</loc></url>
@@ -56,15 +57,14 @@
 <url><loc>https://insightrx.github.io/clinPK/reference/kg2oz.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/lbs2kg.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/mean_step.html</loc></url>
+<url><loc>https://insightrx.github.io/clinPK/reference/median_x_for_y.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/mol2conc.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/nca.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/nca_linear.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/nca_trapezoid.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/oz2kg.html</loc></url>
-<url><loc>https://insightrx.github.io/clinPK/reference/pct_bmi_for_age.html</loc></url>
-<url><loc>https://insightrx.github.io/clinPK/reference/pct_for_age_generic.html</loc></url>
-<url><loc>https://insightrx.github.io/clinPK/reference/pct_height_for_age.html</loc></url>
-<url><loc>https://insightrx.github.io/clinPK/reference/pct_weight_for_age.html</loc></url>
+<url><loc>https://insightrx.github.io/clinPK/reference/pct_growth_generic.html</loc></url>
+<url><loc>https://insightrx.github.io/clinPK/reference/pct_x_for_y.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/pk_1cmt_bolus.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/pk_1cmt_bolus_cmax_ss.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/pk_1cmt_bolus_cmin_ss.html</loc></url>
@@ -95,7 +95,6 @@
 <url><loc>https://insightrx.github.io/clinPK/reference/pk_2cmt_t12.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/pk_2cmt_t12_interval.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/print.nca_output.html</loc></url>
-<url><loc>https://insightrx.github.io/clinPK/reference/read_who_table.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/relative2absolute_bsa.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/remove_lt_gt.html</loc></url>
 <url><loc>https://insightrx.github.io/clinPK/reference/time_to_ss.html</loc></url>

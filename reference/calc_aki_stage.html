@@ -9,7 +9,7 @@ methods for children (pRIFLE) and adults (RIFLE, kDIGO)"></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">clinPK</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@ methods for children (pRIFLE) and adults (RIFLE, kDIGO)</p>
 
 
 <dl><dt id="arg-scr">scr<a class="anchor" aria-label="anchor" href="#arg-scr"></a></dt>
-<dd><p>serum creatinine in mg/dL. Use `convert_creat()` to convert from
+<dd><p>serum creatinine in mg/dL. Use <code>convert_creat()</code> to convert from
 mmol/L. Values below the detection limit ("&lt;0.2") will be converted to
 numeric (0.2)</p></dd>
 
@@ -76,19 +76,19 @@ numeric (0.2)</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>classification method, one of `KDIGO`, `RIFLE`, `pRIFLE` (case insensitive)</p></dd>
+<dd><p>classification method, one of <code>KDIGO</code>, <code>RIFLE</code>, <code>pRIFLE</code> (case insensitive)</p></dd>
 
 
 <dt id="arg-baseline-scr">baseline_scr<a class="anchor" aria-label="anchor" href="#arg-baseline-scr"></a></dt>
-<dd><p>baseline serum creatinine, required for `RIFLE` classifation. Will use value if numeric. If `character`, can be either `median`, `median_before_treatment`, `lowest`, or `first`.</p></dd>
+<dd><p>baseline serum creatinine, required for <code>RIFLE</code> classifation. Will use value if numeric. If <code>character</code>, can be either <code>median</code>, <code>median_before_treatment</code>, <code>lowest</code>, or <code>first</code>.</p></dd>
 
 
 <dt id="arg-baseline-egfr">baseline_egfr<a class="anchor" aria-label="anchor" href="#arg-baseline-egfr"></a></dt>
-<dd><p>baseline eGFR, required for `RIFLE` classifations. Will take median of `egfr` values if `NULL`.</p></dd>
+<dd><p>baseline eGFR, required for <code>RIFLE</code> classifations. Will take median of <code>egfr</code> values if <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-first-dose-time">first_dose_time<a class="anchor" aria-label="anchor" href="#arg-first-dose-time"></a></dt>
-<dd><p>time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in `median_before_treatment` approach.</p></dd>
+<dd><p>time in hours of first dose relative to sCr value, used for calculate baseline serum creatinine in <code>median_before_treatment</code> approach.</p></dd>
 
 
 <dt id="arg-age">age<a class="anchor" aria-label="anchor" href="#arg-age"></a></dt>
@@ -96,31 +96,31 @@ numeric (0.2)</p></dd>
 
 
 <dt id="arg-egfr">egfr<a class="anchor" aria-label="anchor" href="#arg-egfr"></a></dt>
-<dd><p>eGFR in ml/min/1.73m^2. Optional, can also be calcualted if `age`, `weight`, `height`, `sex`, `egfr_method` are specified as arguments.</p></dd>
+<dd><p>eGFR in ml/min/1.73m^2. Optional, can also be calcualted if <code>age</code>, <code>weight</code>, <code>height</code>, <code>sex</code>, <code>egfr_method</code> are specified as arguments.</p></dd>
 
 
 <dt id="arg-egfr-method">egfr_method<a class="anchor" aria-label="anchor" href="#arg-egfr-method"></a></dt>
-<dd><p>eGFR calculation method, used by `calc_egfr()`. If NULL, will pick default based on classification system (`cockroft_gault` for RIFLE / kDIGO, `revised_schwartz` for pRIFLE).</p></dd>
+<dd><p>eGFR calculation method, used by <code><a href="calc_egfr.html">calc_egfr()</a></code>. If NULL, will pick default based on classification system (<code>cockroft_gault</code> for RIFLE / kDIGO, <code>revised_schwartz</code> for pRIFLE).</p></dd>
 
 
 <dt id="arg-force-numeric">force_numeric<a class="anchor" aria-label="anchor" href="#arg-force-numeric"></a></dt>
-<dd><p>keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default `FALSE`.</p></dd>
+<dd><p>keep stage numeric (1, 2, or 3), instead of e.g. "R", "I", "F" as in RIFLE. Default <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-override-prifle-baseline">override_prifle_baseline<a class="anchor" aria-label="anchor" href="#arg-override-prifle-baseline"></a></dt>
-<dd><p>by default, `pRIFLE` compares eGFR to 120 ml/min. Override by setting to TRUE.</p></dd>
+<dd><p>by default, <code>pRIFLE</code> compares eGFR to 120 ml/min. Override by setting to TRUE.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>verbose (`TRUE` or `FALSE`)</p></dd>
+<dd><p>verbose (<code>TRUE</code> or <code>FALSE</code>)</p></dd>
 
 
 <dt id="arg-return-object">return_object<a class="anchor" aria-label="anchor" href="#arg-return-object"></a></dt>
-<dd><p>return object with detailed data (default `TRUE`). If `FALSE`, will just return maximum stage.</p></dd>
+<dd><p>return object with detailed data (default <code>TRUE</code>). If <code>FALSE</code>, will just return maximum stage.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>arguments passed on to `calc_egfr()`</p></dd>
+<dd><p>arguments passed on to <code><a href="calc_egfr.html">calc_egfr()</a></code></p></dd>
 
 </dl></div>
     <div class="section level2">

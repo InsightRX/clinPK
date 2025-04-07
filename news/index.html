@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinPK</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,6 +33,20 @@
       <small>Source: <a href="https://github.com/InsightRX/clinPK/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.14.0" id="clinpk-0140">clinPK 0.14.0<a class="anchor" aria-label="anchor" href="#clinpk-0140"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-0-14-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-14-0"></a></h3>
+<ul><li>Refactored <code>pct_*_for_*()</code> functions. As input, they now accept vectors of values. They now return either a vector of percentiles for the given physical measurement, or a data frame with the observed percentile for the given physical measurement, along with a select distribution of physical measurements at particular percentiles. These functions also use updated CDC growth charts instead of WHO growth charts.</li>
+<li>Added <code>median_*_for_*()</code> functions for calculating median growth values for infants and children. These functions replace the now-deprecated <code>return_median</code> argument in the <code>pct_*_for_*()</code> functions.</li>
+<li>Added CDC growth chart data sets as package data (see <code><a href="../reference/growth-charts.html">?"growth-charts"</a></code>).</li>
+<li>Removed <code>read_who_table()</code> function, as part of the refactor for the <code>pct_*_for_*()</code> functions.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-updates-0-14-0">Minor updates<a class="anchor" aria-label="anchor" href="#minor-updates-0-14-0"></a></h3>
+<ul><li>Activated roxygen’s markdown parser for improved function documentation</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.13.0" id="clinpk-0130">clinPK 0.13.0<a class="anchor" aria-label="anchor" href="#clinpk-0130"></a></h2><p class="text-muted">CRAN release: 2024-02-23</p>
 <div class="section level3">

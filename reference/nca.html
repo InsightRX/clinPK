@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinPK</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -73,11 +73,11 @@
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>`linear`, `log_linear` (default), or `log_log`</p></dd>
+<dd><p><code>linear</code>, <code>log_linear</code> (default), or <code>log_log</code></p></dd>
 
 
 <dt id="arg-scale">scale<a class="anchor" aria-label="anchor" href="#arg-scale"></a></dt>
-<dd><p>list with scaling for auc and concentration (`conc`)</p></dd>
+<dd><p>list with scaling for auc and concentration (<code>conc</code>)</p></dd>
 
 
 <dt id="arg-dv-min">dv_min<a class="anchor" aria-label="anchor" href="#arg-dv-min"></a></dt>
@@ -90,7 +90,7 @@
 
 <dt id="arg-fit-samples">fit_samples<a class="anchor" aria-label="anchor" href="#arg-fit-samples"></a></dt>
 <dd><p>vector of sample indexes used in fit to calculate elimination
-rate, e.g. `c(3,4,5)`. If not specified (default), it will evaluate which of the last n
+rate, e.g. <code>c(3,4,5)</code>. If not specified (default), it will evaluate which of the last n
 samples shows the largest adjusted R^2 when log-transformed data is fitted using linear
 regression, and use those samples in the estimation of the elimination rate.</p></dd>
 
@@ -104,11 +104,11 @@ regression, and use those samples in the estimation of the elimination rate.</p>
 
 
 <dt id="arg-has-baseline">has_baseline<a class="anchor" aria-label="anchor" href="#arg-has-baseline"></a></dt>
-<dd><p>does the included data include a baseline? If `FALSE`, baseline is set to zero.</p></dd>
+<dd><p>does the included data include a baseline? If <code>FALSE</code>, baseline is set to zero.</p></dd>
 
 
 <dt id="arg-route">route<a class="anchor" aria-label="anchor" href="#arg-route"></a></dt>
-<dd><p>administration route, `iv` (intravenous, default), `oral`, `sc` (sub-cutaneous), or `im` (intra-muscular).</p></dd>
+<dd><p>administration route, <code>iv</code> (intravenous, default), <code>oral</code>, <code>sc</code> (sub-cutaneous), or <code>im</code> (intra-muscular).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -118,9 +118,9 @@ regression, and use those samples in the estimation of the elimination rate.</p>
 <li><p><code>t_12</code>: half-life</p></li>
 <li><p><code>v</code>: distribution volume</p></li>
 <li><p><code>cl</code>: clearance</p></li>
-</ul><p></p></dd>
+</ul></dd>
 
-  <dt><code>descriptive</code></dt>
+<dt><code>descriptive</code></dt>
 <dd><p>Lists exposure parameters.</p><ul><li><p><code>cav_t</code>: the average concentration between the first observation and the last observation without extrapolating to tau</p></li>
 <li><p><code>cav_tau</code>: the average concentration from 0 to tau</p></li>
 <li><p><code>cmin</code>: the extrapolated concentration at <code>time = tau</code></p></li>
@@ -130,12 +130,12 @@ regression, and use those samples in the estimation of the elimination rate.</p>
 <li><p><code>auc_24</code>: the extrapolated AUC after 24 hours, provided no further doses are administered</p></li>
 <li><p><code>auc_tau</code>: the extrapolated AUC at the end of the dosing interval</p></li>
 <li><p><code>auc_t</code>: the AUC at the time of the last observation</p></li>
-</ul><p></p></dd>
+</ul></dd>
 
-  <dt><code>settings</code></dt>
+<dt><code>settings</code></dt>
 <dd><p>Lists dosing information.</p><ul><li><p><code>dose</code>: dose quantity</p></li>
 <li><p><code>tau</code>: dosing interval</p></li>
-</ul><p></p></dd>
+</ul></dd>
 
 
 </dl></div>

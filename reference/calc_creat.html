@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">clinPK</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.14.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,7 @@
 
 
 <dl><dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
-<dd><p>sex, either `male` or `female`</p></dd>
+<dd><p>sex, either <code>male</code> or <code>female</code></p></dd>
 
 
 <dt id="arg-age">age<a class="anchor" aria-label="anchor" href="#arg-age"></a></dt>
@@ -71,7 +71,7 @@
 
 
 <dt id="arg-adult-method">adult_method<a class="anchor" aria-label="anchor" href="#arg-adult-method"></a></dt>
-<dd><p>estimation adult method, `johanssen` (default) or `brooks`,</p></dd>
+<dd><p>estimation adult method, <code>johanssen</code> (default) or <code>brooks</code>,</p></dd>
 
 
 <dt id="arg-digits">digits<a class="anchor" aria-label="anchor" href="#arg-digits"></a></dt>
@@ -88,7 +88,7 @@ For adults:  Two methods are available Johanssen et al. Ther Drug Monit 2011.
 which describes a flat serum creatinine dependent on sex, and Brooks et al
 (unpublished) which is a linear regression built on the NHANES open-source
 data and takes into account sex, age, weight, and height.
-Equation: `lm(SCr~Age+Sex+Weight+Height, data=NHANES)`</p>
+Equation: <code>lm(SCr~Age+Sex+Weight+Height, data=NHANES)</code></p>
     </div>
 
     <div class="section level2">
