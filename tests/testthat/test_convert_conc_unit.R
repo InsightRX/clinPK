@@ -5,6 +5,8 @@ test_that("convert_conc_unit can convert g/dl, g/l, mg/dl", {
   expect_equal(convert_conc_unit(1, "mg_dl", "g_dl")$value, .001)
   expect_equal(convert_conc_unit(1, "mg_dl", "g_l")$value, 0.01)
   expect_equal(convert_conc_unit(1, "g_l", "mg_dl")$value, 100)
+  expect_equal(convert_conc_unit(1, "g_l", "mg_l")$value, 1000)
+  expect_equal(convert_conc_unit(1, "mg_l", "pg_ml")$value, 1e6)
 })
 
 test_that("molecular weight required when converting molar units", {
@@ -17,6 +19,7 @@ test_that("molecular weight required when converting molar units", {
 
 test_that("molar unit conversion works", {
   expect_equal(convert_conc_unit(1, "mg_dl", "micromol_l", 0.5)$value, 20000)
+  expect_equal(convert_conc_unit(200, "pg_ml", "pmol_l", 50)$value, 4000)
 })
 
 test_that("vectorized input works", {

@@ -31,6 +31,10 @@ convert_conc_unit <- function(value, unit_in, unit_out, mol_weight = NULL) {
     `g/l`        = 1000000,
     mg_dl        = 10000,
     `mg/dl`      = 10000,
+    mg_l         = 1000,
+    `mg/l`       = 1000,
+    pg_ml        = 1e-3,
+    `pg/ml`      = 1e-3,
     `micromol/l` = mol_weight,
     micromol_l   = mol_weight,
     micromol     = mol_weight,
@@ -38,7 +42,9 @@ convert_conc_unit <- function(value, unit_in, unit_out, mol_weight = NULL) {
     `mumol/l`    = mol_weight,
     `umol/l`     = mol_weight,
     mumol_l      = mol_weight,
-    umol_l       = mol_weight
+    umol_l       = mol_weight,
+    pmol_l       = mol_weight * 1e-6,
+    `pmol/l`     = mol_weight * 1e-6
   )
 
   unit_out <- match.arg(unit_out, names(conv))
