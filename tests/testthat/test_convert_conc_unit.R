@@ -20,6 +20,7 @@ test_that("molecular weight required when converting molar units", {
 test_that("molar unit conversion works", {
   expect_equal(convert_conc_unit(1, "mg_dl", "micromol_l", 0.5)$value, 20000)
   expect_equal(convert_conc_unit(200, "pg_ml", "pmol_l", 50)$value, 4000)
+  expect_equal(convert_conc_unit(1, "mmol_l", "pmol_l", 17)$value, 1e9)
 })
 
 test_that("vectorized input works", {
