@@ -93,13 +93,17 @@ reference:
      - pk_1cmt_inf_dose_for_range
      - dose2auc
      - auc2dose
+  - title: Probability calculations
+    desc: Functions to calculate outcome probabilities.
+    contents:
+      - calc_cefepime_neurotoxicity
+      - calc_treosulfan_success
   - title: Miscellaneous functions
     contents:
       - nca
       - egfr_cov_reqs
       - check_covs_available
       - calc_carboplatin_calvert
-      - calc_cefepime_neurotoxicity
       - calc_kel_single_tdm
       - calc_kel_double_tdm
       - calc_t12
