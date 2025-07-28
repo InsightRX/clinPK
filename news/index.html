@@ -34,13 +34,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.14.0" id="clinpk-0140">clinPK 0.14.0<a class="anchor" aria-label="anchor" href="#clinpk-0140"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.14.0" id="clinpk-0140-development-version">clinPK 0.14.0 (development version)<a class="anchor" aria-label="anchor" href="#clinpk-0140-development-version"></a></h2>
 <div class="section level3">
 <h3 id="major-changes-0-14-0">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-0-14-0"></a></h3>
 <ul><li>Refactored <code>pct_*_for_*()</code> functions. As input, they now accept vectors of values. They now return either a vector of percentiles for the given physical measurement, or a data frame with the observed percentile for the given physical measurement, along with a select distribution of physical measurements at particular percentiles. These functions also use updated CDC growth charts instead of WHO growth charts.</li>
 <li>Added <code>median_*_for_*()</code> functions for calculating median growth values for infants and children. These functions replace the now-deprecated <code>return_median</code> argument in the <code>pct_*_for_*()</code> functions.</li>
 <li>Added CDC growth chart data sets as package data (see <code><a href="../reference/growth-charts.html">?"growth-charts"</a></code>).</li>
 <li>Removed <code>read_who_table()</code> function, as part of the refactor for the <code>pct_*_for_*()</code> functions.</li>
+<li>Added <code><a href="../reference/calc_treosulfan_success.html">calc_treosulfan_success()</a></code> function.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-updates-0-14-0">Minor updates<a class="anchor" aria-label="anchor" href="#minor-updates-0-14-0"></a></h3>
