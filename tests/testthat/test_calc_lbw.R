@@ -17,3 +17,14 @@ test_that("LBW calculation works", {
     class(calc_lbw(weight = 50, height = 150, sex = "male")) == "list"
   )
 })
+
+test_that("LBW calculation works, boer", {
+  expect_equal(
+    calc_lbw(weight = 65, height = 155, sex = "male", method = "boer")$value,
+    48.6
+  )
+  expect_equal(
+    calc_lbw(weight = 65, height = 155, sex = "female", method = "boer")$value,
+    41.4
+  )
+})

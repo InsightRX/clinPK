@@ -44,7 +44,7 @@ calc_lbw <- function (
     } else {
       if(method == "boer") {
         if(sex == "male") {
-          lbm <-  0.407 * weight + 0.237 * height - 19.2
+          lbm <-  0.407 * weight + 0.267 * height - 19.2
         } else {
           lbm <-  0.252 * weight + 0.473 * height - 48.3
         }
