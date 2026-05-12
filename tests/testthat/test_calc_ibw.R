@@ -17,9 +17,24 @@ test_that("calc_ibw() errors if method doesn't match allowed", {
   expect_error(calc_ibw(method_adults = "foo"))
 })
 
-test_that("calc_ibw errors if passed a vector", {
+test_that("vectorization over different sex values works", {
+  male_val <- calc_ibw(weight = 80, height = 170, age = 40, sex = "male")
+  female_val <- calc_ibw(weight = 80, height = 170, age = 40, sex = "female")
+  vec_val <- calc_ibw(
+    weight = c(80, 80), height = c(170, 170),
+    age = c(40, 40), sex = c("male", "female")
+  )
+  expect_equal(vec_val, c(male_val, female_val))
+})
+
+test_that("calc_ibw() errors on mismatched vector lengths", {
   expect_error(
-    calc_ibw(age = c(10, 20), sex = c("male", "female"), height = 100, 130)
+    calc_ibw(
+      age = c(30, 40),
+      sex = c("male", "female", "male"),
+      height = 170
+    ),
+    "Vector inputs must all be the same length: `age` \\(size 2\\), `sex` \\(size 3\\)\\."
   )
 })
 

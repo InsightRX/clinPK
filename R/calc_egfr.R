@@ -116,7 +116,6 @@ calc_egfr <- function (
   ...
 ){
 
-
   # Format output units
   # ---- Relative eGFR?
   if (is.nil(relative)) {
@@ -132,6 +131,16 @@ calc_egfr <- function (
   method <- names(cov_reqs)
   cov_reqs <- cov_reqs[[1]]
 
+  # Check for inconsistent vector lengths
+  check_input_lengths(
+    sex = sex,
+    age = age,
+    scr = scr,
+    weight = weight,
+    height = height,
+    bsa = bsa
+  )
+  
   # Convert units, tidy covariates, calculate intermediates if required
   # -------------------------------------------------------------------
 
@@ -159,8 +168,8 @@ calc_egfr <- function (
   scr <- convert_creat_unit(scr, scr_unit, "mg/dl")$value
 
   # ---- Format Sex
-  sex <- ifelse(is.nil(sex), '', tolower(sex))
-
+  sex <- if (is.nil(sex)) '' else tolower(sex)
+  
   # Confirm Required Covariates Are Present
   # ---------------------------------------
   calculate_egfr <- check_covs_available(
@@ -394,7 +403,7 @@ calc_egfr <- function (
 }
 
 egfr_wright <- function(age, bsa, sex, scr) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -402,7 +411,7 @@ egfr_wright <- function(age, bsa, sex, scr) {
 }
 
 egfr_jelliffe <- function(age, sex, bsa, scr) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -410,7 +419,7 @@ egfr_jelliffe <- function(age, sex, bsa, scr) {
 }
 
 egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -456,7 +465,7 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
 #'   coefficient (TRUE) or the 2006 coefficient (FALSE), which was updated for 
 #'   standardization of the creatinine assay.
 egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -467,7 +476,7 @@ egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
 }
 
 egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -479,7 +488,7 @@ egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
 }
 
 egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -490,7 +499,7 @@ egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
 }
 
 egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -499,7 +508,7 @@ egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
 }
 
 egfr_cockcroft_gault <- function(sex, age, scr, weight) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -508,7 +517,7 @@ egfr_cockcroft_gault <- function(sex, age, scr, weight) {
 }
 
 egfr_malmo_lund <- function(sex, age, scr) {
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("This method requires sex to be one of 'male' or 'female'.")
     return(NULL)
   }
@@ -531,16 +540,14 @@ egfr_bedside_schwartz <- function(age, height, scr, verbose) {
 }
 
 egfr_schwartz <- function(age, preterm, sex, height, scr) {
-  if (age < 1 ) {
-    k <- ifelse(preterm, 0.33, 0.45)
-  } else if (age > 13) {
-    if (!sex %in% c("male", "female")) {
-      warning("This method requires sex to be one of 'male' or 'female'.")
-      return(NULL)
-    }
-    k <- ifelse(sex == 'male', 0.7,  0.55)
-  } else {
-    k <- 0.55
+  if (any(!sex %in% c("male", "female"))) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
   }
+  k <- ifelse(
+    age < 1,
+    ifelse(preterm, 0.33, 0.45),
+    ifelse(age > 13 & sex == "male", 0.7, 0.55)
+  )
   (k * height) / scr
 }

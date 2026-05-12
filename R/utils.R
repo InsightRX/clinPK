@@ -1,3 +1,18 @@
+#' Check for inconsistent vector lengths among inputs
+#'
+#' @param ... named arguments to check
+#' @keywords internal
+check_input_lengths <- function(...) {
+  input_lengths <- lengths(Filter(
+    function(x) !is.null(x) && length(x) > 1,
+    list(...)
+  ))
+  if (length(unique(input_lengths)) > 1) {
+    sizes <- paste(sprintf("`%s` (size %d)", names(input_lengths), input_lengths), collapse = ", ")
+    stop(sprintf("Vector inputs must all be the same length: %s.", sizes))
+  }
+}
+
 #' Check if values in vector are empty
 #'
 #' @param x vector

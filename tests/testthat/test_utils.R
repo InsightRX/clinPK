@@ -69,3 +69,38 @@ test_that("%<=% handles zero-length input", {
   expect_equal(c(1, 3) %<=% numeric(0), logical(0))
   expect_equal(numeric(0) %<=% 5, logical(0))
 })
+
+# check_input_lengths() -------------------------------------------------------
+test_that("check_input_lengths() passes when all vectors are the same length", {
+  expect_no_error(
+    check_input_lengths(sex = c("male", "female"), age = c(30, 40))
+  )
+})
+
+test_that("check_input_lengths() passes when some inputs are scalar", {
+  expect_no_error(check_input_lengths(sex = c("male", "female"), age = 30))
+})
+
+test_that("check_input_lengths() passes when all inputs are scalar", {
+  expect_no_error(check_input_lengths(sex = "male", age = 30))
+})
+
+test_that("check_input_lengths() passes when some inputs are NULL", {
+  expect_no_error(
+    check_input_lengths(sex = c("male", "female"), age = c(30, 40), bsa = NULL)
+  )
+})
+
+test_that("check_input_lengths() errors on mismatched vector lengths", {
+  expect_error(
+    check_input_lengths(sex = c("male", "female"), age = c(30, 40, 50)),
+    "Vector inputs must all be the same length: `sex` \\(size 2\\), `age` \\(size 3\\)\\."
+  )
+  # Multiple mismatches are caught too:
+  expect_error(
+    check_input_lengths(
+      sex = c("male", "female"), age = c(30, 40, 50), scr = c(0.5, 0.6, 0.7, 0.8)
+    ),
+    "Vector inputs must all be the same length: `sex` \\(size 2\\), `age` \\(size 3\\), `scr` \\(size 4\\)\\."
+  )
+})

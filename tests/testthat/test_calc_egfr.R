@@ -782,3 +782,54 @@ test_that("missing scr_units handled well", {
   expect_equal(res2, expect_res)
   expect_equal(res3, expect_res)
 })
+
+test_that("vectorization over different sex values works for all methods", {
+  methods <- c(
+    "cockcroft_gault",
+    "cockcroft_gault_sci",
+    "cockcroft_gault_ideal",
+    "cockcroft_gault_adjusted",
+    "cockcroft_gault_adaptive",
+    "wright",
+    "jelliffe",
+    "jelliffe_unstable",
+    "mdrd_ignore_race",
+    "mdrd_original_ignore_race",
+    "ckd_epi_ignore_race",
+    "ckd_epi_as_2021",
+    "malmo_lund_revised",
+    "schwartz"
+  )
+
+  for (m in methods) {
+    male_val <- calc_egfr(
+      method = m, sex = "male", age = 30, scr = 0.5,
+      weight = 80, height = 170, bsa = 1.9, unit_out = "ml/min", verbose = FALSE
+    )$value
+    female_val <- calc_egfr(
+      method = m, sex = "female", age = 30, scr = 0.5,
+      weight = 80, height = 170, bsa = 1.9, unit_out = "ml/min", verbose = FALSE
+    )$value
+    vec_val <- calc_egfr(
+      method = m, sex = c("male", "female"), age = c(30, 30), scr = c(0.5, 0.5),
+      weight = c(80, 80), height = c(170, 170), bsa = c(1.9, 1.9),
+      unit_out = "ml/min", verbose = FALSE
+    )$value
+    expect_equal(vec_val, c(male_val, female_val), label = paste("method:", m))
+  }
+})
+
+test_that("calc_egfr() errors on mismatched vector lengths", {
+  expect_error(
+    calc_egfr(
+      method = "ckd_epi_as_2021",
+      sex = c("male", "female"), # length 2
+      age = c(30, 40, 50), # length 3
+      scr = 0.5,
+      weight = 80,
+      height = 170,
+      verbose = FALSE
+    ),
+    "Vector inputs must all be the same length: `sex` \\(size 2\\), `age` \\(size 3\\)\\."
+  )
+})

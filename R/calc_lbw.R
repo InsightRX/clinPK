@@ -35,33 +35,34 @@ calc_lbw <- function (
   if(! method %in% methods) {
     stop(paste0("Unknown estimation method, please choose from: ", paste(methods, collapse=" ")))
   }
-  if(is.null(sex) || !(sex %in% c("male", "female"))) {
+  if(is.null(sex) || !all(sex %in% c("male", "female"))) {
     stop("Sex needs to be either male or female!")
   }
+  check_input_lengths(sex = sex, weight = weight, height = height, bmi = bmi)
   if(method %in% c("boer", "james", "hume")) {
     if(is.null(weight) || is.null(height) || is.null(sex)) {
       stop("Equation needs weight, BMI or height, and sex of patient!")
     } else {
       if(method == "boer") {
-        if(sex == "male") {
-          lbm <-  0.407 * weight + 0.267 * height - 19.2
-        } else {
-          lbm <-  0.252 * weight + 0.473 * height - 48.3
-        }
+        lbm <- ifelse(
+          sex == "male",
+          0.407 * weight + 0.267 * height - 19.2,
+          0.252 * weight + 0.473 * height - 48.3
+        )
       }
       if(method == "hume") {
-        if(sex == "male") {
-          lbm <-  0.3281 * weight + 0.33929 * height - 29.5336
-        } else {
-          lbm <-  0.29569 * weight + 0.41813 * height - 43.2933
-        }
+        lbm <- ifelse(
+          sex == "male",
+          0.3281  * weight + 0.33929 * height - 29.5336,
+          0.29569 * weight + 0.41813 * height - 43.2933
+        )
       }
       if(method == "james") {
-        if(sex == "male") {
-          lbm <-  1.1 * weight - 128 * (weight/height)^2
-        } else {
-          lbm <-  1.07 * weight - 148 * (weight/height)^2
-        }
+        lbm <- ifelse(
+          sex == "male",
+          1.1  * weight - 128 * (weight/height)^2,
+          1.07 * weight - 148 * (weight/height)^2
+        )
       }
     }
   }
@@ -72,11 +73,11 @@ calc_lbw <- function (
       if(is.null(bmi)) {
         bmi <- calc_bmi(height = height, weight = weight)
       }
-      if(sex == "male") {
-        lbm <- (1.1 * weight) - 0.0128 * bmi * weight
-      } else {
-        lbm <- (1.07 * weight) - 0.0148 * bmi * weight
-      }
+      lbm <- ifelse(
+        sex == "male",
+        (1.1  * weight) - 0.0128 * bmi * weight,
+        (1.07 * weight) - 0.0148 * bmi * weight
+      )
     }
   }
   return(list(
