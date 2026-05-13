@@ -1,6 +1,7 @@
 test_that("calculate egfr works: cockroft_gault", {
   expect_error(
-    suppressMessages(calc_egfr(scr = .5, weight = 4.5, method = "cockcroft_gault"))
+    suppressMessages(calc_egfr(scr = .5, weight = 4.5, method = "cockcroft_gault")),
+    "Sorry, missing covariates:"
   )
 
   expect_equal(
@@ -218,7 +219,8 @@ test_that("calculate egfr works: malmo lund", {
       method = "malmo_lund_revised",
       relative = FALSE,
       verbose = FALSE
-    )
+    ),
+    "Sorry, missing covariates:"
   )
 
   expect_equal(
@@ -258,7 +260,8 @@ test_that("calculate egfr works: schwartz", {
       weight = 4.5,
       method = "schwartz",
       verbose = FALSE
-    )
+    ),
+    "Sorry, missing covariates:"
   )
 
   expect_equal(
@@ -547,7 +550,7 @@ test_that("egfr cap applied and info added", {
 })
 
 test_that("calc_egfr does not error for patients < 1yr when calculating ibw", {
-  expect_error(
+  expect_no_error(
     suppressMessages(calc_egfr(
       age = 0.03,
       sex = "female",
@@ -555,10 +558,9 @@ test_that("calc_egfr does not error for patients < 1yr when calculating ibw", {
       height = 30,
       scr = 0.5,
       method = "cockcroft_gault_adjusted"
-    )),
-    NA
+    ))
   )
-  expect_error(
+  expect_no_error(
     suppressMessages(calc_egfr(
       age = 0.03,
       sex = "female",
@@ -566,8 +568,7 @@ test_that("calc_egfr does not error for patients < 1yr when calculating ibw", {
       height = 30,
       scr = 0.5,
       method = "cockcroft_gault_ideal"
-    )),
-    NA
+    ))
   )
 })
 
@@ -677,17 +678,39 @@ test_that("eGFR for mdrd_ignore_race and mdrd_original_ignore_race", {
 })
 
 test_that("calc_egfr warns and returns NULL if sex isn't supported", {
-  expect_warning(
-    res <- calc_egfr(
-      age = 40,
-      sex = "unknown",
-      weight = 80,
-      scr = 1,
-      method = "cockcroft_gault",
-      verbose = FALSE
-    )
+  methods <- c(
+    "cockcroft_gault",
+    "cockcroft_gault_sci",
+    "cockcroft_gault_ideal",
+    "cockcroft_gault_adjusted",
+    "cockcroft_gault_adaptive",
+    "wright",
+    "jelliffe",
+    "jelliffe_unstable",
+    "mdrd_ignore_race",
+    "mdrd_original_ignore_race",
+    "ckd_epi_ignore_race",
+    "ckd_epi_as_2021",
+    "malmo_lund_revised",
+    "schwartz"
   )
-  expect_null(res$value)
+  
+  for (m in methods) {
+    expect_warning(
+      res <- calc_egfr(
+        age = 40,
+        sex = "unknown",
+        weight = 80,
+        height = 170,
+        scr = 1,
+        method = m,
+        verbose = FALSE
+      ),
+      "This method requires sex to be one of 'male' or 'female'.",
+      label = paste("method:", m)
+    )
+    expect_null(res$value, label = paste("method:", m))
+  }
 })
 
 test_that("calc_egfr converts scr appropriately", {
