@@ -29,65 +29,79 @@
 #' calc_ffm(weight = 70, bmi = 25, sex = "male")
 #' calc_ffm(weight = 70, height = 180, age = 40, sex = "female", method = "storset")
 #' @export
-calc_ffm <- function (
+calc_ffm <- function(
   weight = NULL,
   bmi = NULL,
   sex = NULL,
   height = NULL,
   age = NULL,
-  method = c("janmahasatian", "green", "al-sallami", "storset", "bucaloiu", "hume", "james", "garrow_webster"),
-  digits = 1) {
+  method = c(
+    "janmahasatian",
+    "green",
+    "al-sallami",
+    "storset",
+    "bucaloiu",
+    "hume",
+    "james",
+    "garrow_webster"
+  ),
+  digits = 1
+) {
   method <- match.arg(method)
   check_input_lengths(
-    sex = sex,
-    weight = weight,
-    bmi = bmi,
-    height = height,
-    age = age
+    sex = sex, weight = weight, bmi = bmi, height = height, age = age
   )
-  sex <- tolower(sex)
 
-  ffm <- switch(
-    method,
-    "janmahasatian" = ffm_janmahasatian_green(
-      weight = weight,
-      sex = sex,
-      height = height,
-      bmi = bmi
-    ),
-    "green" = ffm_janmahasatian_green(
-      weight = weight,
-      sex = sex,
-      height = height,
-      bmi = bmi
-    ),
-    "al-sallami" = ffm_al_sallami(
-      weight = weight,
-      sex = sex,
-      age = age,
-      height = height,
-      bmi = bmi
-    ),
-    "storset" = ffm_storset( # based on kidney transplant patient
-      weight = weight,
-      sex = sex,
-      height = height,
-      age = age
-    ),
-    "bucaloiu" = ffm_bucaloiu( # morbidly obese females
-      weight = weight,
-      height = height,
-      sex = sex,
-      age = age
-    ),
-    "hume" = ffm_hume(weight = weight, height = height, sex = sex),
-    "james" = ffm_james(weight = weight, height = height, sex = sex),
-    "garrow_webster" = ffm_garrow_webster(
-      weight = weight,
-      height = height,
-      sex = sex
-    )
+  fn <- switch(method,
+    "janmahasatian"  = ffm_janmahasatian_green,
+    "green"          = ffm_janmahasatian_green,
+    "al-sallami"     = ffm_al_sallami,
+    "storset"        = ffm_storset,
+    "bucaloiu"       = ffm_bucaloiu,
+    "hume"           = ffm_hume,
+    "james"          = ffm_james,
+    "garrow_webster" = ffm_garrow_webster
   )
+
+  # Identify required args for selected method --------------------------------
+  fn_formals <- formals(fn)
+  is_required <- sapply(fn_formals, function(.x) identical(.x, alist(a = )[[1]]))
+  required_args <- names(fn_formals)[is_required]
+
+  # If BMI is required but not supplied, compute it if possible ---------------
+  if ("bmi" %in% required_args && is.null(bmi) && !is.null(height) && !is.null(weight)) {
+    bmi <- calc_bmi(height = height, weight = weight)
+  }
+
+  # Check required covariates are present -------------------------------------
+  available <- list(
+    weight = weight, bmi = bmi, sex = sex, height = height, age = age
+  )
+  missing_required <- required_args[
+    sapply(required_args, function(.x) is.null(available[[.x]]))
+  ]
+  if (length(missing_required) > 0) {
+    missing_labels <- ifelse(
+      missing_required == "bmi", "bmi or weight and height", missing_required
+    )
+    stop(sprintf(
+      "Method '%s' requires: %s.",
+      method, paste(missing_labels, collapse = ", ")
+    ))
+  }
+
+  # Central sex validation ----------------------------------------------------
+  sex <- tolower(sex)
+  if (!all(sex %in% c("male", "female"))) {
+    warning("This method requires sex to be one of 'male' or 'female'.")
+    return(NULL)
+  }
+
+  # fn dispatch (only pass args the inner function accepts) -------------------
+  available <- list(
+    weight = weight, bmi = bmi, sex = sex, height = height, age = age
+  )
+  ffm <- do.call(fn, available[intersect(names(available), formalArgs(fn))])
 
   return(list(
     value = round(ffm, digits),
@@ -96,114 +110,55 @@ calc_ffm <- function (
   ))
 }
 
-ffm_janmahasatian_green <- function(weight, sex, height = NULL, bmi = NULL) {
-  if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex)) {
-    stop("Equation needs weight, BMI or height, and sex of patient!")
-  }
-  if (any(!sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
-  if(is.null(bmi)) {
-    bmi <- calc_bmi(height = height, weight = weight)
-  }
-  ffm <- ifelse(
-    sex == "male", 
-    (9.27e03 * weight) / (6.68e03 + 216 * bmi), 
+ffm_janmahasatian_green <- function(weight, sex, bmi) {
+  ifelse(
+    sex == "male",
+    (9.27e03 * weight) / (6.68e03 + 216 * bmi),
     (9.27e03 * weight) / (8.78e03 + 244 * bmi)
   )
-  ffm
 }
 
-ffm_al_sallami <- function(weight, sex, age, height = NULL, bmi = NULL) {
-  if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex) || is.null(age)) {
-    stop("Equation needs weight, BMI or height, sex, and age of patient!")
-  }
-  if (any(!sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
-  if(is.null(bmi)) {
-    bmi <- calc_bmi(weight = weight, height = height)
-  }
-  ffm  <- ifelse(
+ffm_al_sallami <- function(weight, sex, age, bmi) {
+  ifelse(
     sex == "female",
-    (1.11 + ((1-1.11)/(1+(age/7.1)^-1.1))) * ((9270 * weight) / (8780 + (244 * bmi))),
-    (0.88 + ((1-0.88)/(1+(age/13.4)^-12.7))) * ((9270 * weight) / (6680 + (216 * bmi)))
+    (1.11 + ((1 - 1.11) / (1 + (age / 7.1)^-1.1)))   * ((9270 * weight) / (8780 + (244 * bmi))),
+    (0.88 + ((1 - 0.88) / (1 + (age / 13.4)^-12.7))) * ((9270 * weight) / (6680 + (216 * bmi)))
   )
-  ffm
 }
 
 ffm_storset <- function(weight, sex, height, age) {
-  if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
-    stop("Equation needs weight, height, sex, and age of patient!")
-  }
-  if (any(!sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
-  ffm <- ifelse(
-    sex == "male", 
-    (11.4 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1 - age * 0.0007),
-    (10.2 * weight) / (81.3 + weight) * (1 + height * 0.052) * (1 - age * 0.0007)
-  )
-  ffm
+  coef <- ifelse(sex == "male", 11.4, 10.2)
+  (coef * weight) / (81.3 + weight) * (1 + height * 0.052) * (1 - age * 0.0007)
 }
 
-ffm_bucaloiu <- function(weight, sex, height, age) {
-  if(is.null(weight) || is.null(height) || is.null(sex) || is.null(age)) {
-    stop("Equation needs weight, height, sex, and age of patient!")
-  }
+ffm_bucaloiu <- function(weight, sex, height) {
   bmi <- calc_bmi(weight = weight, height = height)
-  if(any(bmi < 25) || any(!sex == "female")) {
+  if (any(bmi < 25) || any(!sex == "female")) {
     warning("This equation is only meant for obese females.")
   }
-  ffm <- -11.41 + 0.354 * weight + 11.06 * height/100
-  ffm
+  -11.41 + 0.354 * weight + 11.06 * height / 100
 }
 
 ffm_hume <- function(weight, sex, height) {
-  if(is.null(weight) || is.null(height) || is.null(sex)) {
-    stop("Equation needs weight, height, sex of patient!")
-  }
-  if (any(!sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
-  ffm <- ifelse(
+  ifelse(
     sex == "male",
     0.3281  * weight + 0.33929 * height - 29.5336,
     0.29569 * weight + 0.41813 * height - 43.2933
   )
-  ffm
 }
 
 ffm_james <- function(weight, sex, height) {
-  if(is.null(weight) || is.null(height) || is.null(sex)) {
-    stop("Equation needs weight, height, sex of patient!")
-  }
-  if (any(!sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
-  ffm <- ifelse(sex == "male",
-    1.1  * weight - 128 * (weight/height)^2,
-    1.07 * weight - 148 * (weight/height)^2
+  ifelse(
+    sex == "male",
+    1.1  * weight - 128 * (weight / height)^2,
+    1.07 * weight - 148 * (weight / height)^2
   )
-  ffm
 }
 
 ffm_garrow_webster <- function(weight, sex, height) {
-  if(is.null(weight) || is.null(height) || is.null(sex)) {
-    stop("Equation needs weight, height, and sex of patient!")
-  }
-  if (any(!sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
-  ffm <- ifelse(sex == "male",
-    0.285 * weight + 12.1  * (height/100)^2,
-    0.287 * weight +  9.74 * (height/100)^2
+  ifelse(
+    sex == "male",
+    0.285 * weight + 12.1  * (height / 100)^2,
+    0.287 * weight +  9.74 * (height / 100)^2
   )
-  ffm
 }
