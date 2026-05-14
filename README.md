@@ -1,5 +1,9 @@
 # clinPK: Clinical Pharmacokinetics Toolkit
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/InsightRX/clinPK/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/InsightRX/clinPK/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 ## Overview
 
 The clinPK package provides equations commonly used in clinical pharmacokinetics 
