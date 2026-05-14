@@ -24,64 +24,66 @@
 #' calc_lbw(weight = 80, height = 170, sex = "male")
 #' calc_lbw(weight = 80, height = 170, sex = "male", method = "james")
 #' @export
-calc_lbw <- function (
+calc_lbw <- function(
   weight = NULL,
   bmi = NULL,
   sex = NULL,
   height = NULL,
-  method = "green",
-  digits = 1) {
-  methods <- c("green", "boer", "james", "hume")
-  if(! method %in% methods) {
-    stop(paste0("Unknown estimation method, please choose from: ", paste(methods, collapse=" ")))
-  }
-  if(is.null(sex) || !all(sex %in% c("male", "female"))) {
-    stop("Sex needs to be either male or female!")
-  }
+  method = c("green", "boer", "james", "hume"),
+  digits = 1
+) {
   check_input_lengths(sex = sex, weight = weight, height = height, bmi = bmi)
-  if(method %in% c("boer", "james", "hume")) {
-    if(is.null(weight) || is.null(height) || is.null(sex)) {
-      stop("Equation needs weight, BMI or height, and sex of patient!")
-    } else {
-      if(method == "boer") {
-        lbm <- ifelse(
-          sex == "male",
-          0.407 * weight + 0.267 * height - 19.2,
-          0.252 * weight + 0.473 * height - 48.3
-        )
-      }
-      if(method == "hume") {
-        lbm <- ifelse(
-          sex == "male",
-          0.3281  * weight + 0.33929 * height - 29.5336,
-          0.29569 * weight + 0.41813 * height - 43.2933
-        )
-      }
-      if(method == "james") {
-        lbm <- ifelse(
-          sex == "male",
-          1.1  * weight - 128 * (weight/height)^2,
-          1.07 * weight - 148 * (weight/height)^2
-        )
-      }
-    }
-  }
-  if(method == "green") {
-    if(is.null(weight) || (is.null(bmi) & is.null(height)) || is.null(sex)) {
-      stop("Equation needs weight, BMI or height, and sex of patient!")
-    } else {
-      if(is.null(bmi)) {
-        bmi <- calc_bmi(height = height, weight = weight)
-      }
-      lbm <- ifelse(
-        sex == "male",
-        (1.1  * weight) - 0.0128 * bmi * weight,
-        (1.07 * weight) - 0.0148 * bmi * weight
-      )
-    }
-  }
+  method <- match.arg(method)
+  method_fn <- switch(method,
+    "green" = lbw_green,
+    "boer"  = lbw_boer,
+    "james" = lbw_james,
+    "hume"  = lbw_hume
+  )
+
+  inputs <- prepare_method_inputs(method_fn, method,
+    weight = weight, bmi = bmi, sex = sex, height = height
+  )
+
+  inputs$sex <- normalize_sex(inputs$sex)
+  if (is.null(inputs$sex)) return(NULL)
+
+  lbw <- do.call(method_fn, inputs[intersect(names(inputs), formalArgs(method_fn))])
+
   return(list(
-    value = round(lbm,1),
+    value = round(lbw, digits),
     unit = "kg"
   ))
+}
+
+lbw_green <- function(weight, sex, bmi) {
+  ifelse(
+    sex == "male",
+    (1.1  * weight) - 0.0128 * bmi * weight,
+    (1.07 * weight) - 0.0148 * bmi * weight
+  )
+}
+
+lbw_boer <- function(weight, sex, height) {
+  ifelse(
+    sex == "male",
+    0.407 * weight + 0.267 * height - 19.2,
+    0.252 * weight + 0.473 * height - 48.3
+  )
+}
+
+lbw_james <- function(weight, sex, height) {
+  ifelse(
+    sex == "male",
+    1.1  * weight - 128 * (weight / height)^2,
+    1.07 * weight - 148 * (weight / height)^2
+  )
+}
+
+lbw_hume <- function(weight, sex, height) {
+  ifelse(
+    sex == "male",
+    0.3281  * weight + 0.33929 * height - 29.5336,
+    0.29569 * weight + 0.41813 * height - 43.2933
+  )
 }

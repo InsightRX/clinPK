@@ -47,12 +47,11 @@ calc_ffm <- function(
   ),
   digits = 1
 ) {
-  method <- match.arg(method)
   check_input_lengths(
     sex = sex, weight = weight, bmi = bmi, height = height, age = age
   )
-
-  fn <- switch(method,
+  method <- match.arg(method)
+  method_fn <- switch(method,
     "janmahasatian"  = ffm_janmahasatian_green,
     "green"          = ffm_janmahasatian_green,
     "al-sallami"     = ffm_al_sallami,
@@ -63,45 +62,14 @@ calc_ffm <- function(
     "garrow_webster" = ffm_garrow_webster
   )
 
-  # Identify required args for selected method --------------------------------
-  fn_formals <- formals(fn)
-  is_required <- sapply(fn_formals, function(.x) identical(.x, alist(a = )[[1]]))
-  required_args <- names(fn_formals)[is_required]
-
-  # If BMI is required but not supplied, compute it if possible ---------------
-  if ("bmi" %in% required_args && is.null(bmi) && !is.null(height) && !is.null(weight)) {
-    bmi <- calc_bmi(height = height, weight = weight)
-  }
-
-  # Check required covariates are present -------------------------------------
-  available <- list(
+  inputs <- prepare_method_inputs(method_fn, method,
     weight = weight, bmi = bmi, sex = sex, height = height, age = age
   )
-  missing_required <- required_args[
-    sapply(required_args, function(.x) is.null(available[[.x]]))
-  ]
-  if (length(missing_required) > 0) {
-    missing_labels <- ifelse(
-      missing_required == "bmi", "bmi or weight and height", missing_required
-    )
-    stop(sprintf(
-      "Method '%s' requires: %s.",
-      method, paste(missing_labels, collapse = ", ")
-    ))
-  }
 
-  # Central sex validation ----------------------------------------------------
-  sex <- tolower(sex)
-  if (!all(sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
+  inputs$sex <- normalize_sex(inputs$sex)
+  if (is.null(inputs$sex)) return(NULL)
 
-  # fn dispatch (only pass args the inner function accepts) -------------------
-  available <- list(
-    weight = weight, bmi = bmi, sex = sex, height = height, age = age
-  )
-  ffm <- do.call(fn, available[intersect(names(available), formalArgs(fn))])
+  ffm <- do.call(method_fn, inputs[intersect(names(inputs), formalArgs(method_fn))])
 
   return(list(
     value = round(ffm, digits),

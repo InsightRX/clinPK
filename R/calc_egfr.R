@@ -188,9 +188,9 @@ calc_egfr <- function (
 
   ## Format Sex ----
   sex <- if (is.nil(sex)) '' else tolower(sex)
-  if ("sex" %in% cov_reqs && !all(sex %in% c("male", "female"))) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
+  if ("sex" %in% cov_reqs) {
+    sex <- normalize_sex(sex)
+    if (is.null(sex)) return(NULL)
   }
 
   ## Select Weight for eGFR ----
