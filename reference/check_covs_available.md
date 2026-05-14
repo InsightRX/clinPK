@@ -1,0 +1,44 @@
+# Checks whether required covariates for eGFR calculations are present
+
+returns true if all patient covs specified in required covs are
+non-null, non-NA and not a 0-character string. See `is.nil` for missing
+data types checked. Returns TRUE if no covariates are required.
+
+## Usage
+
+``` r
+check_covs_available(
+  cov_reqs = NULL,
+  patient_covs = NULL,
+  verbose = TRUE,
+  fail = TRUE
+)
+```
+
+## Arguments
+
+- cov_reqs:
+
+  vector of covariates required for calculating derived covariatiate
+
+- patient_covs:
+
+  named list of covariates
+
+- verbose:
+
+  stop and describe missing covariate(s)?
+
+- fail:
+
+  invoke [`stop()`](https://rdrr.io/r/base/stop.html) if not all
+  covariates available?
+
+## Examples
+
+``` r
+check_covs_available(
+  egfr_cov_reqs('cockcroft_gault_ideal')[[1]],
+  list(creat = 1, weight = 100, height = 160, sex = 'female', age = 90))
+#> [1] TRUE
+```
