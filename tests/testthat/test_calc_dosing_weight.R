@@ -54,6 +54,19 @@ test_that("Dosing weight is calculated (vectorized)", {
     ),
     c(95.4, 52.4, 50)
   )
+  expect_equal(
+    round(
+      calc_dosing_weight(
+        weight = c(160, 60, 50),
+        height = c(160, 60, 50),
+        age= c(50, 6, 5),
+        sex = "female",
+        verbose = FALSE
+      )$value,
+      1
+    ),
+    c(95.4, 27.6, 22.5)
+  )
 })
 
 test_that("vectorization over different sex values works", {
