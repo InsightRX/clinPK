@@ -69,3 +69,45 @@ test_that("vectorization over different sex values works", {
   )$value
   expect_equal(vec_val, c(male_val, female_val))
 })
+
+test_that("verbose = TRUE emits the correct message for each weight type", {
+  expect_message(
+    calc_dosing_weight(weight = 160, height = 160, age = 50, sex = "female"),
+    "Using adjusted body weight."
+  )
+  expect_message(
+    calc_dosing_weight(weight = 60, height = 160, age = 50, sex = "female"),
+    "Using ideal body weight."
+  )
+  expect_message(
+    calc_dosing_weight(weight = 50, height = 160, age = 50, sex = "female"),
+    "Using total body weight."
+  )
+})
+
+test_that("verbose = TRUE has no effect for vectorized output", {
+  expect_no_message(
+    calc_dosing_weight(
+      weight = c(160, 60, 50),
+      height = 160,
+      age = 50,
+      sex = "female",
+      verbose = TRUE
+    )
+  )
+})
+
+test_that("verbose = FALSE suppresses messages", {
+  expect_no_message(
+    calc_dosing_weight(
+      weight = 160, height = 160, age = 50, sex = "female", verbose = FALSE)
+  )
+  expect_no_message(
+    calc_dosing_weight(
+      weight = 60, height = 160, age = 50, sex = "female", verbose = FALSE)
+  )
+  expect_no_message(
+    calc_dosing_weight(
+      weight = 50, height = 160, age = 50, sex = "female", verbose = FALSE)
+  )
+})

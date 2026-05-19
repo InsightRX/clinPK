@@ -36,11 +36,11 @@ calc_dosing_weight <- function(weight, height, age, sex, verbose = TRUE, ...) {
     )
   )
   wt_chosen <- ifelse(weight > ibw * 1.2, abw, ifelse(weight < ibw, weight, ibw))
-  if (verbose) {
-    types <- unique(weight_type)
-    if ("Adjusted BW" %in% types) message("Using adjusted body weight.")
-    if ("Total BW" %in% types) message("Using total body weight.")
-    if ("Ideal BW" %in% types) message("Using ideal body weight.")
+  # Verbosity is only informative for length 1 outputs:
+  if (verbose && length(wt_chosen) == 1 && length(weight_type) == 1) {
+    if ("Adjusted BW" %in% weight_type) message("Using adjusted body weight.")
+    if ("Total BW" %in% weight_type) message("Using total body weight.")
+    if ("Ideal BW" %in% weight_type) message("Using ideal body weight.")
   }
   return(list(value = wt_chosen, unit = "kg", type = weight_type))
 }
