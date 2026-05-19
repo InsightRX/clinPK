@@ -39,3 +39,88 @@ test_that("Dosing weight is calculated", {
     50
   )
 })
+
+test_that("Dosing weight is calculated (vectorized)", {
+  expect_equal(
+    round(
+      calc_dosing_weight(
+        weight = c(160, 60, 50),
+        height = 160,
+        age= 50,
+        sex = "female",
+        verbose = FALSE
+      )$value,
+      1
+    ),
+    c(95.4, 52.4, 50)
+  )
+  expect_equal(
+    round(
+      calc_dosing_weight(
+        weight = c(160, 60, 50),
+        height = c(160, 60, 50),
+        age= c(50, 6, 5),
+        sex = "female",
+        verbose = FALSE
+      )$value,
+      1
+    ),
+    c(95.4, 27.6, 22.5)
+  )
+})
+
+test_that("vectorization over different sex values works", {
+  male_val <- calc_dosing_weight(
+    weight = 80, height = 170, age = 40, sex = "male",   verbose = FALSE
+  )$value
+  female_val <- calc_dosing_weight(
+    weight = 80, height = 170, age = 40, sex = "female", verbose = FALSE
+  )$value
+  vec_val <- calc_dosing_weight(
+    weight = c(80, 80), height = c(170, 170), age = c(40, 40),
+    sex = c("male", "female"), verbose = FALSE
+  )$value
+  expect_equal(vec_val, c(male_val, female_val))
+})
+
+test_that("verbose = TRUE emits the correct message for each weight type", {
+  expect_message(
+    calc_dosing_weight(weight = 160, height = 160, age = 50, sex = "female"),
+    "Using adjusted body weight."
+  )
+  expect_message(
+    calc_dosing_weight(weight = 60, height = 160, age = 50, sex = "female"),
+    "Using ideal body weight."
+  )
+  expect_message(
+    calc_dosing_weight(weight = 50, height = 160, age = 50, sex = "female"),
+    "Using total body weight."
+  )
+})
+
+test_that("verbose = TRUE has no effect for vectorized output", {
+  expect_no_message(
+    calc_dosing_weight(
+      weight = c(160, 60, 50),
+      height = 160,
+      age = 50,
+      sex = "female",
+      verbose = TRUE
+    )
+  )
+})
+
+test_that("verbose = FALSE suppresses messages", {
+  expect_no_message(
+    calc_dosing_weight(
+      weight = 160, height = 160, age = 50, sex = "female", verbose = FALSE)
+  )
+  expect_no_message(
+    calc_dosing_weight(
+      weight = 60, height = 160, age = 50, sex = "female", verbose = FALSE)
+  )
+  expect_no_message(
+    calc_dosing_weight(
+      weight = 50, height = 160, age = 50, sex = "female", verbose = FALSE)
+  )
+})

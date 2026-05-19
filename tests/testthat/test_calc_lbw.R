@@ -28,3 +28,28 @@ test_that("LBW calculation works, boer", {
     41.4
   )
 })
+
+test_that("vectorization over different sex values works for all methods", {
+  methods <- c("green", "boer", "james", "hume")
+
+  for (m in methods) {
+    male_val <- calc_lbw(method = m, sex = "male", weight = 80, height = 170)$value
+    female_val <- calc_lbw(method = m, sex = "female", weight = 80, height = 170)$value
+    vec_val <- calc_lbw(
+      method = m, sex = c("male", "female"),
+      weight = c(80, 80), height = c(170, 170)
+    )$value
+    expect_equal(vec_val, c(male_val, female_val), label = paste("method:", m))
+  }
+})
+
+test_that("calc_lbw() errors on mismatched vector lengths", {
+  expect_error(
+    calc_lbw(
+      sex = c("male", "female"),
+      weight = c(80, 80, 80),
+      height = 170
+    ),
+    "Vector inputs must all be the same length: `sex` \\(size 2\\), `weight` \\(size 3\\)\\."
+  )
+})

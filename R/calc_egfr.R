@@ -116,36 +116,64 @@ calc_egfr <- function (
   ...
 ){
 
-
-  # Format output units
-  # ---- Relative eGFR?
-  if (is.nil(relative)) {
+  # Format output units -------------------------------------------------------
+  if (is.nil(relative)) { # Relative eGFR?
     # By default, assume true, since most equations report in units of /1.73m2.
     # Cockcroft-Gault and derived formulae do not report in relative units, but
     # do not require bsa to convert.
     relative <- ifelse(grepl('cockcroft_gault', method), FALSE, TRUE)
   }
   
-  # Extract required covariates and tidied method name
-  # --------------------------------------------------
+  # Extract required covariates and tidied method name ------------------------
   cov_reqs <- egfr_cov_reqs(method, relative)
   method <- names(cov_reqs)
   cov_reqs <- cov_reqs[[1]]
-
-  # Convert units, tidy covariates, calculate intermediates if required
-  # -------------------------------------------------------------------
-
-  # ---- Calculate BSA
+  
+  # Calculate intermediate covariates if required -----------------------------
+  
+  ## Calculate BSA ----
   if("bsa" %in% cov_reqs && is.nil(bsa)) { 
     calculate_egfr <- check_covs_available(c('height', 'weight'), 
-                          list(height = height, weight = weight), fail = fail)
+                                           list(height = height, weight = weight), fail = fail)
     if(!fail && !calculate_egfr) {
       return(FALSE)
     }
     bsa <- calc_bsa(weight, height, bsa_method)$value
   }
+  
+  # Confirm required covariates are present -----------------------------------
+  calculate_egfr <- check_covs_available(
+    cov_reqs,
+    list(
+      age = age,
+      sex = sex,
+      creat = scr,
+      weight = weight,
+      height = height,
+      bsa = bsa,
+      race = race,
+      preterm = preterm
+    ),
+    verbose = TRUE, 
+    fail = fail
+  )
+  if (!(calculate_egfr)) {
+    return(FALSE)
+  }
+  
+  # Check for inconsistent vector lengths -------------------------------------
+  check_input_lengths(
+    sex = sex,
+    age = age,
+    scr = scr,
+    weight = weight,
+    height = height,
+    bsa = bsa
+  )
+  
+  # Convert units, tidy covariates --------------------------------------------
 
-  # ---- Convert Creatinine
+  ## Convert Creatinine ----
   if (is.null(scr_unit) || length(scr_unit) == 0 || all(is.na(scr_unit))) {
     if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
     scr_unit <- "mg/dl"
@@ -158,32 +186,14 @@ calc_egfr <- function (
   scr_unit <- tolower(gsub("%2F", "/", scr_unit))
   scr <- convert_creat_unit(scr, scr_unit, "mg/dl")$value
 
-  # ---- Format Sex
-  sex <- ifelse(is.nil(sex), '', tolower(sex))
-
-  # Confirm Required Covariates Are Present
-  # ---------------------------------------
-  calculate_egfr <- check_covs_available(
-    cov_reqs,
-    list(
-      age = age,
-      sex = sex,
-      creat = scr,
-      weight = weight,
-      height = height,
-      bsa = bsa,
-      race = race,
-      preterm = preterm
-      ),
-    verbose = TRUE, 
-    fail = fail
-  )
-  if (!(calculate_egfr)) {
-    return(FALSE)
+  ## Format Sex ----
+  sex <- if (is.nil(sex)) '' else tolower(sex)
+  if ("sex" %in% cov_reqs) {
+    sex <- normalize_sex(sex)
+    if (is.null(sex)) return(NULL)
   }
 
-  # Select Weight for eGFR
-  # ----------------------
+  ## Select Weight for eGFR ----
   if (grepl('cockcroft_gault_', method)) {
 
     if (grepl('_ideal', method)) {
@@ -212,8 +222,7 @@ calc_egfr <- function (
     weight_for_egfr <- "Total BW"
   }
 
-  # Calculate eGFR
-  # --------------
+  # Calculate eGFR ------------------------------------------------------------
 
   if (grepl("cockcroft_gault(.*)(?<!sci)$", method, perl = TRUE)) {
     method <- "cockcroft_gault"
@@ -323,8 +332,7 @@ calc_egfr <- function (
     NULL
   )
 
-  # Format Output
-  # -------------
+  # Format output -------------------------------------------------------------
   unit <- tolower(unit_out)
 
   if (is.null(crcl)) {
@@ -342,7 +350,7 @@ calc_egfr <- function (
     )
   }
 
-  # --- Convert to relative if required
+  ## Convert to relative if required ----
   if (!relative & !grepl('cockcroft_gault', method)) {
     crcl <- relative2absolute_bsa(crcl, bsa)[["value"]]
   } else if (relative & !grepl('cockcroft_gault', method)){
@@ -351,13 +359,13 @@ calc_egfr <- function (
     unit <- paste0(unit, "/1.73m^2")
     crcl <- absolute2relative_bsa(crcl, bsa)[["value"]]
   }
-  # --- Convert to /h or to L if required
+  ## Convert to /h or to L if required ----
   conversion_factor <- 1
   conversion_factor <- ifelse(grepl('/hr', unit), conversion_factor * 60, conversion_factor)
   conversion_factor <- ifelse(grepl('^l', unit), conversion_factor / 1000, conversion_factor)
   crcl <- conversion_factor * crcl
 
-# --- Check min/max censoring
+  ## Check min/max censoring ----
   capped <- list()
   if(!is.null(min_value)){
     idx <- crcl < min_value
@@ -378,9 +386,7 @@ calc_egfr <- function (
     }
   }
 
-  # Return Output
-  # -------------
-
+  # Return Output -------------------------------------------------------------
   return(list(
     value = crcl,
     age = age,
@@ -394,26 +400,14 @@ calc_egfr <- function (
 }
 
 egfr_wright <- function(age, bsa, sex, scr) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   ((6580 - (38.8 * age)) * bsa * (1-(0.168 * (sex == "female"))))/(scr * 88.42)
 }
 
 egfr_jelliffe <- function(age, sex, bsa, scr) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
 }
 
 egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   vol <- 4 * weight
 
   # for times, if null or negative or mismatch in times/scr length, assume one 
@@ -456,10 +450,6 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
 #'   coefficient (TRUE) or the 2006 coefficient (FALSE), which was updated for 
 #'   standardization of the creatinine assay.
 egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   coeff <- ifelse(original_expression, 186, 175)
   f_sex <- ifelse(sex == 'female', 0.742, 1)
   f_race <- ifelse(race == 'black' && use_race == TRUE, 1.212, 1)
@@ -467,10 +457,6 @@ egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
 }
 
 egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   a1 <- ifelse(sex == 'female', -0.329, -0.411)
   K <- ifelse(sex == 'female', 0.7, 0.9)
   f_sex <- ifelse(sex == 'female', 1.018, 1)
@@ -479,10 +465,6 @@ egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
 }
 
 egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   a1 <- ifelse(sex == 'female', -0.241, -0.302)
   K <- ifelse(sex == 'female', 0.7, 0.9)
   f_sex <- ifelse(sex == 'female', 1.012, 1)
@@ -490,28 +472,16 @@ egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
 }
 
 egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   f_sex <- ifelse(sex == 'female', 0.85, 1)
   0.7 * (f_sex * (140-age) / scr * (weight/72))
 }
 
 egfr_cockcroft_gault <- function(sex, age, scr, weight) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   f_sex <- ifelse(sex == 'female', 0.85, 1)
   f_sex * (140-age) / scr * (weight/72)
 }
 
 egfr_malmo_lund <- function(sex, age, scr) {
-  if (!sex %in% c("male", "female")) {
-    warning("This method requires sex to be one of 'male' or 'female'.")
-    return(NULL)
-  }
   scr_cutoff <- ifelse(sex == 'female', 1.696833, 2.0362)
   intercept <- ifelse(sex == 'female', 2.5, 2.56)
   slope <- ifelse(
@@ -525,22 +495,18 @@ egfr_malmo_lund <- function(sex, age, scr) {
 }
 
 egfr_bedside_schwartz <- function(age, height, scr, verbose) {
-  if(age < 1 && verbose) warning("This equation is not meant for patients < 1 years of age.")
+  if(age < 1 && verbose) {
+    warning("This equation is not meant for patients < 1 years of age.")
+  }
   k <- 0.413
   (k * height) / scr
 }
 
 egfr_schwartz <- function(age, preterm, sex, height, scr) {
-  if (age < 1 ) {
-    k <- ifelse(preterm, 0.33, 0.45)
-  } else if (age > 13) {
-    if (!sex %in% c("male", "female")) {
-      warning("This method requires sex to be one of 'male' or 'female'.")
-      return(NULL)
-    }
-    k <- ifelse(sex == 'male', 0.7,  0.55)
-  } else {
-    k <- 0.55
-  }
+  k <- ifelse(
+    age < 1,
+    ifelse(preterm, 0.33, 0.45),
+    ifelse(age > 13 & sex == "male", 0.7, 0.55)
+  )
   (k * height) / scr
 }

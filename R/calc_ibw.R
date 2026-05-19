@@ -52,33 +52,27 @@ calc_ibw <- function (
   if(is.null(age)) {
     stop("Age not specified!")
   }
-  stopifnot(
-    length(age) == 1,
-    length(height) <= 1, # these are not always
-    length(weight) <= 1, # required, so may be
-    length(sex) <= 1     # NULL or length 1
-  )
+  check_input_lengths(age = age, weight = weight, height = height, sex = sex)
 
-  ## babies
-  if (age < 1) {
+  if (any(age < 1)) {
     if (is.null(weight)) {
       stop("Actual body weight is used as IBW for children < 1yr. Please supply a weight value.")
     }
     message("Note: using actual body weight as IBW for children < 1yr.")
-    return(weight)
   }
 
-  if (age >= 1 & age < 18) {
-    ibw <- switch(
-      method_children,
-      "standard" = ibw_standard(age = age, height = height, sex = sex)
+  ibw_children <- switch(method_children, "standard" = ibw_standard)
+  ibw_adults <- switch(method_adults, "devine" = ibw_devine)
+
+  ibw <- ifelse(
+    age < 1,
+    weight,
+    ifelse(
+      age < 18,
+      suppressWarnings(ibw_children(age = age, height = height, sex = sex)),
+      suppressWarnings(ibw_adults(age = age, height = height, sex = sex))
     )
-  } else {
-    ibw <- switch(
-      method_adults,
-      "devine" = ibw_devine(age = age, height = height, sex = sex)
-    )
-  }
+  )
 
   return(ibw)
 }
@@ -87,53 +81,50 @@ calc_ibw <- function (
 #'
 #' @rdname calc_ibw
 ibw_standard <- function(age, height = NULL, sex = NULL) {
-  if (is.null(age) || age >= 18 || age < 1) {
+  if (is.null(age) || any(age >= 18) || any(age < 1)) {
     warning("Age should be >=1 and <18 for the `standard` method.")
   }
-  if (is.null(height) || is.na(height)) {
+  if (is.null(height) || any(is.na(height))) {
     stop("Height is required to calculate IBW")
   }
   height_in <- cm2inch(height)
-  if (height_in < 5 * 12) {
-    return((height^2 * 1.65) / 1000)
+  # Sex is only required when height >= 5ft
+  if (any(height_in >= 5 * 12)) {
+    if (is.null(sex) || any(is.na(sex))) {
+      stop("Sex is required to calculate IBW when height is >= 5 feet")
+    }
+    if (any(!sex %in% c("male", "female"))) {
+      warning("The `standard` method for calculating IBW requires sex to be 'male' or 'female' for children 5 feet tall or taller.")
+      return(NULL)
+    }
   }
-  if (is.null(sex) || is.na(sex)) {
-    # Sex is only required if height >= 5ft, so this must come after the lines
-    # above
-    stop("Sex is required to calculate IBW when height is >= 5 feet")
-  }
-  if (!sex %in% c("male", "female")) {
-    warning("The `standard` method for calculating IBW requires sex to be 'male' or 'female' for children 5 feet tall or taller.")
-    return(NULL)
-  }
-  base_value <- switch(
-    sex,
-    "male" = 39,
-    "female" = 42.2
-  )
+  base_value <- if (!is.null(sex)) ifelse(sex == "male", 39, 42.2) else NA_real_
   height_inches_over_5_feet <- height_in - (5 * 12)
-  base_value + (2.27 * height_inches_over_5_feet)
+  ifelse(
+    height_in < 5 * 12,
+    (height^2 * 1.65) / 1000,
+    base_value + (2.27 * height_inches_over_5_feet)
+  )
 }
 
 #' Calculate IBW using "devine" equation
 #'
 #' @rdname calc_ibw
 ibw_devine <- function(age, height = NULL, sex = NULL) {
-  if (age < 18) {
+  if (is.null(age)) {
+    stop("Age is required to calculate IBW")
+  }
+  if (any(age < 18)) {
     warning("Age should be >18 for the `devine` method.")
   }
-  if (is.null(height) || is.na(height) || is.null(sex) || is.na(sex)) {
+  if (is.null(height) || any(is.na(height)) || is.null(sex) || any(is.na(sex))) {
     stop("Height and sex are required to calculate IBW")
   }
-  if (!sex %in% c("male", "female")) {
+  if (any(!sex %in% c("male", "female"))) {
     warning("The `devine` method for calculating IBW requires sex to be 'male' or 'female'.")
     return(NULL)
   }
-  base_value <- switch(
-    sex,
-    "male" = 50,
-    "female" = 45.5
-  )
+  base_value <- ifelse(sex == "male", 50, 45.5)
   height_in <- cm2inch(height)
   height_inches_over_5_feet <- height_in - (5 * 12)
   base_value + (2.3 * height_inches_over_5_feet)
