@@ -30,7 +30,7 @@ prepare_method_inputs <- function(fn, method, ...) {
   # Detect required (no-default) arguments:
   fn_formals <- formals(fn)
   required <- names(fn_formals)[
-    sapply(fn_formals, function(.x) identical(.x, alist(a = )[[1]]))
+    vapply(fn_formals, function(.x) identical(.x, alist(a = )[[1]]), logical(1))
   ]
 
   # Auto-compute bmi from height + weight if bmi is required but not supplied:
@@ -40,7 +40,7 @@ prepare_method_inputs <- function(fn, method, ...) {
   }
 
   # Check all required args are present:
-  missing_args <- required[sapply(required, function(.x) is.null(inputs[[.x]]))]
+  missing_args <- required[vapply(required, function(.x) is.null(inputs[[.x]]), logical(1))]
   if (length(missing_args) > 0) {
     missing_labels <- ifelse(
       missing_args == "bmi", "bmi or weight and height", missing_args
