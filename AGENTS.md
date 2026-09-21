@@ -1,0 +1,208 @@
+# AGENTS.md
+
+This file provides guidance to AI coding agents working with code in this
+repository. It is harness-agnostic: any agent tooling that reads project
+instructions should use this file.
+
+## Overview
+
+clinPK is a CRAN R package providing equations used in clinical
+pharmacokinetics and clinical pharmacology: dose individualization,
+compartmental PK, drug exposure, anthropometric calculations, clinical
+chemistry, and unit conversion of common clinical parameters. It is a pure-R
+package with **no runtime dependencies** (`Depends: R (>= 2.10)`, `Suggests:
+testthat`). Keep it that way — do not add package dependencies without a
+strong reason.
+
+The defining design goal: where several published, peer-reviewed equations
+exist for the same quantity, a single exported function offers all of them
+behind a `method` argument rather than exposing one function per publication.
+
+## Commands
+
+All commands run from the package root.
+
+```r
+devtools::test()                        # run the full test suite
+devtools::test(filter = "calc_egfr")    # run one test file (regex on the name after "test-"/"test_")
+testthat::test_file("tests/testthat/test_calc_egfr.R")  # run one file by path
+devtools::load_all()                    # load the package for interactive work
+devtools::document()                    # regenerate man/*.Rd and NAMESPACE from roxygen comments
+devtools::check()                       # full R CMD check
+```
+
+Command line equivalents:
+
+```sh
+R CMD build . && R CMD check --as-cran clinPK_*.tar.gz
+Rscript -e 'devtools::test()'
+```
+
+CI (`.github/workflows/R-CMD-check.yaml`) runs `R CMD check` with
+`--no-manual --as-cran` on ubuntu-latest / R release, and fails on errors
+(warnings and notes do not fail the build). A second workflow builds the
+pkgdown site from `_pkgdown.yml`.
+
+### Documentation is generated
+
+`man/*.Rd` and `NAMESPACE` are roxygen2 output — **never edit them by hand**.
+Edit the roxygen comments above the function in `R/` and run
+`devtools::document()`. Roxygen markdown is enabled
+(`Roxygen: list(markdown = TRUE)`), so use markdown in doc comments.
+
+Caveat: `DESCRIPTION` pins `RoxygenNote: 7.3.2`. If the locally installed
+roxygen2 is newer, `document()` will bump that field and may churn every
+`.Rd` file. Check `git diff` after documenting and keep the diff limited to
+the functions actually changed.
+
+### Package data
+
+The CDC growth-chart data sets in `data/*.rda` are built by
+`data-raw/growth-charts.R` from CSVs in `data-raw/data/`. Regenerate the
+`.rda` files through that script rather than editing them; `data-raw/` is
+excluded from the built package via `.Rbuildignore`.
+
+## Architecture
+
+### File layout
+
+`R/` is flat and mostly one exported function per file, named after the
+function. Prefix conventions:
+
+- `calc_*` — derived clinical quantities (eGFR, BSA, BMI, IBW/LBW/FFM/ABW,
+  creatinine, AKI stage, half-life, elimination rate from TDM samples).
+- `pk_1cmt_*` / `pk_2cmt_*` — analytical one- and two-compartment solutions.
+  The suffix encodes the scenario: `_bolus` / `_inf` / `_oral` for the input,
+  `_ss` for steady state, `_cmax_ss` / `_cmin_ss` for peak/trough, and
+  `_dose_from_cmax` / `_dose_from_cmin` for the inverse (dose-finding) form.
+- `convert_*`, `conc2mol` / `mol2conc`, `weight2kg`, `metric_conversion` —
+  unit handling.
+- `pct_*_for_*` / `median_*_for_*` — growth percentiles, all delegating to the
+  internal generic `pct_growth_generic()` in `R/pct_growth_generic.R`.
+- `nca*` — non-compartmental analysis; `nca()` returns an object of class
+  `nca_output` with an S3 `print` method in `R/print.nca_output.R`.
+- `utils.R` — unexported helpers shared across the package.
+
+### The method-dispatch pattern
+
+This is the most important pattern to follow. A multi-method function such as
+`calc_lbw()`, `calc_ffm()`, `calc_ibw()`, or `calc_egfr()` is split into a
+validating wrapper plus small, pure, unexported equation functions named
+`<quantity>_<method>` (e.g. `lbw_green()`, `lbw_boer()`, `egfr_ckd_epi()`):
+
+```r
+calc_lbw <- function(weight = NULL, bmi = NULL, sex = NULL, height = NULL,
+                     method = c("green", "boer", "james", "hume"), digits = 1) {
+  check_input_lengths(sex = sex, weight = weight, height = height, bmi = bmi)
+  method <- match.arg(method)
+  method_fn <- switch(method, "green" = lbw_green, "boer" = lbw_boer, ...)
+
+  inputs <- prepare_method_inputs(method_fn, method,
+    weight = weight, bmi = bmi, sex = sex, height = height)
+
+  inputs$sex <- normalize_sex(inputs$sex)
+  if (is.null(inputs$sex)) return(NULL)
+
+  lbw <- do.call(method_fn, inputs[intersect(names(inputs), formalArgs(method_fn))])
+  list(value = round(lbw, digits), unit = "kg")
+}
+```
+
+All validation, unit conversion, rounding and output shaping live in the
+wrapper. The inner functions take only the covariates they need, do no
+validation, and are written so they vectorize.
+
+Where every method is a one-line expression, the `switch()` holds the
+expressions directly instead of function references — see `calc_bsa()`. Use
+that lighter form only when no method needs its own covariate set or
+validation.
+
+Helpers in `R/utils.R` that make this work:
+
+- `check_input_lengths(...)` — errors if vector arguments of length > 1 have
+  inconsistent lengths, so recycling cannot silently produce wrong results.
+- `prepare_method_inputs(fn, method, ...)` — inspects `formals(fn)` to find
+  arguments without defaults, auto-computes `bmi` from `height` and `weight`
+  when the method needs it, and errors listing exactly which covariates the
+  chosen method requires.
+- `normalize_sex(sex)` — lowercases and validates `"male"` / `"female"`;
+  returns `NULL` after a warning so the caller can `return(NULL)`.
+- `is.nil(x)` — the package's missing-value test (`NULL`, length 0, `NA`,
+  `NaN`, or `""`).
+- `%>=%` / `%<=%` — comparisons tolerant of floating-point error.
+
+`calc_egfr()` additionally uses `egfr_cov_reqs()` (canonicalizes the method
+name, including legacy misspellings such as `cockroft`, and returns the
+required covariates) together with `check_covs_available()`.
+
+### Vectorization
+
+Functions are expected to work over vectors of patients. Inside equation
+functions use `ifelse()` rather than `if`/`else` when branching on a covariate
+such as `sex`, and prefer `vapply()` over `sapply()` for type stability. When
+adding a method, add a test that exercises it with vector inputs mixing e.g.
+both sexes — there are existing examples of exactly this in
+`tests/testthat/test_calc_ffm.R`.
+
+### Return-value conventions
+
+- Clinical quantity functions return `list(value = <numeric>, unit = "<unit>")`
+  and accept a `digits` argument for rounding.
+- Unit conversion functions accept `unit_in` / `unit_out` and also return
+  `list(value =, unit =)`. Recognized unit strings live in one place,
+  `valid_units()` in `R/valid_units.R`; extend that function rather than
+  hard-coding new unit spellings at the call site. Concentration/molar
+  conversions funnel through `convert_conc_unit()` with a molecular weight
+  (e.g. `convert_creat_unit()` passes 113.12).
+- eGFR results carry a `relative` notion (per 1.73 m²) converted via
+  `absolute2relative_bsa()` / `relative2absolute_bsa()`. Cockcroft-Gault and
+  derivatives default to absolute; other methods default to relative.
+- Many functions take `verbose` to control informational messages; keep new
+  messages behind it.
+- Simulation functions (`pk_1cmt_inf()` and friends) return a `data.frame` of
+  concentrations over time, optionally with residual error added by
+  `add_ruv()`.
+
+### Adding a new equation or method
+
+1. Add the inner `<quantity>_<method>()` function in the relevant `R/` file
+   (or a new file named after the exported function).
+2. Wire it into the wrapper's `match.arg()` choices and `switch()`.
+3. Cite the publication in the roxygen `References:` block — every equation in
+   this package is tied to a peer-reviewed source, and reviewers expect the
+   citation.
+4. Add tests with values taken from the paper or an independent
+   implementation, plus a vectorized case.
+5. Run `devtools::document()`.
+6. Add a bullet to the development-version section at the top of `NEWS.md`.
+
+## Testing
+
+testthat edition 3, tests in `tests/testthat/`. File naming is inconsistent
+(`test_foo.R` and `test-foo.R` both occur) — match the neighbouring files for
+the area you are working in. Tests assert on numeric results of published
+equations, typically as `round(f(...)$value)` compared against the value in
+the source paper, so expected numbers should be traceable to a reference and
+not simply snapshotted from current output.
+
+## Conventions
+
+- Two-space indent, `<-` for assignment, `snake_case` names.
+- Commit messages are short, lowercase, imperative, and backtick function
+  names, e.g. ``refactor `calc_lbw()`, `calc_ffm()`, and `calc_egfr()` to
+  reduce code duplication``. Work happens on branches (often `RXR-####`)
+  merged into `master` by pull request.
+- Backwards compatibility matters: this package is on CRAN and is consumed by
+  downstream clinical software. Prefer deprecating an argument (as was done
+  for `return_median` in the `pct_*_for_*()` functions) over removing it, and
+  keep legacy method-name aliases working.
+- `cran-comments.md` and `CRAN-SUBMISSION` support CRAN releases; the package
+  targets roughly one CRAN release per year.
+
+## Domain notes
+
+Getting a coefficient wrong here produces a plausible-looking number that is
+clinically wrong, and the package computes drug doses. Verify equations
+against the cited publication rather than against intuition or another
+implementation, keep unit handling explicit at every boundary, and do not
+"simplify" an equation in a way that changes its numerical result.
