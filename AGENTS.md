@@ -24,12 +24,15 @@ All commands run from the package root.
 
 ```r
 devtools::test()                        # run the full test suite
-devtools::test(filter = "calc_egfr")    # run one test file (regex on the name after "test-"/"test_")
-testthat::test_file("tests/testthat/test_calc_egfr.R")  # run one file by path
+devtools::test(filter = "calc_egfr")    # run matching test files (regex on the name after "test-"/"test_")
 devtools::load_all()                    # load the package for interactive work
 devtools::document()                    # regenerate man/*.Rd and NAMESPACE from roxygen comments
 devtools::check()                       # full R CMD check
 ```
+
+`testthat::test_file()` on its own does not load the package under test and
+will fail with "could not find function". Call `devtools::load_all()` first in
+the same session, or just use `devtools::test(filter = ...)`.
 
 Command line equivalents:
 
@@ -51,9 +54,10 @@ Edit the roxygen comments above the function in `R/` and run
 (`Roxygen: list(markdown = TRUE)`), so use markdown in doc comments.
 
 Caveat: `DESCRIPTION` pins `RoxygenNote: 7.3.2`. If the locally installed
-roxygen2 is newer, `document()` will bump that field and may churn every
-`.Rd` file. Check `git diff` after documenting and keep the diff limited to
-the functions actually changed.
+roxygen2 is newer, `document()` will rewrite that field (roxygen2 8.x replaces
+it with `Config/roxygen2/version`) and may churn unrelated `.Rd` files. Check
+`git diff` after documenting and keep the diff limited to the functions you
+actually changed.
 
 ### Package data
 
@@ -86,8 +90,8 @@ function. Prefix conventions:
 ### The method-dispatch pattern
 
 This is the most important pattern to follow. A multi-method function such as
-`calc_lbw()`, `calc_ffm()`, `calc_ibw()`, or `calc_egfr()` is split into a
-validating wrapper plus small, pure, unexported equation functions named
+`calc_lbw()`, `calc_ffm()`, or `calc_egfr()` is split into a validating
+wrapper plus small, pure, unexported equation functions named
 `<quantity>_<method>` (e.g. `lbw_green()`, `lbw_boer()`, `egfr_ckd_epi()`):
 
 ```r
@@ -116,6 +120,12 @@ Where every method is a one-line expression, the `switch()` holds the
 expressions directly instead of function references — see `calc_bsa()`. Use
 that lighter form only when no method needs its own covariate set or
 validation.
+
+`calc_ibw()` predates this pattern and does not follow it: it takes separate
+`method_children` / `method_adults` arguments, its `ibw_standard()` and
+`ibw_devine()` helpers validate their own inputs and warn, and the wrapper
+returns a bare numeric vector. Treat it as a legacy exception rather than
+refactoring it to match the pattern as a drive-by change.
 
 Helpers in `R/utils.R` that make this work:
 
@@ -146,14 +156,32 @@ both sexes — there are existing examples of exactly this in
 
 ### Return-value conventions
 
-- Clinical quantity functions return `list(value = <numeric>, unit = "<unit>")`
-  and accept a `digits` argument for rounding.
-- Unit conversion functions accept `unit_in` / `unit_out` and also return
-  `list(value =, unit =)`. Recognized unit strings live in one place,
-  `valid_units()` in `R/valid_units.R`; extend that function rather than
-  hard-coding new unit spellings at the call site. Concentration/molar
-  conversions funnel through `convert_conc_unit()` with a molecular weight
-  (e.g. `convert_creat_unit()` passes 113.12).
+There is no single package-wide contract. Preserve whatever the function you
+are editing already returns — the shape is part of the public API.
+
+- `list(value =, unit =)`: `calc_lbw()`, `calc_ffm()`, `calc_bsa()`,
+  `calc_creat()`, `calc_creat_neo()`. All but `calc_bsa()` take a `digits`
+  argument and round `value` with it.
+- Bare numeric, no `digits`: `calc_bmi()`, `calc_abw()`, `calc_ibw()`, and the
+  `metric_conversion.R` helpers (`cm2inch()`, `lbs2kg()`, ...).
+- `calc_egfr()` returns a wider list: `value` and `unit` plus the covariates it
+  resolved (`age`, `bsa`, `sex`, `scr`, `weight`, `capped`).
+
+Unit conversion is not uniform either. Use the registry or table the function
+you are changing already uses:
+
+- `convert_creat_unit()`, `convert_albumin_unit()`, `convert_bilirubin_unit()`
+  take `unit_in` / `unit_out` defaulted from `valid_units()`
+  (`R/valid_units.R`) and delegate to `convert_conc_unit()` with a molecular
+  weight (creatinine passes 113.12). Extend `valid_units()` rather than
+  hard-coding new spellings at these call sites.
+- `convert_conc_unit(value, unit_in, unit_out, mol_weight)` returns
+  `list(value =, unit =)` using its own `conv` factor table, not
+  `valid_units()`.
+- `conc2mol()` / `mol2conc()` take `unit_conc` / `unit_mol`, hold their own
+  inline unit vectors, and return `list(value =, unit =)`.
+- `convert_flow_unit(value, from, to, weight)` and `weight2kg(value, unit)`
+  return bare numerics; of the two only `weight2kg()` checks `valid_units()`.
 - eGFR results carry a `relative` notion (per 1.73 m²) converted via
   `absolute2relative_bsa()` / `relative2absolute_bsa()`. Cockcroft-Gault and
   derivatives default to absolute; other methods default to relative.
