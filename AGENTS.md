@@ -28,13 +28,14 @@ devtools::test(filter = "calc_egfr")    # run matching test files (regex on the 
 devtools::load_all()                    # load the package for interactive work
 devtools::document()                    # regenerate man/*.Rd and NAMESPACE from roxygen comments
 devtools::check()                       # full R CMD check
+pkgdown::build_site()                   # build the pkgdown site locally
 ```
 
-`testthat::test_file()` on its own does not load the package under test and
-will fail with "could not find function". Call `devtools::load_all()` first in
-the same session, or just use `devtools::test(filter = ...)`.
+Use `devtools::test(filter = ...)` to run a subset — `testthat::test_file()` on
+its own does not load the package and fails with "could not find function".
 
-Command line equivalents:
+Equivalent checks from a shell, for a CI-like run or when working outside an R
+session:
 
 ```sh
 R CMD build . && R CMD check --as-cran clinPK_*.tar.gz
@@ -43,8 +44,9 @@ Rscript -e 'devtools::test()'
 
 CI (`.github/workflows/R-CMD-check.yaml`) runs `R CMD check` with
 `--no-manual --as-cran` on ubuntu-latest / R release, and fails on errors
-(warnings and notes do not fail the build). A second workflow builds the
-pkgdown site from `_pkgdown.yml`.
+(warnings and notes do not fail the build). A second workflow
+(`.github/workflows/pkgdown.yaml`) builds the pkgdown site from `_pkgdown.yml`
+with `pkgdown::build_site_github_pages()` on pushes to `master`.
 
 ### Documentation is generated
 
@@ -61,10 +63,17 @@ actually changed.
 
 ### Package data
 
-The CDC growth-chart data sets in `data/*.rda` are built by
-`data-raw/growth-charts.R` from CSVs in `data-raw/data/`. Regenerate the
-`.rda` files through that script rather than editing them; `data-raw/` is
-excluded from the built package via `.Rbuildignore`.
+`data-raw/` exists to preserve the origin story of the package data
+(<https://r-pkgs.org/data.html#sec-data-data-raw>): the script there records
+where each data set came from and how it was derived, so the `.rda` files are
+reproducible rather than opaque.
+
+Here, the CDC growth-chart data sets in `data/*.rda` are built by
+`data-raw/growth-charts.R` from CSVs in `data-raw/data/`, with the source URL
+recorded at the top of that script. Regenerate the `.rda` files through the
+script rather than editing them, and update the script (not just the data) when
+the source changes. `data-raw/` is excluded from the built package via
+`.Rbuildignore`.
 
 ## Architecture
 
@@ -112,9 +121,16 @@ calc_lbw <- function(weight = NULL, bmi = NULL, sex = NULL, height = NULL,
 }
 ```
 
-All validation, unit conversion, rounding and output shaping live in the
-wrapper. The inner functions take only the covariates they need, do no
-validation, and are written so they vectorize.
+As a general rule, input validation, unit conversion, rounding and output
+shaping live in the wrapper, and the inner functions take only the covariates
+they need and are written so they vectorize.
+
+The exception is method-specific applicability checks, which may stay in the
+inner function because only that method knows its own validity range — see
+`ffm_bucaloiu()`, which warns when the patient is not an obese female, and
+`egfr_bedside_schwartz()`, which warns below age 1 and therefore also takes
+`verbose`. Leave such checks where they are; do not hoist them into the wrapper
+as a drive-by change.
 
 Where every method is a one-line expression, the `switch()` holds the
 expressions directly instead of function references — see `calc_bsa()`. Use
@@ -159,37 +175,48 @@ both sexes — there are existing examples of exactly this in
 There is no single package-wide contract. Preserve whatever the function you
 are editing already returns — the shape is part of the public API.
 
-- `list(value =, unit =)`: `calc_lbw()`, `calc_ffm()`, `calc_bsa()`,
-  `calc_creat()`, `calc_creat_neo()`. All but `calc_bsa()` take a `digits`
-  argument and round `value` with it.
+- At least `value` and `unit`, with a `digits` argument that rounds `value`:
+  `calc_lbw()`, `calc_ffm()`, `calc_creat()`, `calc_creat_neo()`. `calc_ffm()`
+  and `calc_creat()` additionally return `method` (the resolved, lower-cased
+  method name) — keep that field when editing them.
+- `value` and `unit` only, no `digits`: `calc_bsa()`.
 - Bare numeric, no `digits`: `calc_bmi()`, `calc_abw()`, `calc_ibw()`, and the
   `metric_conversion.R` helpers (`cm2inch()`, `lbs2kg()`, ...).
-- `calc_egfr()` returns a wider list: `value` and `unit` plus the covariates it
-  resolved (`age`, `bsa`, `sex`, `scr`, `weight`, `capped`).
+- `calc_egfr()` returns a wider list: `value` and `unit`, the covariates it
+  resolved (`age`, `bsa`, `sex`, `scr`, `weight`), and `capped` — cap metadata
+  (`min_value`/`min_n`, `max_value`/`max_n`), not a covariate, empty when
+  `min_value`/`max_value` were not applied.
+- Simulation functions (`pk_1cmt_inf()` and friends) return a `data.frame` of
+  concentrations over time, optionally with residual error added by
+  `add_ruv()`.
 
-Unit conversion is not uniform either. Use the registry or table the function
-you are changing already uses:
+eGFR results also carry a `relative` notion (per 1.73 m²) converted via
+`absolute2relative_bsa()` / `relative2absolute_bsa()`. Cockcroft-Gault and
+derivatives default to absolute; other methods default to relative. Many
+functions take `verbose` to control informational messages; keep new messages
+behind it.
+
+### Unit conversion
+
+Not uniform either. Use the registry or table the function you are changing
+already uses:
 
 - `convert_creat_unit()`, `convert_albumin_unit()`, `convert_bilirubin_unit()`
   take `unit_in` / `unit_out` defaulted from `valid_units()`
   (`R/valid_units.R`) and delegate to `convert_conc_unit()` with a molecular
-  weight (creatinine passes 113.12). Extend `valid_units()` rather than
-  hard-coding new spellings at these call sites.
+  weight (creatinine passes 113.12).
 - `convert_conc_unit(value, unit_in, unit_out, mol_weight)` returns
-  `list(value =, unit =)` using its own `conv` factor table, not
-  `valid_units()`.
+  `list(value =, unit =)` using its own `conv` factor table, which is separate
+  from `valid_units()`.
 - `conc2mol()` / `mol2conc()` take `unit_conc` / `unit_mol`, hold their own
   inline unit vectors, and return `list(value =, unit =)`.
 - `convert_flow_unit(value, from, to, weight)` and `weight2kg(value, unit)`
   return bare numerics; of the two only `weight2kg()` checks `valid_units()`.
-- eGFR results carry a `relative` notion (per 1.73 m²) converted via
-  `absolute2relative_bsa()` / `relative2absolute_bsa()`. Cockcroft-Gault and
-  derivatives default to absolute; other methods default to relative.
-- Many functions take `verbose` to control informational messages; keep new
-  messages behind it.
-- Simulation functions (`pk_1cmt_inf()` and friends) return a `data.frame` of
-  concentrations over time, optionally with residual error added by
-  `add_ruv()`.
+
+Adding a unit spelling for the three wrapper functions above means editing two
+places: `valid_units()` (or `match.arg()` rejects it) **and** the `conv` table
+in `convert_conc_unit()` (or the delegate rejects it with "Unrecognized unit").
+Keep the two in sync.
 
 ### Adding a new equation or method
 
@@ -206,12 +233,16 @@ you are changing already uses:
 
 ## Testing
 
-testthat edition 3, tests in `tests/testthat/`. File naming is inconsistent
-(`test_foo.R` and `test-foo.R` both occur) — match the neighbouring files for
-the area you are working in. Tests assert on numeric results of published
-equations, typically as `round(f(...)$value)` compared against the value in
-the source paper, so expected numbers should be traceable to a reference and
-not simply snapshotted from current output.
+testthat edition 3, tests in `tests/testthat/`. Name new test files
+`test_<topic>.R` with an underscore: that is this repo's historic convention and
+the large majority of existing files. Note that `usethis::use_test()` creates
+`test-<topic>.R` with a hyphen, so rename the file after using it. Both
+spellings currently occur, and `devtools::test(filter = )` matches either.
+
+Tests assert on numeric results of published equations, typically as
+`round(f(...)$value)` compared against the value in the source paper, so
+expected numbers should be traceable to a reference and not simply snapshotted
+from current output.
 
 ## Conventions
 
