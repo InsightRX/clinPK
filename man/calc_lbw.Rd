@@ -9,7 +9,7 @@ calc_lbw(
   bmi = NULL,
   sex = NULL,
   height = NULL,
-  method = "green",
+  method = c("green", "boer", "james", "hume"),
   digits = 1
 )
 }
