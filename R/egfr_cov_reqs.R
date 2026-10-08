@@ -3,7 +3,7 @@
 #' @param method egfr calculation method
 #' @param relative if egfr calculations should be relative or not
 #' @examples 
-#' egfr_cov_reqs('schwartz_revised')
+#' egfr_cov_reqs("schwartz_revised")
 #' @export
 egfr_cov_reqs <- function(method, relative = NULL){
   # Format input
@@ -39,7 +39,7 @@ egfr_cov_reqs <- function(method, relative = NULL){
     covs <- list(c("creat", "age", "weight", "sex", "height"))
   
   } else {
-    stop('required covariates unknown')
+    stop("required covariates unknown")
   }
   
   # ---- Relative eGFR?
@@ -47,12 +47,12 @@ egfr_cov_reqs <- function(method, relative = NULL){
     # By default, assume true, since most equations report in units of /1.73m2.
     # Cockcroft-Gault and derived formulae do not report in relative units, but
     # do not require bsa to convert.
-    relative <- ifelse(grepl('cockcroft_gault', method), FALSE, TRUE)
+    relative <- ifelse(grepl("cockcroft_gault", method), FALSE, TRUE)
   }
-  if (!relative & !grepl('cockcroft_gault', method)) {
-    covs[[1]] <- unique(c('bsa', covs[[1]]))
-  } else if (relative & grepl('cockcroft_gault', method)) {
-    covs[[1]] <- unique(c('bsa', covs[[1]]))
+  if (!relative & !grepl("cockcroft_gault", method)) {
+    covs[[1]] <- unique(c("bsa", covs[[1]]))
+  } else if (relative & grepl("cockcroft_gault", method)) {
+    covs[[1]] <- unique(c("bsa", covs[[1]]))
   }
   
   names(covs) <- method

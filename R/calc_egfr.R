@@ -152,7 +152,7 @@ calc_egfr <- function (
     # By default, assume true, since most equations report in units of /1.73m2.
     # Cockcroft-Gault and derived formulae do not report in relative units, but
     # do not require bsa to convert.
-    relative <- ifelse(grepl('cockcroft_gault', method), FALSE, TRUE)
+    relative <- ifelse(grepl("cockcroft_gault", method), FALSE, TRUE)
   }
   
   # Extract required covariates and tidied method name ------------------------
@@ -164,7 +164,7 @@ calc_egfr <- function (
   
   ## Calculate BSA ----
   if("bsa" %in% cov_reqs && is.nil(bsa)) { 
-    calculate_egfr <- check_covs_available(c('height', 'weight'), 
+    calculate_egfr <- check_covs_available(c("height", "weight"), 
                                            list(height = height, weight = weight), fail = fail)
     if(!fail && !calculate_egfr) {
       return(FALSE)
@@ -209,25 +209,25 @@ calc_egfr <- function (
   scr <- convert_egfr_scr(scr, scr_unit, verbose)
 
   ## Format Sex ----
-  sex <- if (is.nil(sex)) '' else tolower(sex)
+  sex <- if (is.nil(sex)) "" else tolower(sex)
   if ("sex" %in% cov_reqs) {
     sex <- normalize_sex(sex)
     if (is.null(sex)) return(NULL)
   }
 
   ## Select Weight for eGFR ----
-  if (grepl('cockcroft_gault_', method)) {
+  if (grepl("cockcroft_gault_", method)) {
 
-    if (grepl('_ideal', method)) {
+    if (grepl("_ideal", method)) {
       weight_for_egfr <- "Ideal BW"
       weight <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
 
-    } else if (grepl('_adjusted', method)) {
+    } else if (grepl("_adjusted", method)) {
       weight_for_egfr <- "Adjusted BW"
       ibw <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
       weight <- calc_abw(weight = weight, ibw = ibw, ...)
 
-    } else if (grepl('_adaptive', method)) {
+    } else if (grepl("_adaptive", method)) {
       tmp <- calc_dosing_weight(weight = weight,
                                 height = height,
                                 age = age,
@@ -556,23 +556,23 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
 #'   standardization of the creatinine assay.
 egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
   coeff <- ifelse(original_expression, 186, 175)
-  f_sex <- ifelse(sex == 'female', 0.742, 1)
+  f_sex <- ifelse(sex == "female", 0.742, 1)
   f_race <- if (use_race) ifelse(race == "black", 1.212, 1) else 1
   coeff * scr^(-1.154) * f_sex * f_race * age^(-0.203)
 }
 
 egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
-  a1 <- ifelse(sex == 'female', -0.329, -0.411)
-  K <- ifelse(sex == 'female', 0.7, 0.9)
-  f_sex <- ifelse(sex == 'female', 1.018, 1)
+  a1 <- ifelse(sex == "female", -0.329, -0.411)
+  K <- ifelse(sex == "female", 0.7, 0.9)
+  f_sex <- ifelse(sex == "female", 1.018, 1)
   f_race <- if (use_race) ifelse(race == "black", 1.159, 1) else 1
   141 * ((scr/K) ^ ifelse(scr < K, a1, -1.209)) * 0.993^age * f_sex * f_race
 }
 
 egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
-  a1 <- ifelse(sex == 'female', -0.241, -0.302)
-  K <- ifelse(sex == 'female', 0.7, 0.9)
-  f_sex <- ifelse(sex == 'female', 1.012, 1)
+  a1 <- ifelse(sex == "female", -0.241, -0.302)
+  K <- ifelse(sex == "female", 0.7, 0.9)
+  f_sex <- ifelse(sex == "female", 1.012, 1)
   142 * ((scr/K) ^ ifelse(scr < K, a1, -1.200)) * 0.9938^age * f_sex
 }
 
@@ -608,22 +608,22 @@ egfr_ekfc_creat <- function(sex, scr, age, verbose = TRUE) {
 }
 
 egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
-  f_sex <- ifelse(sex == 'female', 0.85, 1)
+  f_sex <- ifelse(sex == "female", 0.85, 1)
   0.7 * (f_sex * (140-age) / scr * (weight/72))
 }
 
 egfr_cockcroft_gault <- function(sex, age, scr, weight) {
-  f_sex <- ifelse(sex == 'female', 0.85, 1)
+  f_sex <- ifelse(sex == "female", 0.85, 1)
   f_sex * (140-age) / scr * (weight/72)
 }
 
 egfr_malmo_lund <- function(sex, age, scr) {
-  scr_cutoff <- ifelse(sex == 'female', 1.696833, 2.0362)
-  intercept <- ifelse(sex == 'female', 2.5, 2.56)
+  scr_cutoff <- ifelse(sex == "female", 1.696833, 2.0362)
+  intercept <- ifelse(sex == "female", 2.5, 2.56)
   slope <- ifelse(
     scr >= scr_cutoff,
     -0.926,
-    ifelse(sex == 'female', 1.06964, 0.855712)
+    ifelse(sex == "female", 1.06964, 0.855712)
   )
   cr_term <- ifelse(scr < scr_cutoff, scr_cutoff - scr, log(scr/scr_cutoff))
   x <- intercept + slope * cr_term
