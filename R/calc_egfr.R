@@ -60,7 +60,8 @@
 #' @param times vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)
 #' @param ckd chronic kidney disease? Used for Schwartz method.
 #' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
-#' @param unit_out `"ml/min"` (default), `"L/hr"`, or `"mL/hr"`
+#' @param unit_out `"mL/min"` (default), `"mL/hr"`, `"L/min"`, or `"L/hr"`
+#'   (case-insensitive)
 #' @param preterm is patient preterm? Used for Schwartz method.
 #' @param min_value minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
 #' @param max_value maximum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
@@ -198,7 +199,8 @@ calc_egfr <- function (
     scr = scr,
     weight = weight,
     height = height,
-    bsa = bsa
+    bsa = bsa,
+    race = race
   )
   
   # Convert units, tidy covariates --------------------------------------------
@@ -438,7 +440,8 @@ convert_egfr_scr <- function(scr, scr_unit, verbose = TRUE) {
 #'
 #' @param egfr eGFR as returned by the equation, in mL/min (per 1.73 m2 if
 #'   `reported_relative`)
-#' @param unit requested output unit (lower case), e.g. `ml/min`
+#' @param unit requested output unit (lower case): `"ml/min"`, `"ml/hr"`,
+#'   `"l/min"`, or `"l/hr"`
 #' @param relative report eGFR per 1.73 m2?
 #' @param reported_relative is `egfr` reported per 1.73 m2 by the equation?
 #' @inheritParams calc_egfr
@@ -454,6 +457,15 @@ format_egfr_output <- function(
   max_value = NULL,
   verbose = TRUE
 ) {
+  valid_units_out <- c("ml/min", "ml/hr", "l/min", "l/hr")
+  if (length(unit) != 1 || !(unit %in% valid_units_out)) {
+    stop(paste0(
+      "Sorry, `unit_out` must be one of: ",
+      paste0("\"", valid_units_out, "\"", collapse = ", "),
+      " (case-insensitive)."
+    ))
+  }
+
   ## Convert to relative if required ----
   if (!relative & reported_relative) {
     egfr <- relative2absolute_bsa(egfr, bsa)[["value"]]
@@ -545,7 +557,7 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
 egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
   coeff <- ifelse(original_expression, 186, 175)
   f_sex <- ifelse(sex == 'female', 0.742, 1)
-  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.212, 1)
+  f_race <- if (use_race) ifelse(race == "black", 1.212, 1) else 1
   coeff * scr^(-1.154) * f_sex * f_race * age^(-0.203)
 }
 
@@ -553,7 +565,7 @@ egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
   a1 <- ifelse(sex == 'female', -0.329, -0.411)
   K <- ifelse(sex == 'female', 0.7, 0.9)
   f_sex <- ifelse(sex == 'female', 1.018, 1)
-  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.159, 1)
+  f_race <- if (use_race) ifelse(race == "black", 1.159, 1) else 1
   141 * ((scr/K) ^ ifelse(scr < K, a1, -1.209)) * 0.993^age * f_sex * f_race
 }
 
@@ -619,7 +631,7 @@ egfr_malmo_lund <- function(sex, age, scr) {
 }
 
 egfr_bedside_schwartz <- function(age, height, scr, verbose) {
-  if(age < 1 && verbose) {
+  if (verbose && any(age < 1)) {
     warning("This equation is not meant for patients < 1 years of age.")
   }
   k <- 0.413

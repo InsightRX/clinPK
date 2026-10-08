@@ -63,8 +63,8 @@ calc_egfr_cystatin <- function (
   check_covs_available(cov_reqs, list(age = age, sex = sex))
   check_input_lengths(
     cystatin = cystatin,
-    age = if ("age" %in% cov_reqs) age,
-    sex = if ("sex" %in% cov_reqs) sex
+    age = age,
+    sex = sex
   )
   if ("sex" %in% cov_reqs) {
     sex <- normalize_sex(sex)

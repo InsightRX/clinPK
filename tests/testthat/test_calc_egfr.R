@@ -963,3 +963,130 @@ test_that("calc_egfr resolves method names", {
   expect_error(calc_egfr(method = NULL), "egfr method unspecified")
   expect_error(calc_egfr(method = "foo"), "should be one of")
 })
+
+test_that("vectorization over race works for race-based methods", {
+  for (method in c("ckd_epi", "mdrd", "mdrd_original")) {
+    egfr_vector <- calc_egfr(
+      method = method,
+      sex = c("male", "female"),
+      age = c(50, 60),
+      scr = c(1, 1.2),
+      race = c("black", "other"),
+      verbose = FALSE
+    )
+    egfr_black <- calc_egfr(
+      method = method,
+      sex = "male",
+      age = 50,
+      scr = 1,
+      race = "black",
+      verbose = FALSE
+    )
+    egfr_other <- calc_egfr(
+      method = method,
+      sex = "female",
+      age = 60,
+      scr = 1.2,
+      race = "other",
+      verbose = FALSE
+    )
+    expect_equal(egfr_vector$value, c(egfr_black$value, egfr_other$value))
+  }
+
+  # race is ignored by the race-free variants
+  egfr_ignore_race <- calc_egfr(
+    method = "ckd_epi_ignore_race",
+    sex = c("male", "male"),
+    age = c(50, 50),
+    scr = c(1, 1),
+    race = c("black", "other"),
+    verbose = FALSE
+  )
+  expect_equal(egfr_ignore_race$value[1], egfr_ignore_race$value[2])
+
+  expect_error(
+    calc_egfr(
+      method = "ckd_epi",
+      sex = c("male", "female"),
+      age = c(50, 60),
+      scr = c(1, 1.2),
+      race = c("black", "other", "other"),
+      verbose = FALSE
+    ),
+    "Vector inputs must all be the same length"
+  )
+})
+
+test_that("vectorization over age works for bedside_schwartz", {
+  egfr_vector <- calc_egfr(
+    method = "bedside_schwartz",
+    sex = c("male", "female"),
+    age = c(5, 10),
+    scr = c(0.5, 0.6),
+    height = c(110, 140),
+    verbose = FALSE
+  )
+  expect_equal(egfr_vector$value, 0.413 * c(110, 140) / c(0.5, 0.6))
+
+  expect_warning(
+    calc_egfr(
+      method = "bedside_schwartz",
+      sex = c("male", "female"),
+      age = c(0.5, 10),
+      scr = c(0.3, 0.6),
+      scr_unit = "mg/dL",
+      height = c(65, 140)
+    ),
+    "not meant for patients < 1 years of age"
+  )
+})
+
+test_that("calc_egfr validates unit_out", {
+  egfr <- function(unit_out) {
+    calc_egfr(
+      method = "ckd_epi",
+      sex = "male",
+      age = 50,
+      scr = 1,
+      unit_out = unit_out,
+      verbose = FALSE
+    )
+  }
+  expect_equal(egfr("L/MIN")$value, egfr("mL/min")$value / 1000)
+  expect_equal(egfr("L/MIN")$unit, "l/min/1.73m^2")
+  expect_error(egfr("banana"), "`unit_out` must be one of")
+  expect_error(egfr("ml/min/1.73m2"), "`unit_out` must be one of")
+})
+
+test_that("race-free methods ignore race, including NULL", {
+  egfr <- function(method, race) {
+    calc_egfr(
+      method = method,
+      sex = "female",
+      age = 62,
+      scr = c(63, 54, 60, 52),
+      scr_unit = "umol/l",
+      weight = 45,
+      height = 156,
+      race = race,
+      relative = FALSE,
+      verbose = FALSE,
+      fail = FALSE
+    )$value
+  }
+  race_free_methods <- c(
+    "ckd_epi_ignore_race",
+    "mdrd_ignore_race",
+    "mdrd_original_ignore_race"
+  )
+  for (method in race_free_methods) {
+    egfr_other <- egfr(method, race = "other")
+    expect_length(egfr_other, 4)
+    expect_equal(egfr(method, race = NULL), egfr_other)
+    expect_equal(egfr(method, race = "black"), egfr_other)
+    expect_error(
+      egfr(method, race = c("black", "other")),
+      "Vector inputs must all be the same length"
+    )
+  }
+})

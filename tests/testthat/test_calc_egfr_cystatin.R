@@ -134,3 +134,23 @@ test_that("convert_egfr_cystatin validates cystatin unit", {
     "only `mg/L` is supported"
   )
 })
+
+test_that("calculate egfr based on cystatin checks input lengths", {
+  expect_error(
+    calc_egfr_cystatin(c(1, 1.3), age = c(50, 60, 70)),
+    "Vector inputs must all be the same length"
+  )
+  expect_error(
+    calc_egfr_cystatin(
+      c(1, 1.3),
+      method = "ekfc",
+      unit_out = "ml/min/1.73m2",
+      age = 50,
+      sex = c("male", "female", "male")
+    ),
+    "Vector inputs must all be the same length"
+  )
+  # sex is only validated when the method uses it
+  egfr_grubb <- calc_egfr_cystatin(1.3, sex = "unknown")
+  expect_equal(egfr_grubb$value, calc_egfr_cystatin(1.3)$value)
+})

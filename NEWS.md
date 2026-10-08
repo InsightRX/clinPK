@@ -15,6 +15,8 @@
 - `calc_egfr_cystatin()` now errors if `cystatin_unit` is not `mg/L`. Previously, other units were silently ignored.
 - `calc_egfr()` now validates `method` with `match.arg()`, so the available methods are listed in its usage. Unrecognized methods now give `match.arg()`'s error message, and unambiguous partial method names are accepted.
 - `egfr_cov_reqs()` now returns the canonical method name (`"malmo_lund_revised"`) for Lund-Malmo aliases.
+- `calc_egfr()` now supports vectors of `race` for the CKD-EPI and MDRD methods, and vectors of `age` for the bedside Schwartz method. Previously these errored.
+- `calc_egfr()` and `calc_egfr_combined()` now error if `unit_out` is not one of `"mL/min"`, `"mL/hr"`, `"L/min"`, or `"L/hr"`. Previously, unrecognized units were silently treated as mL/min.
 
 # clinPK 0.13.0
 

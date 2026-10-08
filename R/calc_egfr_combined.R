@@ -22,7 +22,8 @@
 #' @param bsa_method BSA estimation method, see [calc_bsa()] for details
 #' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? If `FALSE`,
 #'   requires `bsa`, or `weight` and `height` to calculate it.
-#' @param unit_out `"ml/min"` (default), `"L/hr"`, or `"mL/hr"`
+#' @param unit_out `"mL/min"` (default), `"mL/hr"`, `"L/min"`, or `"L/hr"`
+#'   (case-insensitive)
 #' @param min_value minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
 #' @param max_value maximum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
 #' @param verbose verbosity, show guidance and warnings. `TRUE` by default
@@ -101,6 +102,8 @@ calc_egfr_combined <- function(
     age = age,
     scr = scr,
     cystatin = cystatin,
+    weight = weight,
+    height = height,
     bsa = bsa
   )
 

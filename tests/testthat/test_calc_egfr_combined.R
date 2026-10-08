@@ -166,6 +166,19 @@ test_that("calculate egfr combined checks inputs", {
   )
   expect_error(
     calc_egfr_combined(
+      age = c(50, 40),
+      sex = "female",
+      scr = c(1, 0.7),
+      cystatin = c(1, 0.7),
+      weight = c(70, 80, 90),
+      height = 165,
+      relative = FALSE,
+      verbose = FALSE
+    ),
+    "Vector inputs must all be the same length"
+  )
+  expect_error(
+    calc_egfr_combined(
       age = 50,
       sex = "female",
       scr = 1,
@@ -184,5 +197,19 @@ test_that("calculate egfr combined checks inputs", {
       cystatin = 1,
       verbose = FALSE
     )
+  )
+})
+
+test_that("calc_egfr_combined validates unit_out", {
+  expect_error(
+    calc_egfr_combined(
+      age = 50,
+      sex = "female",
+      scr = 1,
+      cystatin = 1,
+      unit_out = "banana",
+      verbose = FALSE
+    ),
+    "`unit_out` must be one of"
   )
 })

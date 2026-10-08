@@ -69,7 +69,8 @@ See Note section below for important considerations when using race as a predict
 
 \item{relative}{\code{TRUE}/\code{FALSE}. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If \code{NULL} (=default), will choose value typical for \code{method}.}
 
-\item{unit_out}{\code{"ml/min"} (default), \code{"L/hr"}, or \code{"mL/hr"}}
+\item{unit_out}{\code{"mL/min"} (default), \code{"mL/hr"}, \code{"L/min"}, or \code{"L/hr"}
+(case-insensitive)}
 
 \item{verbose}{verbosity, show guidance and warnings. \code{TRUE} by default}
 

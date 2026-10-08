@@ -50,7 +50,8 @@ calc_egfr_combined(
 \item{relative}{\code{TRUE}/\code{FALSE}. Report eGFR as per 1.73 m2? If \code{FALSE},
 requires \code{bsa}, or \code{weight} and \code{height} to calculate it.}
 
-\item{unit_out}{\code{"ml/min"} (default), \code{"L/hr"}, or \code{"mL/hr"}}
+\item{unit_out}{\code{"mL/min"} (default), \code{"mL/hr"}, \code{"L/min"}, or \code{"L/hr"}
+(case-insensitive)}
 
 \item{verbose}{verbosity, show guidance and warnings. \code{TRUE} by default}
 
