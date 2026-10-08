@@ -7,18 +7,30 @@
 calc_egfr_cystatin(
   cystatin = NULL,
   cystatin_unit = "mg/L",
-  method = c("grubb", "larsson", "hoek"),
-  unit_out = c("ml/min", "ml/hr", "l/min", "l/hr", "ml/min/1.73m2")
+  method = c("grubb", "larsson", "hoek", "ekfc", "ckd_epi"),
+  unit_out = c("ml/min", "ml/hr", "l/min", "l/hr", "ml/min/1.73m2"),
+  age = NULL,
+  sex = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
 \item{cystatin}{serum cystatin concentration (mg/L)}
 
-\item{cystatin_unit, }{only \code{mg/L} available}
+\item{cystatin_unit}{only \code{"mg/L"} available}
 
-\item{method}{eGFR estimation method, choose from \code{grubb}, \code{larsson}, \code{hoek}}
+\item{method}{eGFR estimation method, choose from \code{"grubb"}, \code{"larsson"}, \code{"hoek"},
+\code{"ekfc"}, \code{"ckd_epi"}}
 
-\item{unit_out}{eGFR output unit, choose from \code{ml/min}, \code{ml/hr}, \code{l/min}, \code{l/hr}}
+\item{unit_out}{eGFR output unit, choose from \code{"ml/min"}, \code{"ml/hr"}, \code{"l/min"},
+\code{"l/hr"}, \code{"ml/min/1.73m2"}. The Hoek, EKFC, and CKD-EPI methods only support
+\code{"ml/min/1.73m2"}.}
+
+\item{age}{age, in years. Required for the \code{"ekfc"} and \code{"ckd_epi"} methods.}
+
+\item{sex}{sex, \code{"male"} or \code{"female"}. Required for the \code{"ckd_epi"} method.}
+
+\item{verbose}{verbosity, show guidance and warnings. \code{TRUE} by default}
 }
 \description{
 Calculate eGFR based on Cystatin C measurements
@@ -27,4 +39,20 @@ Calculate eGFR based on Cystatin C measurements
 calc_egfr_cystatin(1.0)
 calc_egfr_cystatin(1.0, method = "larsson")
 calc_egfr_cystatin(1.0, unit_out = "l/hr")
+calc_egfr_cystatin(1.0, method = "ekfc", unit_out = "ml/min/1.73m2", age = 50)
+calc_egfr_cystatin(1.0, method = "ckd_epi", unit_out = "ml/min/1.73m2",
+  age = 50, sex = "female")
+}
+\references{
+\itemize{
+\item EKFC: \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2203769}{Pottel et al., NEJM (2023)}.
+Validated in adults (>= 18 years) only.
+\item CKD-EPI (2012): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa1114248}{Inker et al., NEJM (2012)}
+}
+}
+\seealso{
+\itemize{
+\item \code{\link[=calc_egfr]{calc_egfr()}} for equations using creatinine alone
+\item \code{\link[=calc_egfr_combined]{calc_egfr_combined()}} for equations using both creatinine and Cystatin C
+}
 }
