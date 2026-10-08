@@ -32,7 +32,7 @@
 #'   ideal, adjusted, or adaptive (see [calc_dosing_weight()]) body weight
 #' - C-G spinal cord injury (`cockcroft_gault_sci`), using correction factor of
 #'   0.7, representing median correction point reported in the original
-#'   publication (parapalegic patients: 0.8; tetrapalegic patients: 0.6)
+#'   publication (paraplegic patients: 0.8; tetraplegic patients: 0.6)
 #' - Jelliffe (`jelliffe`)
 #' - Jelliffe for unstable renal function (`jelliffe_unstable`). Note that the
 #'   15% reduction in P_adj recommended for hemodialysis patients is not
