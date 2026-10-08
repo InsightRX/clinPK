@@ -6,9 +6,15 @@
 - Added CDC growth chart data sets as package data (see `?"growth-charts"`).
 - Removed `read_who_table()` function, as part of the refactor for the `pct_*_for_*()` functions.
 - Added `calc_treosulfan_success()` function.
+- Added `calc_egfr_combined()` function for estimating eGFR from both creatinine and cystatin C, supporting the CKD-EPI (2021, without race) and EKFC equations.
+- Added European Kidney Function Consortium (EKFC) eGFR equations: creatinine-based (`calc_egfr(method = "ekfc")`), cystatin C-based (`calc_egfr_cystatin(method = "ekfc")`), and the mean of both (`calc_egfr_combined(method = "ekfc")`).
+- Added CKD-EPI cystatin C equation (2012) (`calc_egfr_cystatin(method = "ckd_epi")`). `calc_egfr_cystatin()` gains `age`, `sex`, and `verbose` arguments.
 
 ## Minor updates
 - Activated roxygen's markdown parser for improved function documentation
+- `calc_egfr_cystatin()` now errors if `cystatin_unit` is not `mg/L`. Previously, other units were silently ignored.
+- `calc_egfr()` now validates `method` with `match.arg()`, so the available methods are listed in its usage. Unrecognized methods now give `match.arg()`'s error message, and unambiguous partial method names are accepted.
+- `egfr_cov_reqs()` now returns the canonical method name (`"malmo_lund_revised"`) for Lund-Malmo aliases.
 
 # clinPK 0.13.0
 
