@@ -7,23 +7,10 @@
 #' @export
 egfr_cov_reqs <- function(method, relative = NULL){
   # Format input
-  if (is.nil(method)) {
-    stop(paste('egfr method unspecified'))
-  }
-  method <- tolower(method)
-  method <- gsub("-", "_", method)
-  method <- gsub("cockroft", "cockcroft", method) # legacy support for typo
-  
+  method <- normalize_egfr_method(method)
+
   # Check method is supported
-  available_methods <- c(
-    "cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
-    "cockcroft_gault_adaptive", "cockcroft_gault_sci",
-    "malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev",
-    "mdrd", "mdrd_ignore_race", "mdrd_original", "mdrd_original_ignore_race",
-    "ckd_epi", "ckd_epi_ignore_race", "ckd_epi_as_2021", 
-    "schwartz", "schwartz_revised", "bedside_schwartz", 
-    "jelliffe", "jelliffe_unstable", "wright"
-  )
+  available_methods <- eval(formals(calc_egfr)$method)
   if(!(method %in% available_methods)) {
     stop(paste0("Sorry, eGFR calculation method not recognized! Please choose from: ", 
                 paste0(available_methods, collapse=", ")))
@@ -33,7 +20,7 @@ egfr_cov_reqs <- function(method, relative = NULL){
   if (method %in% c("cockcroft_gault", "jelliffe_unstable", "cockcroft_gault_sci")) {
     covs <- list(c("creat", "age", "weight", "sex"))
     
-  } else if (method %in% c("malmo_lund_revised", "malmo_lund_rev", "lund_malmo_revised", "lund_malmo_rev", "mdrd_ignore_race", "mdrd_original_ignore_race", "ckd_epi_ignore_race", "ckd_epi_as_2021")) {
+  } else if (method %in% c("malmo_lund_revised", "mdrd_ignore_race", "mdrd_original_ignore_race", "ckd_epi_ignore_race", "ckd_epi_as_2021", "ekfc")) {
     covs <- list(c("creat", "sex", "age"))
     
   } else if (method %in% c("schwartz_revised", "bedside_schwartz")) {
