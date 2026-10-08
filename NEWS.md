@@ -17,6 +17,10 @@
 - `egfr_cov_reqs()` now returns the canonical method name (`"malmo_lund_revised"`) for Lund-Malmo aliases.
 - `calc_egfr()` now supports vectors of `race` for the CKD-EPI and MDRD methods, and vectors of `age` for the bedside Schwartz method. Previously these errored.
 - `calc_egfr()` and `calc_egfr_combined()` now error if `unit_out` is not one of `"mL/min"`, `"mL/hr"`, `"L/min"`, or `"L/hr"`. Previously, unrecognized units were silently treated as mL/min.
+- `calc_egfr_cystatin()`'s `unit_out` now defaults to `NULL`, which picks `"ml/min"` for the Larsson method, and `"ml/min/1.73m2"` for the Grubb, Hoek, EKFC, and CKD-EPI methods. Previously, the Hoek method errored unless `unit_out` was set.
+- **Breaking change:** `calc_egfr_cystatin(method = "grubb")` now reports eGFR in mL/min/1.73m2, as in the original publication (Grubb et al., Clinical Chemistry, 2005). Previously, it was labelled as absolute eGFR (mL/min) and could be converted to other absolute units, which was incorrect. The calculated values are unchanged, but the Grubb method now only supports `unit_out = "ml/min/1.73m2"`.
+- Added references for the Grubb, Larsson, and Hoek methods to the `calc_egfr_cystatin()` documentation, along with a note that these equations were developed with cystatin C assays calibrated before international standardization.
+- `calc_egfr_cystatin()` now warns when the Grubb or CKD-EPI methods are used for patients < 18 years of age, since these equations were developed in adults. For the Grubb method, `age` is optional and only used for this warning.
 
 # clinPK 0.13.0
 
