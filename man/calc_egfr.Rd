@@ -2,10 +2,14 @@
 % Please edit documentation in R/calc_egfr.R
 \name{calc_egfr}
 \alias{calc_egfr}
-\title{Calculate eGFR}
+\title{Calculate eGFR or creatinine clearance}
 \usage{
 calc_egfr(
-  method = "cockcroft_gault",
+  method = c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
+    "cockcroft_gault_adaptive", "cockcroft_gault_sci", "mdrd", "mdrd_ignore_race",
+    "mdrd_original", "mdrd_original_ignore_race", "ckd_epi", "ckd_epi_ignore_race",
+    "ckd_epi_as_2021", "ekfc", "malmo_lund_revised", "schwartz", "schwartz_revised",
+    "bedside_schwartz", "jelliffe", "jelliffe_unstable", "wright"),
   sex = NULL,
   age = NULL,
   scr = NULL,
@@ -28,11 +32,13 @@ calc_egfr(
 )
 }
 \arguments{
-\item{method}{eGFR estimation method, choose from \code{cockcroft_gault}, \code{cockcroft_gault_ideal},
-\code{cockcroft_gault_adjusted}, \code{cockcroft_gault_adaptive}, \code{mdrd},
-\code{mdrd_ignore_race}, \code{mdrd_original}, \code{mdrd_original_ignore_race},
-\code{ckd_epi}, \code{ckd_epi_ignore_race}, \code{ckd_epi_as_2021},
-\code{malmo_lund_revised}, \code{schwartz}, \code{jelliffe}, \code{jellife_unstable}, \code{wright}.}
+\item{method}{eGFR or CrCl estimation method, choose from \code{"cockcroft_gault"},
+\code{"cockcroft_gault_ideal"}, \code{"cockcroft_gault_adjusted"}, \code{"cockcroft_gault_adaptive"},
+\code{"cockcroft_gault_sci"}, \code{"mdrd"}, \code{"mdrd_ignore_race"}, \code{"mdrd_original"},
+\code{"mdrd_original_ignore_race"}, \code{"ckd_epi"}, \code{"ckd_epi_ignore_race"},
+\code{"ckd_epi_as_2021"}, \code{"ekfc"}, \code{"malmo_lund_revised"}, \code{"schwartz"},
+\code{"schwartz_revised"}, \code{"bedside_schwartz"}, \code{"jelliffe"}, \code{"jelliffe_unstable"},
+\code{"wright"}. Defaults to \code{"cockcroft_gault"}.}
 
 \item{sex}{sex}
 
@@ -40,9 +46,9 @@ calc_egfr(
 
 \item{scr}{serum creatinine (mg/dL)}
 
-\item{scr_unit, }{\code{mg/dL} or \code{micromol/L} (==\code{umol/L})}
+\item{scr_unit}{\code{"mg/dL"} or \code{"micromol/L"} (==\code{"umol/L"})}
 
-\item{race}{\code{black} or \code{other}, Required for CKD-EPI and MDRD methods for estimating GFR.
+\item{race}{\code{"black"} or \code{"other"}, Required for CKD-EPI and MDRD methods for estimating GFR.
 To use these methods without race, use \code{method = "ckd_epi_ignore_race"},  \code{method = "ckd_epi_as_2021"},
 \code{method = "mdrd_ignore_race"} or \code{method = "mdrd_original_ignore_race"}.
 See Note section below for important considerations when using race as a predictive factor in eGFR.}
@@ -59,11 +65,12 @@ See Note section below for important considerations when using race as a predict
 
 \item{times}{vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)}
 
-\item{bsa_method}{BSA estimation method, see \code{calc_bsa()} for details}
+\item{bsa_method}{BSA estimation method, see \code{\link[=calc_bsa]{calc_bsa()}} for details}
 
 \item{relative}{\code{TRUE}/\code{FALSE}. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If \code{NULL} (=default), will choose value typical for \code{method}.}
 
-\item{unit_out}{\code{ml/min} (default), \code{L/hr}, or \code{mL/hr}}
+\item{unit_out}{\code{"mL/min"} (default), \code{"mL/hr"}, \code{"L/min"}, or \code{"L/hr"}
+(case-insensitive)}
 
 \item{verbose}{verbosity, show guidance and warnings. \code{TRUE} by default}
 
@@ -73,33 +80,47 @@ See Note section below for important considerations when using race as a predict
 
 \item{fail}{invoke \code{stop()} if not all covariates available?}
 
-\item{...}{arguments passed on to \code{calc_abw} or \code{calc_dosing_weight}}
+\item{...}{arguments passed on to \code{\link[=calc_abw]{calc_abw()}} or \code{\link[=calc_dosing_weight]{calc_dosing_weight()}}}
 }
 \description{
-Calculate the estimated glomerular filtration rate (an indicator of renal
-function) based on measured serum creatinine using one of the following
-approaches:
+Calculate the estimated glomerular filtration rate (eGFR) or estimated
+creatinine clearance (CrCl), both indicators of renal function, based on
+measured serum creatinine. Note that CrCl overestimates GFR, because
+creatinine is also secreted by the renal tubules, so the two are not
+interchangeable. Regardless of method, the estimate is returned in the
+\code{value} element of the output.
+
+Methods estimating GFR:
 \itemize{
-\item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
-\item C-G spinal cord injury (using correction factor of 0.7, representing
-median correction point reported in the original publication (parapalegic
-patients: 0.8; tetrapalegic patients: 0.6))
-\item Revised Lund-Malmo
-\item Modification of Diet in Renal Disease study (MDRD;
+\item Revised Lund-Malmo (\code{malmo_lund_revised})
+\item Modification of Diet in Renal Disease study (MDRD; \code{mdrd},
+\code{mdrd_ignore_race}, \code{mdrd_original}, \code{mdrd_original_ignore_race}),
 with or without consideration of race, using either the original equation
 (published 2001) or the equation updated to reflect serum creatinine
-assay standardization (2006))
-\item CKD-EPI (with or without consideration of race, or 2021 re-fit without race)
-\item Schwartz
-\item Schwartz revised / bedside
-\item Jelliffe
-\item Jelliffe for unstable renal function. Note that the 15\% reduction in
-P_adj recommended for hemodialysis patients is not included in this
-implementation.
-\item Wright equation for eGFR in cancer patients, with creatinine measured
-using the Jaffe assay.
+assay standardization (2006)
+\item CKD-EPI (\code{ckd_epi}, \code{ckd_epi_ignore_race}, \code{ckd_epi_as_2021}), with or
+without consideration of race, or 2021 re-fit without race
+\item European Kidney Function Consortium (EKFC; \code{ekfc}). Applicable from 2
+years of age.
+\item Schwartz (\code{schwartz})
+\item Schwartz revised / bedside (\code{schwartz_revised}, \code{bedside_schwartz})
+\item Wright equation for eGFR in cancer patients (\code{wright}), with creatinine
+measured using the Jaffe assay.
 }
-Equations for estimation of eGFR from Cystatin C concentrations are available from the \code{calc_egfr_cystatin()} function.
+
+Methods estimating CrCl:
+\itemize{
+\item Cockcroft-Gault (\code{cockcroft_gault}, \code{cockcroft_gault_ideal},
+\code{cockcroft_gault_adjusted}, \code{cockcroft_gault_adaptive}), using total,
+ideal, adjusted, or adaptive (see \code{\link[=calc_dosing_weight]{calc_dosing_weight()}}) body weight
+\item C-G spinal cord injury (\code{cockcroft_gault_sci}), using correction factor of
+0.7, representing median correction point reported in the original
+publication (paraplegic patients: 0.8; tetraplegic patients: 0.6)
+\item Jelliffe (\code{jelliffe})
+\item Jelliffe for unstable renal function (\code{jelliffe_unstable}). Note that the
+15\% reduction in P_adj recommended for hemodialysis patients is not
+included in this implementation.
+}
 }
 \note{
 The MDRD and CKD-EPI equations use race as a factor in estimation of GFR. Racism has
@@ -111,7 +132,7 @@ of the patient. Removing race from GFR estimation may lead to worse outcomes for
 in some contexts (\href{https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext}{Casal et al., The Lancet (2021)}).
 On the other hand, including race in GFR estimation may also prevent Black patients
 from obtaining procedures like kidney transplants
-({\href{https://pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
+(\href{https://pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}).
 In 2021, the NKF/ASN Task Force on Reassessing the Inclusion of Race in Diagnosing Kidney Diseases
 published revised versions of the CKD-EPI equations refit on the original data but with race excluded,
 which may produce less biased estimates
@@ -127,6 +148,7 @@ calc_egfr(sex = "male", age = 50, scr = c(1.1, 0.8),
   weight = 70, height = 170, method = "jelliffe_unstable")
 calc_egfr(sex = "male", age = 50, scr = 1.1,
   weight = 70, bsa = 1.6, method = "malmo_lund_revised", relative = FALSE)
+calc_egfr(sex = "female", age = 50, scr = 0.9, method = "ekfc")
 }
 \references{
 \itemize{
@@ -137,10 +159,17 @@ calc_egfr(sex = "male", age = 50, scr = 1.1,
 and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
 \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
 \item CKD-EPI (2021): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}.
+\item EKFC: \href{https://pubmed.ncbi.nlm.nih.gov/33166224/}{Pottel et al., Annals of Internal Medicine (2021)}
 \item Schwartz: \href{https://pubmed.ncbi.nlm.nih.gov/951142/}{Schwartz et al., Pediatrics (1976)}
 \item Schwartz revised / bedside: \href{https://pubmed.ncbi.nlm.nih.gov/19158356/}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
 \item Jelliffe: \href{https://pubmed.ncbi.nlm.nih.gov/4748282/}{Jelliffe, Annals of Internal Medicine (1973)}
 \item Jelliffe for unstable renal function: \href{https://pubmed.ncbi.nlm.nih.gov/12169862/}{Jelliffe, American Journal of Nephrology (2002)}
 \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
+}
+}
+\seealso{
+\itemize{
+\item \code{\link[=calc_egfr_cystatin]{calc_egfr_cystatin()}} for equations using Cystatin C alone
+\item \code{\link[=calc_egfr_combined]{calc_egfr_combined()}} for equations using both creatinine and Cystatin C
 }
 }
