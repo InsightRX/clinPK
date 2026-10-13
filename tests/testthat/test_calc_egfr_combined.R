@@ -213,3 +213,37 @@ test_that("calc_egfr_combined validates unit_out", {
     "`unit_out` must be one of"
   )
 })
+
+test_that("calculate egfr combined warns for children with ckd_epi_as_2021", {
+  expect_warning(
+    calc_egfr_combined(
+      method = "ckd_epi_as_2021",
+      age = c(50, 10),
+      sex = c("female", "male"),
+      scr = c(1, 0.5),
+      scr_unit = "mg/dL",
+      cystatin = c(1, 0.8)
+    ),
+    "CKD-EPI creatinine-cystatin C equation was developed in adults only"
+  )
+  expect_no_warning(
+    calc_egfr_combined(
+      method = "ckd_epi_as_2021",
+      age = 10,
+      sex = "male",
+      scr = 0.5,
+      cystatin = 0.8,
+      verbose = FALSE # No warnings
+    )
+  )
+  expect_no_warning(
+    calc_egfr_combined(
+      method = "ckd_epi_as_2021",
+      age = 50,
+      sex = "female",
+      scr = 1,
+      scr_unit = "mg/dL",
+      cystatin = 1
+    )
+  )
+})

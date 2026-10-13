@@ -65,7 +65,8 @@ requires \code{bsa}, or \code{weight} and \code{height} to calculate it.}
 Calculate the estimated glomerular filtration rate based on both measured
 serum creatinine and serum Cystatin C using one of the following approaches:
 \itemize{
-\item CKD-EPI creatinine-cystatin C (2021 re-fit without race)
+\item CKD-EPI creatinine-cystatin C (2021 re-fit without race). Developed in
+adults (>= 18 years) only.
 \item European Kidney Function Consortium (EKFC): the arithmetic mean of
 the creatinine-based and Cystatin C-based EKFC equations. The Cystatin
 C-based equation was validated in adults (>= 18 years) only.

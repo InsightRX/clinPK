@@ -4,7 +4,8 @@
 #' Calculate the estimated glomerular filtration rate based on both measured
 #' serum creatinine and serum Cystatin C using one of the following approaches:
 #'
-#' - CKD-EPI creatinine-cystatin C (2021 re-fit without race)
+#' - CKD-EPI creatinine-cystatin C (2021 re-fit without race). Developed in
+#'   adults (>= 18 years) only.
 #' - European Kidney Function Consortium (EKFC): the arithmetic mean of
 #'   the creatinine-based and Cystatin C-based EKFC equations. The Cystatin
 #'   C-based equation was validated in adults (>= 18 years) only.
@@ -120,7 +121,8 @@ calc_egfr_combined <- function(
       sex = sex,
       scr = scr,
       cystatin = cystatin,
-      age = age
+      age = age,
+      verbose = verbose
     ),
     "ekfc" = egfr_ekfc_combined(
       sex = sex,
@@ -155,7 +157,13 @@ calc_egfr_combined <- function(
   )
 }
 
-egfr_ckd_epi_combined_as_2021 <- function(sex, scr, cystatin, age) {
+egfr_ckd_epi_combined_as_2021 <- function(sex, scr, cystatin, age, verbose = TRUE) {
+  if (verbose && any(age < 18)) {
+    warning(
+      "The CKD-EPI creatinine-cystatin C equation was developed in adults ",
+      "only (>= 18 years of age)."
+    )
+  }
   a1 <- ifelse(sex == "female", -0.219, -0.144)
   K <- ifelse(sex == "female", 0.7, 0.9)
   f_sex <- ifelse(sex == "female", 0.963, 1)
