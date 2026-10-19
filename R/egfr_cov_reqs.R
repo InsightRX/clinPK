@@ -20,7 +20,7 @@ egfr_cov_reqs <- function(method, relative = NULL){
   if (method %in% c("cockcroft_gault", "jelliffe_unstable", "cockcroft_gault_sci")) {
     covs <- list(c("creat", "age", "weight", "sex"))
     
-  } else if (method %in% c("malmo_lund_revised", "mdrd_ignore_race", "mdrd_original_ignore_race", "ckd_epi_ignore_race", "ckd_epi_as_2021", "ekfc")) {
+  } else if (method %in% c("malmo_lund_revised", "jelliffe", "mdrd_ignore_race", "mdrd_original_ignore_race", "ckd_epi_ignore_race", "ckd_epi_as_2021", "ekfc")) {
     covs <- list(c("creat", "sex", "age"))
     
   } else if (method %in% c("schwartz_revised", "bedside_schwartz")) {
@@ -32,8 +32,8 @@ egfr_cov_reqs <- function(method, relative = NULL){
   } else if (method %in% c("mdrd", "mdrd_original", "ckd_epi")) {
     covs <- list(c("creat", "sex", "age", "race"))
     
-  } else if (method %in% c("jelliffe", "wright")) {
-    covs <- list( c("creat", "sex", "age", "bsa"))
+  } else if (method %in% c("wright")) {
+    covs <- list(c("creat", "sex", "age", "bsa"))
   
   } else if (method %in% c("cockcroft_gault_ideal", "cockcroft_gault_adjusted", "cockcroft_gault_adaptive")) {
     covs <- list(c("creat", "age", "weight", "sex", "height"))
@@ -43,15 +43,11 @@ egfr_cov_reqs <- function(method, relative = NULL){
   }
   
   # ---- Relative eGFR?
+  is_absolute <- is_absolute_egfr_method(method)
   if (is.nil(relative)) {
-    # By default, assume true, since most equations report in units of /1.73m2.
-    # Cockcroft-Gault and derived formulae do not report in relative units, but
-    # do not require bsa to convert.
-    relative <- ifelse(grepl("cockcroft_gault", method), FALSE, TRUE)
+    relative <- !is_absolute
   }
-  if (!relative & !grepl("cockcroft_gault", method)) {
-    covs[[1]] <- unique(c("bsa", covs[[1]]))
-  } else if (relative & grepl("cockcroft_gault", method)) {
+  if (relative == is_absolute) {
     covs[[1]] <- unique(c("bsa", covs[[1]]))
   }
   

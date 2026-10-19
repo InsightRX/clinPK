@@ -8,6 +8,11 @@
 #' interchangeable. Regardless of method, the estimate is returned in the
 #' `value` element of the output.
 #'
+#' Most equations report values per 1.73 m2 body surface area. The
+#' Cockcroft-Gault, Wright, and Jelliffe for unstable renal function equations
+#' report absolute values (mL/min) instead. By default, values are returned in
+#' the units of the equation; use `relative` to convert between them.
+#'
 #' Methods estimating GFR:
 #'
 #' - Revised Lund-Malmo (`malmo_lund_revised`)
@@ -23,20 +28,21 @@
 #' - Schwartz (`schwartz`)
 #' - Schwartz revised / bedside (`schwartz_revised`, `bedside_schwartz`)
 #' - Wright equation for eGFR in cancer patients (`wright`), with creatinine
-#'   measured using the Jaffe assay.
+#'   measured using the Jaffe assay. Reports absolute values.
 #'
 #' Methods estimating CrCl:
 #'
 #' - Cockcroft-Gault (`cockcroft_gault`, `cockcroft_gault_ideal`,
 #'   `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`), using total,
-#'   ideal, adjusted, or adaptive (see [calc_dosing_weight()]) body weight
+#'   ideal, adjusted, or adaptive (see [calc_dosing_weight()]) body weight.
+#'   Reports absolute values.
 #' - C-G spinal cord injury (`cockcroft_gault_sci`), using correction factor of
 #'   0.7, representing median correction point reported in the original
 #'   publication (paraplegic patients: 0.8; tetraplegic patients: 0.6)
-#' - Jelliffe (`jelliffe`)
-#' - Jelliffe for unstable renal function (`jelliffe_unstable`). Note that the
-#'   15% reduction in P_adj recommended for hemodialysis patients is not
-#'   included in this implementation.
+#' - Jelliffe (`jelliffe`). Reports values per 1.73 m2.
+#' - Jelliffe for unstable renal function (`jelliffe_unstable`). Reports
+#'   absolute values. Note that the 15% reduction in P_adj recommended for
+#'   hemodialysis patients is not included in this implementation.
 #'
 #' @param method eGFR or CrCl estimation method, choose from `"cockcroft_gault"`,
 #'   `"cockcroft_gault_ideal"`, `"cockcroft_gault_adjusted"`, `"cockcroft_gault_adaptive"`,
@@ -59,7 +65,10 @@
 #' @param bsa_method BSA estimation method, see [calc_bsa()] for details
 #' @param times vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)
 #' @param ckd chronic kidney disease? Used for Schwartz method.
-#' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
+#' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA
+#'   if conversion is required. If `NULL` (default), uses the units of the
+#'   equation: `FALSE` for the Cockcroft-Gault, Wright, and Jelliffe for
+#'   unstable renal function equations, and `TRUE` for the others.
 #' @param unit_out `"mL/min"` (default), `"mL/hr"`, `"L/min"`, or `"L/hr"`
 #'   (case-insensitive)
 #' @param preterm is patient preterm? Used for Schwartz method.
@@ -149,10 +158,10 @@ calc_egfr <- function (
 
   # Format output units -------------------------------------------------------
   if (is.nil(relative)) { # Relative eGFR?
-    # By default, assume true, since most equations report in units of /1.73m2.
-    # Cockcroft-Gault and derived formulae do not report in relative units, but
-    # do not require bsa to convert.
-    relative <- ifelse(grepl("cockcroft_gault", method), FALSE, TRUE)
+    # By default, report eGFR in the units of the equation: absolute for
+    # equations that report absolute values (e.g., Cockcroft-Gault), and per
+    # 1.73 m2 for the others.
+    relative <- !is_absolute_egfr_method(method)
   }
   
   # Extract required covariates and tidied method name ------------------------
@@ -253,7 +262,7 @@ calc_egfr <- function (
   egfr <- switch(
     method,
     "wright" = egfr_wright(age = age, bsa = bsa, sex = sex, scr = scr),
-    "jelliffe" = egfr_jelliffe(age = age, sex = sex, bsa = bsa, scr = scr),
+    "jelliffe" = egfr_jelliffe(age = age, sex = sex, scr = scr),
     "jelliffe_unstable" = egfr_jelliffe_unstable(
       weight = weight,
       times = times,
@@ -379,7 +388,7 @@ calc_egfr <- function (
     egfr = egfr,
     unit = unit,
     relative = relative,
-    reported_relative = !grepl("cockcroft_gault", method),
+    reported_relative = !is_absolute_egfr_method(method),
     bsa = bsa,
     min_value = min_value,
     max_value = max_value,
@@ -415,6 +424,19 @@ normalize_egfr_method <- function(method) {
   method <- gsub("-", "_", method)
   method <- gsub("cockroft", "cockcroft", method) # legacy support for typo
   sub("^(malmo_lund|lund_malmo)_rev(ised)?$", "malmo_lund_revised", method)
+}
+
+#' Does an eGFR method report absolute values?
+#'
+#' Most eGFR equations report eGFR per 1.73 m2 body surface area. These
+#' equations report absolute values (mL/min) instead.
+#'
+#' @param method normalized eGFR method name(s)
+#' @returns `TRUE` if the method reports absolute values
+#' @noRd
+is_absolute_egfr_method <- function(method) {
+  grepl("cockcroft_gault", method) |
+    method %in% c("wright", "jelliffe_unstable")
 }
 
 #' Convert serum creatinine to mg/dL for eGFR equations
@@ -508,8 +530,9 @@ egfr_wright <- function(age, bsa, sex, scr) {
   ((6580 - (38.8 * age)) * bsa * (1-(0.168 * (sex == "female"))))/(scr * 88.42)
 }
 
-egfr_jelliffe <- function(age, sex, bsa, scr) {
-  ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
+egfr_jelliffe <- function(age, sex, scr) {
+  f_sex <- ifelse(sex == "female", 0.9, 1)
+  (98 - 0.8 * (age - 20)) * f_sex / scr
 }
 
 egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {

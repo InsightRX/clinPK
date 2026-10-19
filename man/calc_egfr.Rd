@@ -67,7 +67,10 @@ See Note section below for important considerations when using race as a predict
 
 \item{bsa_method}{BSA estimation method, see \code{\link[=calc_bsa]{calc_bsa()}} for details}
 
-\item{relative}{\code{TRUE}/\code{FALSE}. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If \code{NULL} (=default), will choose value typical for \code{method}.}
+\item{relative}{\code{TRUE}/\code{FALSE}. Report eGFR as per 1.73 m2? Requires BSA
+if conversion is required. If \code{NULL} (default), uses the units of the
+equation: \code{FALSE} for the Cockcroft-Gault, Wright, and Jelliffe for
+unstable renal function equations, and \code{TRUE} for the others.}
 
 \item{unit_out}{\code{"mL/min"} (default), \code{"mL/hr"}, \code{"L/min"}, or \code{"L/hr"}
 (case-insensitive)}
@@ -90,6 +93,11 @@ creatinine is also secreted by the renal tubules, so the two are not
 interchangeable. Regardless of method, the estimate is returned in the
 \code{value} element of the output.
 
+Most equations report values per 1.73 m2 body surface area. The
+Cockcroft-Gault, Wright, and Jelliffe for unstable renal function equations
+report absolute values (mL/min) instead. By default, values are returned in
+the units of the equation; use \code{relative} to convert between them.
+
 Methods estimating GFR:
 \itemize{
 \item Revised Lund-Malmo (\code{malmo_lund_revised})
@@ -105,21 +113,22 @@ years of age.
 \item Schwartz (\code{schwartz})
 \item Schwartz revised / bedside (\code{schwartz_revised}, \code{bedside_schwartz})
 \item Wright equation for eGFR in cancer patients (\code{wright}), with creatinine
-measured using the Jaffe assay.
+measured using the Jaffe assay. Reports absolute values.
 }
 
 Methods estimating CrCl:
 \itemize{
 \item Cockcroft-Gault (\code{cockcroft_gault}, \code{cockcroft_gault_ideal},
 \code{cockcroft_gault_adjusted}, \code{cockcroft_gault_adaptive}), using total,
-ideal, adjusted, or adaptive (see \code{\link[=calc_dosing_weight]{calc_dosing_weight()}}) body weight
+ideal, adjusted, or adaptive (see \code{\link[=calc_dosing_weight]{calc_dosing_weight()}}) body weight.
+Reports absolute values.
 \item C-G spinal cord injury (\code{cockcroft_gault_sci}), using correction factor of
 0.7, representing median correction point reported in the original
 publication (paraplegic patients: 0.8; tetraplegic patients: 0.6)
-\item Jelliffe (\code{jelliffe})
-\item Jelliffe for unstable renal function (\code{jelliffe_unstable}). Note that the
-15\% reduction in P_adj recommended for hemodialysis patients is not
-included in this implementation.
+\item Jelliffe (\code{jelliffe}). Reports values per 1.73 m2.
+\item Jelliffe for unstable renal function (\code{jelliffe_unstable}). Reports
+absolute values. Note that the 15\% reduction in P_adj recommended for
+hemodialysis patients is not included in this implementation.
 }
 }
 \note{

@@ -324,20 +324,45 @@ test_that("multiple calculations work", {
 })
 
 test_that("calculate egfr works: jelliffe", {
-  expect_equal(
-    round(
-      calc_egfr(
-        age = 40,
-        sex="male",
-        bsa = 1.6,
-        weight = 70,
-        scr = 1,
-        method = "jelliffe",
-        verbose = FALSE
-      )$value
-    ),
-    76
+  egfr_relative <- calc_egfr(
+    age = 40,
+    sex = "male",
+    bsa = 1.6,
+    weight = 70,
+    scr = 1,
+    method = "jelliffe",
+    verbose = FALSE
   )
+  expect_equal(egfr_relative$value, 82)
+  expect_equal(egfr_relative$unit, "ml/min/1.73m^2")
+
+  egfr_absolute <- calc_egfr(
+    age = 40,
+    sex = "male",
+    bsa = 1.6,
+    weight = 70,
+    scr = 1,
+    method = "jelliffe",
+    relative = FALSE,
+    verbose = FALSE
+  )
+  expect_equal(round(egfr_absolute$value), 76)
+  expect_equal(egfr_absolute$unit, "ml/min")
+
+  # Examples from the original publication (Jelliffe, 1973)
+  egfr <- function(age, sex, scr) {
+    calc_egfr(
+      age = age,
+      sex = sex,
+      scr = scr,
+      scr_unit = "mg/dL",
+      method = "jelliffe",
+      verbose = FALSE
+    )$value
+  }
+  expect_equal(egfr(20, "male", 1), 98)
+  expect_equal(egfr(20, "female", 1), 98 * 0.9)
+  expect_equal(egfr(80, "female", 1), 45)
 })
 
 test_that("calculate egfr works: jelliffe unstable", {
@@ -1087,6 +1112,53 @@ test_that("race-free methods ignore race, including NULL", {
     expect_error(
       egfr(method, race = c("black", "other")),
       "Vector inputs must all be the same length"
+    )
+  }
+})
+
+test_that("absolute and relative eGFR are converted correctly", {
+  egfr <- function(method, relative = NULL) {
+    calc_egfr(
+      method = method,
+      sex = "male",
+      age = 50,
+      scr = c(1, 1),
+      times = c(1, 2),
+      weight = 90,
+      height = 190,
+      bsa = 2.2,
+      relative = relative,
+      verbose = FALSE
+    )
+  }
+
+  # Absolute methods default to absolute eGFR
+  for (method in c("cockcroft_gault", "wright", "jelliffe_unstable")) {
+    egfr_default <- egfr(method)
+    egfr_absolute <- egfr(method, relative = FALSE)
+    egfr_relative <- egfr(method, relative = TRUE)
+    expect_equal(egfr_default$unit, "ml/min", label = method)
+    expect_equal(egfr_absolute$value, egfr_default$value, label = method)
+    expect_equal(egfr_relative$unit, "ml/min/1.73m^2", label = method)
+    expect_equal(
+      egfr_relative$value,
+      egfr_default$value * 1.73 / 2.2,
+      label = method
+    )
+  }
+
+  # Relative methods default to relative eGFR
+  for (method in c("jelliffe", "ckd_epi_as_2021", "ekfc")) {
+    egfr_default <- egfr(method)
+    egfr_relative <- egfr(method, relative = TRUE)
+    egfr_absolute <- egfr(method, relative = FALSE)
+    expect_equal(egfr_default$unit, "ml/min/1.73m^2", label = method)
+    expect_equal(egfr_relative$value, egfr_default$value, label = method)
+    expect_equal(egfr_absolute$unit, "ml/min", label = method)
+    expect_equal(
+      egfr_absolute$value,
+      egfr_default$value * 2.2 / 1.73,
+      label = method
     )
   }
 })
