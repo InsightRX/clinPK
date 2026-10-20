@@ -2,29 +2,76 @@
 % Please edit documentation in R/calc_egfr_cystatin.R
 \name{calc_egfr_cystatin}
 \alias{calc_egfr_cystatin}
-\title{Calculate eGFR based on Cystatin C measurements}
+\title{Calculate eGFR based on cystatin C measurements}
 \usage{
 calc_egfr_cystatin(
   cystatin = NULL,
   cystatin_unit = "mg/L",
-  method = c("grubb", "larsson", "hoek"),
-  unit_out = c("ml/min", "ml/hr", "l/min", "l/hr", "ml/min/1.73m2")
+  method = c("grubb", "larsson", "hoek", "ekfc", "ckd_epi"),
+  unit_out = NULL,
+  age = NULL,
+  sex = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
 \item{cystatin}{serum cystatin concentration (mg/L)}
 
-\item{cystatin_unit, }{only \code{mg/L} available}
+\item{cystatin_unit}{only \code{"mg/L"} available}
 
-\item{method}{eGFR estimation method, choose from \code{grubb}, \code{larsson}, \code{hoek}}
+\item{method}{eGFR estimation method, choose from \code{"grubb"}, \code{"larsson"}, \code{"hoek"},
+\code{"ekfc"}, \code{"ckd_epi"}}
 
-\item{unit_out}{eGFR output unit, choose from \code{ml/min}, \code{ml/hr}, \code{l/min}, \code{l/hr}}
+\item{unit_out}{eGFR output unit, choose from \code{"ml/min"}, \code{"ml/hr"},
+\code{"l/min"}, \code{"l/hr"}, \code{"ml/min/1.73m2"}. The Larsson method reports
+absolute eGFR, so it supports all units except \code{"ml/min/1.73m2"}. The
+other methods report eGFR per 1.73 m2, so they only support
+\code{"ml/min/1.73m2"}. If \code{NULL} (default), uses \code{"ml/min"} for the Larsson
+method, and \code{"ml/min/1.73m2"} for the others.}
+
+\item{age}{age, in years. Required for the \code{"ekfc"} and \code{"ckd_epi"} methods.
+Optional for the \code{"grubb"} method, where it is only used to warn for
+patients < 18 years of age.}
+
+\item{sex}{sex, \code{"male"} or \code{"female"}. Required for the \code{"ckd_epi"} method.}
+
+\item{verbose}{verbosity, show guidance and warnings. \code{TRUE} by default}
 }
 \description{
-Calculate eGFR based on Cystatin C measurements
+Calculate eGFR based on cystatin C measurements
+}
+\details{
+The Grubb, Larsson, and Hoek equations were developed with cystatin C
+assays calibrated before the introduction of the international reference
+material for cystatin C (ERM-DA471/IFCC), and may be biased when used with
+results from standardized assays. The EKFC and CKD-EPI equations were
+developed with standardized assays.
 }
 \examples{
 calc_egfr_cystatin(1.0)
 calc_egfr_cystatin(1.0, method = "larsson")
-calc_egfr_cystatin(1.0, unit_out = "l/hr")
+calc_egfr_cystatin(1.0, method = "larsson", unit_out = "l/hr")
+calc_egfr_cystatin(1.0, method = "ekfc", age = 50)
+calc_egfr_cystatin(1.0, method = "ckd_epi", age = 50, sex = "female")
+}
+\references{
+\itemize{
+\item Grubb: \href{https://doi.org/10.1373/clinchem.2005.051557}{Grubb et al., Clinical Chemistry (2005)}.
+Uses the equation derived for adults (>= 18 years), without adjustment
+for sex. Cystatin C measured with DakoCytomation reagents.
+\item Larsson: \href{https://doi.org/10.1080/00365510410003723}{Larsson et al., Scandinavian Journal of Clinical and Laboratory Investigation (2004)}.
+Uses the equation for the Dade Behring cystatin C calibration.
+\item Hoek: \href{https://doi.org/10.1093/ndt/gfg349}{Hoek et al., Nephrology Dialysis Transplantation (2003)}.
+Cystatin C measured with the Dade Behring N Latex assay.
+\item EKFC: \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2203769}{Pottel et al., NEJM (2023)}.
+Validated in adults (>= 18 years) only.
+\item CKD-EPI (2012): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa1114248}{Inker et al., NEJM (2012)}.
+Developed in adults (>= 18 years) only.
+}
+}
+\seealso{
+\itemize{
+\item \code{\link[=calc_egfr]{calc_egfr()}} for equations using creatinine alone
+\item \code{\link[=calc_egfr_combined]{calc_egfr_combined()}} for equations using both creatinine and cystatin C
+}
 }

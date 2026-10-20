@@ -1,87 +1,115 @@
-#' Calculate eGFR
+#' Calculate eGFR or creatinine clearance
 #'
-#' Calculate the estimated glomerular filtration rate (an indicator of renal 
-#' function) based on measured serum creatinine using one of the following 
-#' approaches:
-#' \itemize{
-#'   \item Cockcroft-Gault (using weight, ideal body weight, or adjusted body weight)
-#'   \item C-G spinal cord injury (using correction factor of 0.7, representing 
-#'     median correction point reported in the original publication (parapalegic
-#'     patients: 0.8; tetrapalegic patients: 0.6))
-#'   \item Revised Lund-Malmo
-#'   \item Modification of Diet in Renal Disease study (MDRD; 
-#'     with or without consideration of race, using either the original equation 
-#'     (published 2001) or the equation updated to reflect serum creatinine 
-#'     assay standardization (2006))
-#'   \item CKD-EPI (with or without consideration of race, or 2021 re-fit without race)
-#'   \item Schwartz
-#'   \item Schwartz revised / bedside
-#'   \item Jelliffe
-#'   \item Jelliffe for unstable renal function. Note that the 15% reduction in 
-#'     P_adj recommended for hemodialysis patients is not included in this 
-#'     implementation.
-#'   \item Wright equation for eGFR in cancer patients, with creatinine measured
-#'     using the Jaffe assay.
-#' }
-#' Equations for estimation of eGFR from Cystatin C concentrations are available from the `calc_egfr_cystatin()` function.
+#' @description
+#' Calculate the estimated glomerular filtration rate (eGFR) or estimated
+#' creatinine clearance (CrCl), both indicators of renal function, based on
+#' measured serum creatinine. Note that CrCl overestimates GFR, because
+#' creatinine is also secreted by the renal tubules, so the two are not
+#' interchangeable. Regardless of method, the estimate is returned in the
+#' `value` element of the output.
 #'
-#' @param method eGFR estimation method, choose from `cockcroft_gault`, `cockcroft_gault_ideal`, 
-#'   `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`, `mdrd`, 
-#'   `mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`, 
-#'   `ckd_epi`, `ckd_epi_ignore_race`, `ckd_epi_as_2021`,
-#'   `malmo_lund_revised`, `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.
+#' Most equations report values per 1.73 m2 body surface area. The
+#' Cockcroft-Gault, Wright, and Jelliffe for unstable renal function equations
+#' report absolute values (mL/min) instead. By default, values are returned in
+#' the units of the equation; use `relative` to convert between them.
+#'
+#' Methods estimating GFR:
+#'
+#' - Revised Lund-Malmo (`malmo_lund_revised`)
+#' - Modification of Diet in Renal Disease study (MDRD; `mdrd`,
+#'   `mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`),
+#'   with or without consideration of race, using either the original equation
+#'   (published 2001) or the equation updated to reflect serum creatinine
+#'   assay standardization (2006)
+#' - CKD-EPI (`ckd_epi`, `ckd_epi_ignore_race`, `ckd_epi_as_2021`), with or
+#'   without consideration of race, or 2021 re-fit without race
+#' - European Kidney Function Consortium (EKFC; `ekfc`). Applicable from 2
+#'   years of age.
+#' - Schwartz (`schwartz`)
+#' - Schwartz revised / bedside (`schwartz_revised`, `bedside_schwartz`)
+#' - Wright equation for eGFR in cancer patients (`wright`), with creatinine
+#'   measured using the Jaffe assay. Reports absolute values.
+#'
+#' Methods estimating CrCl:
+#'
+#' - Cockcroft-Gault (`cockcroft_gault`, `cockcroft_gault_ideal`,
+#'   `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`), using total,
+#'   ideal, adjusted, or adaptive (see [calc_dosing_weight()]) body weight.
+#'   Reports absolute values.
+#' - C-G spinal cord injury (`cockcroft_gault_sci`), using correction factor of
+#'   0.7, representing median correction point reported in the original
+#'   publication (paraplegic patients: 0.8; tetraplegic patients: 0.6)
+#' - Jelliffe (`jelliffe`). Reports values per 1.73 m2.
+#' - Jelliffe for unstable renal function (`jelliffe_unstable`). Reports
+#'   absolute values. Note that the 15% reduction in P_adj recommended for
+#'   hemodialysis patients is not included in this implementation.
+#'
+#' @param method eGFR or CrCl estimation method, choose from `"cockcroft_gault"`,
+#'   `"cockcroft_gault_ideal"`, `"cockcroft_gault_adjusted"`, `"cockcroft_gault_adaptive"`,
+#'   `"cockcroft_gault_sci"`, `"mdrd"`, `"mdrd_ignore_race"`, `"mdrd_original"`,
+#'   `"mdrd_original_ignore_race"`, `"ckd_epi"`, `"ckd_epi_ignore_race"`,
+#'   `"ckd_epi_as_2021"`, `"ekfc"`, `"malmo_lund_revised"`, `"schwartz"`,
+#'   `"schwartz_revised"`, `"bedside_schwartz"`, `"jelliffe"`, `"jelliffe_unstable"`,
+#'   `"wright"`. Defaults to `"cockcroft_gault"`.
 #' @param sex sex
 #' @param age age, in years
 #' @param scr serum creatinine (mg/dL)
-#' @param scr_unit, `mg/dL` or `micromol/L` (==`umol/L`)
-#' @param race `black` or `other`, Required for CKD-EPI and MDRD methods for estimating GFR. 
+#' @param scr_unit `"mg/dL"` or `"micromol/L"` (==`"umol/L"`)
+#' @param race `"black"` or `"other"`, Required for CKD-EPI and MDRD methods for estimating GFR. 
 #'   To use these methods without race, use `method = "ckd_epi_ignore_race"`,  `method = "ckd_epi_as_2021"`,
 #'   `method = "mdrd_ignore_race"` or `method = "mdrd_original_ignore_race"`.
 #'   See Note section below for important considerations when using race as a predictive factor in eGFR.
 #' @param weight weight, in `kg`
 #' @param height height, in `cm`, used for converting to/from BSA-normalized units.
 #' @param bsa body surface area
-#' @param bsa_method BSA estimation method, see `calc_bsa()` for details
+#' @param bsa_method BSA estimation method, see [calc_bsa()] for details
 #' @param times vector of sampling times (in days!) for creatinine (only used in Jelliffe equation for unstable patients)
 #' @param ckd chronic kidney disease? Used for Schwartz method.
-#' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if re-calculation required. If `NULL` (=default), will choose value typical for `method`.
-#' @param unit_out `ml/min` (default), `L/hr`, or `mL/hr`
+#' @param relative `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA
+#'   if conversion is required. If `NULL` (default), uses the units of the
+#'   equation: `FALSE` for the Cockcroft-Gault, Wright, and Jelliffe for
+#'   unstable renal function equations, and `TRUE` for the others.
+#' @param unit_out `"mL/min"` (default), `"mL/hr"`, `"L/min"`, or `"L/hr"`
+#'   (case-insensitive)
 #' @param preterm is patient preterm? Used for Schwartz method.
 #' @param min_value minimum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
 #' @param max_value maximum value (`NULL` by default). The cap is applied in the same unit as the `unit_out`.
 #' @param verbose verbosity, show guidance and warnings. `TRUE` by default
 #' @param fail invoke `stop()` if not all covariates available?
-#' @param ... arguments passed on to `calc_abw` or `calc_dosing_weight`
-#' @references \itemize{
-#'   \item Cockcroft-Gault: \href{https://pubmed.ncbi.nlm.nih.gov/1244564/}{Cockcroft & Gault, Nephron (1976)}
-#'   \item Cockcroft-Gault for spinal cord injury: \href{https://pubmed.ncbi.nlm.nih.gov/6835689/}{Mirahmadi et al., Paraplegia (1983)}
-#'   \item Revised Lund-Malmo: \href{https://pubmed.ncbi.nlm.nih.gov/24334413/}{Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)}
-#'   \item MDRD: \href{https://pubmed.ncbi.nlm.nih.gov/11706306/}{Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)} 
-#'     and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et al., Clinical Chemistry (2007)}. (See Note.)
-#'   \item CKD-EPI: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/}{Levey et al., Annals of Internal Medicine (2009)}. (See Note.)
-#'   \item CKD-EPI (2021): \href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}.
-#'   \item Schwartz: \href{https://pubmed.ncbi.nlm.nih.gov/951142/}{Schwartz et al., Pediatrics (1976)}
-#'   \item Schwartz revised / bedside: \href{https://pubmed.ncbi.nlm.nih.gov/19158356/}{Schwartz et al., Journal of the American Society of Nephrology (2009)}
-#'   \item Jelliffe: \href{https://pubmed.ncbi.nlm.nih.gov/4748282/}{Jelliffe, Annals of Internal Medicine (1973)}
-#'   \item Jelliffe for unstable renal function: \href{https://pubmed.ncbi.nlm.nih.gov/12169862/}{Jelliffe, American Journal of Nephrology (2002)}
-#'   \item Wright: \href{https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/}{Wright et al., British Journal of Cancer (2001)}
-#' }
+#' @param ... arguments passed on to [calc_abw()] or [calc_dosing_weight()]
+#' @references
+#' - Cockcroft-Gault: [Cockcroft & Gault, Nephron (1976)](https://pubmed.ncbi.nlm.nih.gov/1244564/)
+#' - Cockcroft-Gault for spinal cord injury: [Mirahmadi et al., Paraplegia (1983)](https://pubmed.ncbi.nlm.nih.gov/6835689/)
+#' - Revised Lund-Malmo: [Nyman et al., Clinical Chemistry and Laboratory Medicine (2014)](https://pubmed.ncbi.nlm.nih.gov/24334413/)
+#' - MDRD: [Manjunath et al., Curr. Opin. Nephrol. Hypertens. (2001)](https://pubmed.ncbi.nlm.nih.gov/11706306/) 
+#'   and [Levey et al., Clinical Chemistry (2007)](https://academic.oup.com/clinchem/article/53/4/766/5627682). (See Note.)
+#' - CKD-EPI: [Levey et al., Annals of Internal Medicine (2009)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2763564/). (See Note.)
+#' - CKD-EPI (2021): [Inker, et al., NEJM (2021)](https://www.nejm.org/doi/full/10.1056/NEJMoa2102953).
+#' - EKFC: [Pottel et al., Annals of Internal Medicine (2021)](https://pubmed.ncbi.nlm.nih.gov/33166224/)
+#' - Schwartz: [Schwartz et al., Pediatrics (1976)](https://pubmed.ncbi.nlm.nih.gov/951142/)
+#' - Schwartz revised / bedside: [Schwartz et al., Journal of the American Society of Nephrology (2009)](https://pubmed.ncbi.nlm.nih.gov/19158356/)
+#' - Jelliffe: [Jelliffe, Annals of Internal Medicine (1973)](https://pubmed.ncbi.nlm.nih.gov/4748282/)
+#' - Jelliffe for unstable renal function: [Jelliffe, American Journal of Nephrology (2002)](https://pubmed.ncbi.nlm.nih.gov/12169862/)
+#' - Wright: [Wright et al., British Journal of Cancer (2001)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/)
 #' @note 
 #'   The MDRD and CKD-EPI equations use race as a factor in estimation of GFR. Racism has
 #'   historically been and continues to be a problem in medicine, with racialized patients
 #'   experiencing poorer outcomes. Given this context, the use of race in clinical algorithms
-#'   should be considered carefully (\href{https://www.nejm.org/doi/10.1056/NEJMms2004740}{Vyas et al., NEJM (2020)}).
+#'   should be considered carefully ([Vyas et al., NEJM (2020)](https://www.nejm.org/doi/10.1056/NEJMms2004740)).
 #'   Provided here are versions of the CKD-EPI and MDRD equations that do not consider the race
 #'   of the patient. Removing race from GFR estimation may lead to worse outcomes for Black patients 
-#'   in some contexts (\href{https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext}{Casal et al., The Lancet (2021)}). 
+#'   in some contexts ([Casal et al., The Lancet (2021)](https://www.thelancet.com/journals/lanonc/article/PIIS1470-2045(21)00377-6/fulltext)). 
 #'   On the other hand, including race in GFR estimation may also prevent Black patients 
 #'   from obtaining procedures like kidney transplants
-#'   ({\href{https://pubmed.ncbi.nlm.nih.gov/33443583/}{Zelnick, et al. JAMA Netw Open. (2021)}}).
+#'   ([Zelnick, et al. JAMA Netw Open. (2021)](https://pubmed.ncbi.nlm.nih.gov/33443583/)).
 #'   In 2021, the NKF/ASN Task Force on Reassessing the Inclusion of Race in Diagnosing Kidney Diseases
 #'   published revised versions of the CKD-EPI equations refit on the original data but with race excluded, 
 #'   which may produce less biased estimates 
-#'   (\href{https://www.nejm.org/doi/full/10.1056/NEJMoa2102953}{Inker, et al., NEJM (2021)}).
+#'   ([Inker, et al., NEJM (2021)](https://www.nejm.org/doi/full/10.1056/NEJMoa2102953)).
 #'  
+#' @seealso
+#' - [calc_egfr_cystatin()] for equations using cystatin C alone
+#' - [calc_egfr_combined()] for equations using both creatinine and cystatin C
 #' @examples
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70, unit_out = "L/hr")
@@ -92,9 +120,17 @@
 #'   weight = 70, height = 170, method = "jelliffe_unstable")
 #' calc_egfr(sex = "male", age = 50, scr = 1.1,
 #'   weight = 70, bsa = 1.6, method = "malmo_lund_revised", relative = FALSE)
+#' calc_egfr(sex = "female", age = 50, scr = 0.9, method = "ekfc")
 #' @export
 calc_egfr <- function (
-  method = "cockcroft_gault",
+  method = c(
+    "cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
+    "cockcroft_gault_adaptive", "cockcroft_gault_sci",
+    "mdrd", "mdrd_ignore_race", "mdrd_original", "mdrd_original_ignore_race",
+    "ckd_epi", "ckd_epi_ignore_race", "ckd_epi_as_2021", "ekfc",
+    "malmo_lund_revised", "schwartz", "schwartz_revised", "bedside_schwartz",
+    "jelliffe", "jelliffe_unstable", "wright"
+  ),
   sex = NULL,
   age = NULL,
   scr = NULL,
@@ -116,12 +152,16 @@ calc_egfr <- function (
   ...
 ){
 
+  # Resolve method ------------------------------------------------------------
+  method <- normalize_egfr_method(method)
+  method <- match.arg(method)
+
   # Format output units -------------------------------------------------------
   if (is.nil(relative)) { # Relative eGFR?
-    # By default, assume true, since most equations report in units of /1.73m2.
-    # Cockcroft-Gault and derived formulae do not report in relative units, but
-    # do not require bsa to convert.
-    relative <- ifelse(grepl('cockcroft_gault', method), FALSE, TRUE)
+    # By default, report eGFR in the units of the equation: absolute for
+    # equations that report absolute values (e.g., Cockcroft-Gault), and per
+    # 1.73 m2 for the others.
+    relative <- !is_absolute_egfr_method(method)
   }
   
   # Extract required covariates and tidied method name ------------------------
@@ -133,7 +173,7 @@ calc_egfr <- function (
   
   ## Calculate BSA ----
   if("bsa" %in% cov_reqs && is.nil(bsa)) { 
-    calculate_egfr <- check_covs_available(c('height', 'weight'), 
+    calculate_egfr <- check_covs_available(c("height", "weight"), 
                                            list(height = height, weight = weight), fail = fail)
     if(!fail && !calculate_egfr) {
       return(FALSE)
@@ -168,44 +208,35 @@ calc_egfr <- function (
     scr = scr,
     weight = weight,
     height = height,
-    bsa = bsa
+    bsa = bsa,
+    race = race
   )
   
   # Convert units, tidy covariates --------------------------------------------
 
   ## Convert Creatinine ----
-  if (is.null(scr_unit) || length(scr_unit) == 0 || all(is.na(scr_unit))) {
-    if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
-    scr_unit <- "mg/dl"
-  } else if (!(all(tolower(scr_unit) %in% valid_units("scr")))) {
-    stop("Sorry, specified serum creatinine unit not recognized!")
-  }
-  if (length(scr_unit) == 1 && length(scr) > 1) {
-    scr_unit <- rep(scr_unit, length(scr))
-  }
-  scr_unit <- tolower(gsub("%2F", "/", scr_unit))
-  scr <- convert_creat_unit(scr, scr_unit, "mg/dl")$value
+  scr <- convert_egfr_scr(scr, scr_unit, verbose)
 
   ## Format Sex ----
-  sex <- if (is.nil(sex)) '' else tolower(sex)
+  sex <- if (is.nil(sex)) "" else tolower(sex)
   if ("sex" %in% cov_reqs) {
     sex <- normalize_sex(sex)
     if (is.null(sex)) return(NULL)
   }
 
   ## Select Weight for eGFR ----
-  if (grepl('cockcroft_gault_', method)) {
+  if (grepl("cockcroft_gault_", method)) {
 
-    if (grepl('_ideal', method)) {
+    if (grepl("_ideal", method)) {
       weight_for_egfr <- "Ideal BW"
       weight <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
 
-    } else if (grepl('_adjusted', method)) {
+    } else if (grepl("_adjusted", method)) {
       weight_for_egfr <- "Adjusted BW"
       ibw <- calc_ibw(weight = weight, height = height, age = age, sex = sex)
       weight <- calc_abw(weight = weight, ibw = ibw, ...)
 
-    } else if (grepl('_adaptive', method)) {
+    } else if (grepl("_adaptive", method)) {
       tmp <- calc_dosing_weight(weight = weight,
                                 height = height,
                                 age = age,
@@ -227,14 +258,11 @@ calc_egfr <- function (
   if (grepl("cockcroft_gault(.*)(?<!sci)$", method, perl = TRUE)) {
     method <- "cockcroft_gault"
   }
-  if (grepl("malmo", method) & grepl("lund", method)) {
-    method <- "malmo_lund_revised"
-  }
 
-  crcl <- switch(
+  egfr <- switch(
     method,
     "wright" = egfr_wright(age = age, bsa = bsa, sex = sex, scr = scr),
-    "jelliffe" = egfr_jelliffe(age = age, sex = sex, bsa = bsa, scr = scr),
+    "jelliffe" = egfr_jelliffe(age = age, sex = sex, scr = scr),
     "jelliffe_unstable" = egfr_jelliffe_unstable(
       weight = weight,
       times = times,
@@ -293,6 +321,12 @@ calc_egfr <- function (
       scr = scr,
       age = age
     ),
+    "ekfc" = egfr_ekfc_creat(
+      sex = sex,
+      scr = scr,
+      age = age,
+      verbose = verbose
+    ),
     "cockcroft_gault_sci" = egfr_cockcroft_gault_sci(
       sex = sex,
       age = age,
@@ -335,10 +369,10 @@ calc_egfr <- function (
   # Format output -------------------------------------------------------------
   unit <- tolower(unit_out)
 
-  if (is.null(crcl)) {
+  if (is.null(egfr)) {
     return(
       list(
-        value = crcl,
+        value = egfr,
         age = age,
         bsa = bsa,
         sex = sex,
@@ -350,61 +384,155 @@ calc_egfr <- function (
     )
   }
 
+  out <- format_egfr_output(
+    egfr = egfr,
+    unit = unit,
+    relative = relative,
+    reported_relative = !is_absolute_egfr_method(method),
+    bsa = bsa,
+    min_value = min_value,
+    max_value = max_value,
+    verbose = verbose
+  )
+
+  # Return Output -------------------------------------------------------------
+  return(list(
+    value = out$value,
+    age = age,
+    bsa = bsa,
+    sex = sex,
+    scr = scr,
+    unit = out$unit,
+    weight = weight_for_egfr,
+    capped = out$capped
+  ))
+}
+
+#' Normalize eGFR method name
+#'
+#' Standardizes case and separators, and maps legacy typos and aliases to the
+#' method names used by [calc_egfr()].
+#'
+#' @param method eGFR method name(s)
+#' @returns normalized method name(s)
+#' @noRd
+normalize_egfr_method <- function(method) {
+  if (is.nil(method)) {
+    stop("egfr method unspecified")
+  }
+  method <- tolower(method)
+  method <- gsub("-", "_", method)
+  method <- gsub("cockroft", "cockcroft", method) # legacy support for typo
+  sub("^(malmo_lund|lund_malmo)_rev(ised)?$", "malmo_lund_revised", method)
+}
+
+#' Does an eGFR method report absolute values?
+#'
+#' Most eGFR equations report eGFR per 1.73 m2 body surface area. These
+#' equations report absolute values (mL/min) instead.
+#'
+#' @param method normalized eGFR method name(s)
+#' @returns `TRUE` if the method reports absolute values
+#' @noRd
+is_absolute_egfr_method <- function(method) {
+  grepl("cockcroft_gault", method) |
+    method %in% c("wright", "jelliffe_unstable")
+}
+
+#' Convert serum creatinine to mg/dL for eGFR equations
+#'
+#' @inheritParams calc_egfr
+#' @returns serum creatinine in mg/dL
+#' @noRd
+convert_egfr_scr <- function(scr, scr_unit, verbose = TRUE) {
+  if (is.null(scr_unit) || length(scr_unit) == 0 || all(is.na(scr_unit))) {
+    if(verbose) message("Creatinine unit not specified, assuming mg/dL.")
+    scr_unit <- "mg/dl"
+  } else if (!(all(tolower(scr_unit) %in% valid_units("scr")))) {
+    stop("Sorry, specified serum creatinine unit not recognized!")
+  }
+  if (length(scr_unit) == 1 && length(scr) > 1) {
+    scr_unit <- rep(scr_unit, length(scr))
+  }
+  scr_unit <- tolower(gsub("%2F", "/", scr_unit))
+  convert_creat_unit(scr, scr_unit, "mg/dl")$value
+}
+
+#' Convert eGFR to the requested output units and apply min/max caps
+#'
+#' @param egfr eGFR as returned by the equation, in mL/min (per 1.73 m2 if
+#'   `reported_relative`)
+#' @param unit requested output unit (lower case): `"ml/min"`, `"ml/hr"`,
+#'   `"l/min"`, or `"l/hr"`
+#' @param relative report eGFR per 1.73 m2?
+#' @param reported_relative is `egfr` reported per 1.73 m2 by the equation?
+#' @inheritParams calc_egfr
+#' @returns list with `value`, `unit`, and `capped`
+#' @noRd
+format_egfr_output <- function(
+  egfr,
+  unit,
+  relative,
+  reported_relative,
+  bsa = NULL,
+  min_value = NULL,
+  max_value = NULL,
+  verbose = TRUE
+) {
+  valid_units_out <- c("ml/min", "ml/hr", "l/min", "l/hr")
+  if (length(unit) != 1 || !(unit %in% valid_units_out)) {
+    stop(paste0(
+      "Sorry, `unit_out` must be one of: ",
+      paste0("\"", valid_units_out, "\"", collapse = ", "),
+      " (case-insensitive)."
+    ))
+  }
+
   ## Convert to relative if required ----
-  if (!relative & !grepl('cockcroft_gault', method)) {
-    crcl <- relative2absolute_bsa(crcl, bsa)[["value"]]
-  } else if (relative & !grepl('cockcroft_gault', method)){
+  if (!relative & reported_relative) {
+    egfr <- relative2absolute_bsa(egfr, bsa)[["value"]]
+  } else if (relative & reported_relative){
     unit <- paste0(unit, "/1.73m^2")
   } else if (relative) {
     unit <- paste0(unit, "/1.73m^2")
-    crcl <- absolute2relative_bsa(crcl, bsa)[["value"]]
+    egfr <- absolute2relative_bsa(egfr, bsa)[["value"]]
   }
   ## Convert to /h or to L if required ----
   conversion_factor <- 1
-  conversion_factor <- ifelse(grepl('/hr', unit), conversion_factor * 60, conversion_factor)
-  conversion_factor <- ifelse(grepl('^l', unit), conversion_factor / 1000, conversion_factor)
-  crcl <- conversion_factor * crcl
+  conversion_factor <- ifelse(grepl("/hr", unit), conversion_factor * 60, conversion_factor)
+  conversion_factor <- ifelse(grepl("^l", unit), conversion_factor / 1000, conversion_factor)
+  egfr <- conversion_factor * egfr
 
   ## Check min/max censoring ----
   capped <- list()
   if(!is.null(min_value)){
-    idx <- crcl < min_value
+    idx <- egfr < min_value
     if(any(idx)) {
-      crcl[idx] <- min_value
+      egfr[idx] <- min_value
       capped$min_value <- min_value
       capped$min_n <- sum(idx)
       if(verbose) message(paste0(capped$min_n, " values were capped to minimum value of ", min_value))
     }
   }
   if(!is.null(max_value)){
-    idx <- crcl > max_value
+    idx <- egfr > max_value
     if(any(idx)) {
-      crcl[idx] <- max_value
+      egfr[idx] <- max_value
       capped$max_value <- max_value
       capped$max_n <- sum(idx)
       if(verbose) message(paste0(capped$max_n, " values were capped to maximum value of ", max_value))
     }
   }
-
-  # Return Output -------------------------------------------------------------
-  return(list(
-    value = crcl,
-    age = age,
-    bsa = bsa,
-    sex = sex,
-    scr = scr,
-    unit = unit,
-    weight = weight_for_egfr,
-    capped = capped
-  ))
+  list(value = egfr, unit = unit, capped = capped)
 }
 
 egfr_wright <- function(age, bsa, sex, scr) {
   ((6580 - (38.8 * age)) * bsa * (1-(0.168 * (sex == "female"))))/(scr * 88.42)
 }
 
-egfr_jelliffe <- function(age, sex, bsa, scr) {
-  ((98 - 0.8*(age - 20)) * (1 - 0.01 * ifelse(sex == "male", 0, 1)) * bsa/1.73) / scr
+egfr_jelliffe <- function(age, sex, scr) {
+  f_sex <- ifelse(sex == "female", 0.9, 1)
+  (98 - 0.8 * (age - 20)) * f_sex / scr
 }
 
 egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
@@ -451,43 +579,74 @@ egfr_jelliffe_unstable <- function(weight, times, scr, age, sex) {
 #'   standardization of the creatinine assay.
 egfr_mdrd <- function(sex, race, scr, age, use_race, original_expression) {
   coeff <- ifelse(original_expression, 186, 175)
-  f_sex <- ifelse(sex == 'female', 0.742, 1)
-  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.212, 1)
+  f_sex <- ifelse(sex == "female", 0.742, 1)
+  f_race <- if (use_race) ifelse(race == "black", 1.212, 1) else 1
   coeff * scr^(-1.154) * f_sex * f_race * age^(-0.203)
 }
 
 egfr_ckd_epi <- function(sex, race, scr, age, use_race) {
-  a1 <- ifelse(sex == 'female', -0.329, -0.411)
-  K <- ifelse(sex == 'female', 0.7, 0.9)
-  f_sex <- ifelse(sex == 'female', 1.018, 1)
-  f_race <- ifelse(race == 'black' && use_race == TRUE, 1.159, 1)
+  a1 <- ifelse(sex == "female", -0.329, -0.411)
+  K <- ifelse(sex == "female", 0.7, 0.9)
+  f_sex <- ifelse(sex == "female", 1.018, 1)
+  f_race <- if (use_race) ifelse(race == "black", 1.159, 1) else 1
   141 * ((scr/K) ^ ifelse(scr < K, a1, -1.209)) * 0.993^age * f_sex * f_race
 }
 
 egfr_ckd_epi_as_2021 <- function(sex, scr, age) {
-  a1 <- ifelse(sex == 'female', -0.241, -0.302)
-  K <- ifelse(sex == 'female', 0.7, 0.9)
-  f_sex <- ifelse(sex == 'female', 1.012, 1)
+  a1 <- ifelse(sex == "female", -0.241, -0.302)
+  K <- ifelse(sex == "female", 0.7, 0.9)
+  f_sex <- ifelse(sex == "female", 1.012, 1)
   142 * ((scr/K) ^ ifelse(scr < K, a1, -1.200)) * 0.9938^age * f_sex
 }
 
+#' @noRd
+#' @param biomarker serum creatinine or cystatin C
+#' @param q median biomarker value in healthy persons of the same age (and sex,
+#'   for creatinine), in the same unit as `biomarker`
+egfr_ekfc <- function(biomarker, q, age) {
+  ratio <- biomarker / q
+  alpha <- ifelse(ratio < 1, -0.322, -1.132)
+  f_age <- ifelse(age > 40, 0.990^(age - 40), 1)
+  107.3 * ratio^alpha * f_age
+}
+
+#' @noRd
+#' @return Q value for EKFC creatinine equation, in mg/dL
+ekfc_q_creat <- function(sex, age) {
+  ln_q_child <- ifelse(
+    sex == "female",
+    3.080 + 0.177 * age - 0.223 * log(age) - 0.00596 * age^2 + 0.0000686 * age^3,
+    3.200 + 0.259 * age - 0.543 * log(age) - 0.00763 * age^2 + 0.0000790 * age^3
+  )
+  q_adult <- ifelse(sex == "female", 62, 80)
+  q_umol <- ifelse(age <= 25, exp(ln_q_child), q_adult)
+  q_umol / 88.4
+}
+
+egfr_ekfc_creat <- function(sex, scr, age, verbose = TRUE) {
+  if (verbose && any(age < 2)) {
+    warning("The EKFC creatinine equation is not meant for patients < 2 years of age.")
+  }
+  egfr_ekfc(scr, ekfc_q_creat(sex, age), age)
+}
+
 egfr_cockcroft_gault_sci <- function(sex, age, scr, weight) {
-  f_sex <- ifelse(sex == 'female', 0.85, 1)
+  f_sex <- ifelse(sex == "female", 0.85, 1)
   0.7 * (f_sex * (140-age) / scr * (weight/72))
 }
 
 egfr_cockcroft_gault <- function(sex, age, scr, weight) {
-  f_sex <- ifelse(sex == 'female', 0.85, 1)
+  f_sex <- ifelse(sex == "female", 0.85, 1)
   f_sex * (140-age) / scr * (weight/72)
 }
 
 egfr_malmo_lund <- function(sex, age, scr) {
-  scr_cutoff <- ifelse(sex == 'female', 1.696833, 2.0362)
-  intercept <- ifelse(sex == 'female', 2.5, 2.56)
+  scr_cutoff <- ifelse(sex == "female", 1.696833, 2.0362)
+  intercept <- ifelse(sex == "female", 2.5, 2.56)
   slope <- ifelse(
     scr >= scr_cutoff,
     -0.926,
-    ifelse(sex == 'female', 1.06964, 0.855712)
+    ifelse(sex == "female", 1.06964, 0.855712)
   )
   cr_term <- ifelse(scr < scr_cutoff, scr_cutoff - scr, log(scr/scr_cutoff))
   x <- intercept + slope * cr_term
@@ -495,7 +654,7 @@ egfr_malmo_lund <- function(sex, age, scr) {
 }
 
 egfr_bedside_schwartz <- function(age, height, scr, verbose) {
-  if(age < 1 && verbose) {
+  if (verbose && any(age < 1)) {
     warning("This equation is not meant for patients < 1 years of age.")
   }
   k <- 0.413

@@ -28,6 +28,7 @@ reference:
     contents:
       - calc_egfr
       - calc_egfr_cystatin
+      - calc_egfr_combined
       - calc_kgfr
       - calc_creat
       - calc_creat_neo
