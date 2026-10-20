@@ -1,4 +1,4 @@
-#' Calculate eGFR based on Cystatin C measurements
+#' Calculate eGFR based on cystatin C measurements
 #'
 #' @details
 #' The Grubb, Larsson, and Hoek equations were developed with cystatin C
@@ -36,7 +36,7 @@
 #'   Developed in adults (>= 18 years) only.
 #' @seealso
 #' - [calc_egfr()] for equations using creatinine alone
-#' - [calc_egfr_combined()] for equations using both creatinine and Cystatin C
+#' - [calc_egfr_combined()] for equations using both creatinine and cystatin C
 #' @examples
 #' calc_egfr_cystatin(1.0)
 #' calc_egfr_cystatin(1.0, method = "larsson")

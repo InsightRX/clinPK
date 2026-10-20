@@ -108,8 +108,8 @@
 #'   ([Inker, et al., NEJM (2021)](https://www.nejm.org/doi/full/10.1056/NEJMoa2102953)).
 #'  
 #' @seealso
-#' - [calc_egfr_cystatin()] for equations using Cystatin C alone
-#' - [calc_egfr_combined()] for equations using both creatinine and Cystatin C
+#' - [calc_egfr_cystatin()] for equations using cystatin C alone
+#' - [calc_egfr_combined()] for equations using both creatinine and cystatin C
 #' @examples
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70)
 #' calc_egfr(sex = "male", age = 50, scr = 1.1, weight = 70, unit_out = "L/hr")

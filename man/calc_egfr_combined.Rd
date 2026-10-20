@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_egfr_combined.R
 \name{calc_egfr_combined}
 \alias{calc_egfr_combined}
-\title{Calculate eGFR based on creatinine and Cystatin C measurements}
+\title{Calculate eGFR based on creatinine and cystatin C measurements}
 \usage{
 calc_egfr_combined(
   method = c("ckd_epi_as_2021", "ekfc"),
@@ -35,7 +35,7 @@ calc_egfr_combined(
 
 \item{scr_unit}{\code{"mg/dL"} or \code{"micromol/L"} (==\code{"umol/L"})}
 
-\item{cystatin}{serum Cystatin C concentration (mg/L)}
+\item{cystatin}{serum cystatin C concentration (mg/L)}
 
 \item{cystatin_unit}{only \code{"mg/L"} available}
 
@@ -63,12 +63,12 @@ requires \code{bsa}, or \code{weight} and \code{height} to calculate it.}
 }
 \description{
 Calculate the estimated glomerular filtration rate based on both measured
-serum creatinine and serum Cystatin C using one of the following approaches:
+serum creatinine and serum cystatin C using one of the following approaches:
 \itemize{
 \item CKD-EPI creatinine-cystatin C (2021 re-fit without race). Developed in
 adults (>= 18 years) only.
 \item European Kidney Function Consortium (EKFC): the arithmetic mean of
-the creatinine-based and Cystatin C-based EKFC equations. The Cystatin
+the creatinine-based and cystatin C-based EKFC equations. The cystatin
 C-based equation was validated in adults (>= 18 years) only.
 }
 }
@@ -88,6 +88,6 @@ calc_egfr_combined(sex = "female", age = 50, scr = 0.9, cystatin = 1.1,
 \seealso{
 \itemize{
 \item \code{\link[=calc_egfr]{calc_egfr()}} for equations using creatinine alone
-\item \code{\link[=calc_egfr_cystatin]{calc_egfr_cystatin()}} for equations using Cystatin C alone
+\item \code{\link[=calc_egfr_cystatin]{calc_egfr_cystatin()}} for equations using cystatin C alone
 }
 }

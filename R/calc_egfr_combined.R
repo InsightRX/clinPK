@@ -1,13 +1,13 @@
-#' Calculate eGFR based on creatinine and Cystatin C measurements
+#' Calculate eGFR based on creatinine and cystatin C measurements
 #'
 #' @description
 #' Calculate the estimated glomerular filtration rate based on both measured
-#' serum creatinine and serum Cystatin C using one of the following approaches:
+#' serum creatinine and serum cystatin C using one of the following approaches:
 #'
 #' - CKD-EPI creatinine-cystatin C (2021 re-fit without race). Developed in
 #'   adults (>= 18 years) only.
 #' - European Kidney Function Consortium (EKFC): the arithmetic mean of
-#'   the creatinine-based and Cystatin C-based EKFC equations. The Cystatin
+#'   the creatinine-based and cystatin C-based EKFC equations. The cystatin
 #'   C-based equation was validated in adults (>= 18 years) only.
 #'
 #' @param method eGFR estimation method, choose from `"ckd_epi_as_2021"`, `"ekfc"`.
@@ -15,7 +15,7 @@
 #' @param age age, in years
 #' @param scr serum creatinine (mg/dL)
 #' @param scr_unit `"mg/dL"` or `"micromol/L"` (==`"umol/L"`)
-#' @param cystatin serum Cystatin C concentration (mg/L)
+#' @param cystatin serum cystatin C concentration (mg/L)
 #' @param cystatin_unit only `"mg/L"` available
 #' @param weight weight, in `kg`, used for converting to absolute units.
 #' @param height height, in `cm`, used for converting to absolute units.
@@ -34,7 +34,7 @@
 #' - EKFC: [Pottel et al., NEJM (2023)](https://www.nejm.org/doi/full/10.1056/NEJMoa2203769)
 #' @seealso
 #' - [calc_egfr()] for equations using creatinine alone
-#' - [calc_egfr_cystatin()] for equations using Cystatin C alone
+#' - [calc_egfr_cystatin()] for equations using cystatin C alone
 #' @examples
 #' calc_egfr_combined(sex = "female", age = 50, scr = 0.9, cystatin = 1.1)
 #' calc_egfr_combined(sex = "female", age = 50, scr = 0.9, cystatin = 1.1,

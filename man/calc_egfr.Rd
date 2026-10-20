@@ -178,7 +178,7 @@ and \href{https://academic.oup.com/clinchem/article/53/4/766/5627682}{Levey et a
 }
 \seealso{
 \itemize{
-\item \code{\link[=calc_egfr_cystatin]{calc_egfr_cystatin()}} for equations using Cystatin C alone
-\item \code{\link[=calc_egfr_combined]{calc_egfr_combined()}} for equations using both creatinine and Cystatin C
+\item \code{\link[=calc_egfr_cystatin]{calc_egfr_cystatin()}} for equations using cystatin C alone
+\item \code{\link[=calc_egfr_combined]{calc_egfr_combined()}} for equations using both creatinine and cystatin C
 }
 }

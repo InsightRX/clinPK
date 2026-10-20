@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_egfr_cystatin.R
 \name{calc_egfr_cystatin}
 \alias{calc_egfr_cystatin}
-\title{Calculate eGFR based on Cystatin C measurements}
+\title{Calculate eGFR based on cystatin C measurements}
 \usage{
 calc_egfr_cystatin(
   cystatin = NULL,
@@ -38,7 +38,7 @@ patients < 18 years of age.}
 \item{verbose}{verbosity, show guidance and warnings. \code{TRUE} by default}
 }
 \description{
-Calculate eGFR based on Cystatin C measurements
+Calculate eGFR based on cystatin C measurements
 }
 \details{
 The Grubb, Larsson, and Hoek equations were developed with cystatin C
@@ -72,6 +72,6 @@ Developed in adults (>= 18 years) only.
 \seealso{
 \itemize{
 \item \code{\link[=calc_egfr]{calc_egfr()}} for equations using creatinine alone
-\item \code{\link[=calc_egfr_combined]{calc_egfr_combined()}} for equations using both creatinine and Cystatin C
+\item \code{\link[=calc_egfr_combined]{calc_egfr_combined()}} for equations using both creatinine and cystatin C
 }
 }
