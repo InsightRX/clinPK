@@ -34,9 +34,11 @@
 ## Clinical chemistry
 
 - [`calc_egfr()`](https://insightrx.github.io/clinPK/reference/calc_egfr.md)
-  : Calculate eGFR
+  : Calculate eGFR or creatinine clearance
 - [`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)
-  : Calculate eGFR based on Cystatin C measurements
+  : Calculate eGFR based on cystatin C measurements
+- [`calc_egfr_combined()`](https://insightrx.github.io/clinPK/reference/calc_egfr_combined.md)
+  : Calculate eGFR based on creatinine and cystatin C measurements
 - [`calc_kgfr()`](https://insightrx.github.io/clinPK/reference/calc_kgfr.md)
   : Calculate kinetic GFR
 - [`calc_creat()`](https://insightrx.github.io/clinPK/reference/calc_creat.md)

@@ -22,11 +22,85 @@
 - Added
   [`calc_treosulfan_success()`](https://insightrx.github.io/clinPK/reference/calc_treosulfan_success.md)
   function.
+- Added
+  [`calc_egfr_combined()`](https://insightrx.github.io/clinPK/reference/calc_egfr_combined.md)
+  function for estimating eGFR from both creatinine and cystatin C,
+  supporting the CKD-EPI (2021, without race) and EKFC equations.
+- Added European Kidney Function Consortium (EKFC) eGFR equations:
+  creatinine-based (`calc_egfr(method = "ekfc")`), cystatin C-based
+  (`calc_egfr_cystatin(method = "ekfc")`), and the mean of both
+  (`calc_egfr_combined(method = "ekfc")`).
+- Added CKD-EPI cystatin C equation (2012)
+  (`calc_egfr_cystatin(method = "ckd_epi")`).
+  [`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)
+  gains `age`, `sex`, and `verbose` arguments.
 
 ### Minor updates
 
 - Activated roxygen’s markdown parser for improved function
   documentation
+- [`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)
+  now errors if `cystatin_unit` is not `mg/L`. Previously, other units
+  were silently ignored.
+- [`calc_egfr()`](https://insightrx.github.io/clinPK/reference/calc_egfr.md)
+  now validates `method` with
+  [`match.arg()`](https://rdrr.io/r/base/match.arg.html), so the
+  available methods are listed in its usage. Unrecognized methods now
+  give [`match.arg()`](https://rdrr.io/r/base/match.arg.html)’s error
+  message, and unambiguous partial method names are accepted.
+- [`egfr_cov_reqs()`](https://insightrx.github.io/clinPK/reference/egfr_cov_reqs.md)
+  now returns the canonical method name (`"malmo_lund_revised"`) for
+  Lund-Malmo aliases.
+- [`calc_egfr()`](https://insightrx.github.io/clinPK/reference/calc_egfr.md)
+  now supports vectors of `race` for the CKD-EPI and MDRD methods, and
+  vectors of `age` for the bedside Schwartz method. Previously these
+  errored.
+- [`calc_egfr()`](https://insightrx.github.io/clinPK/reference/calc_egfr.md)
+  and
+  [`calc_egfr_combined()`](https://insightrx.github.io/clinPK/reference/calc_egfr_combined.md)
+  now error if `unit_out` is not one of `"mL/min"`, `"mL/hr"`,
+  `"L/min"`, or `"L/hr"`. Previously, unrecognized units were silently
+  treated as mL/min.
+- [`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)’s
+  `unit_out` now defaults to `NULL`, which picks `"ml/min"` for the
+  Larsson method, and `"ml/min/1.73m2"` for the Grubb, Hoek, EKFC, and
+  CKD-EPI methods. Previously, the Hoek method errored unless `unit_out`
+  was set.
+- **Breaking change:**
+  [`calc_egfr()`](https://insightrx.github.io/clinPK/reference/calc_egfr.md)
+  now handles absolute and relative (per 1.73 m2) eGFR correctly for the
+  Jelliffe and Wright methods. Previously, all methods other than
+  Cockcroft-Gault were assumed to report values per 1.73 m2.
+  - `method = "wright"` and `method = "jelliffe_unstable"` report
+    absolute values (mL/min), as in the original publications. They now
+    default to `relative = FALSE` (like Cockcroft-Gault) and are
+    labelled correctly. Previously, they were labelled as per 1.73 m2,
+    and `relative = FALSE` scaled them by BSA a second time. This also
+    affected
+    [`calc_carboplatin_calvert()`](https://insightrx.github.io/clinPK/reference/calc_carboplatin_calvert.md)
+    with these methods, which overestimated doses.
+  - `method = "jelliffe"` now reports values per 1.73 m2, as in the
+    original publication (Jelliffe, 1973). Previously, values were
+    multiplied by BSA/1.73 but labelled as per 1.73 m2, and
+    `relative = FALSE` scaled them by BSA a second time. BSA is now only
+    required when `relative = FALSE`.
+  - `method = "jelliffe"` now uses a factor of 0.9 for females, as in
+    the original publication. Previously, it used 0.99.
+- **Breaking change:** `calc_egfr_cystatin(method = "grubb")` now
+  reports eGFR in mL/min/1.73m2, as in the original publication (Grubb
+  et al., Clinical Chemistry, 2005). Previously, it was labelled as
+  absolute eGFR (mL/min) and could be converted to other absolute units,
+  which was incorrect. The calculated values are unchanged, but the
+  Grubb method now only supports `unit_out = "ml/min/1.73m2"`.
+- Added references for the Grubb, Larsson, and Hoek methods to the
+  [`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)
+  documentation, along with a note that these equations were developed
+  with cystatin C assays calibrated before international
+  standardization.
+- [`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)
+  now warns when the Grubb or CKD-EPI methods are used for patients \<
+  18 years of age, since these equations were developed in adults. For
+  the Grubb method, `age` is optional and only used for this warning.
 
 ## clinPK 0.13.0
 

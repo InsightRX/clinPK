@@ -1,49 +1,69 @@
-# Calculate eGFR
+# Calculate eGFR or creatinine clearance
 
-Calculate the estimated glomerular filtration rate (an indicator of
-renal function) based on measured serum creatinine using one of the
-following approaches:
+Calculate the estimated glomerular filtration rate (eGFR) or estimated
+creatinine clearance (CrCl), both indicators of renal function, based on
+measured serum creatinine. Note that CrCl overestimates GFR, because
+creatinine is also secreted by the renal tubules, so the two are not
+interchangeable. Regardless of method, the estimate is returned in the
+`value` element of the output.
 
-- Cockcroft-Gault (using weight, ideal body weight, or adjusted body
-  weight)
+Most equations report values per 1.73 m2 body surface area. The
+Cockcroft-Gault, Wright, and Jelliffe for unstable renal function
+equations report absolute values (mL/min) instead. By default, values
+are returned in the units of the equation; use `relative` to convert
+between them.
 
-- C-G spinal cord injury (using correction factor of 0.7, representing
-  median correction point reported in the original publication
-  (parapalegic patients: 0.8; tetrapalegic patients: 0.6))
+Methods estimating GFR:
 
-- Revised Lund-Malmo
+- Revised Lund-Malmo (`malmo_lund_revised`)
 
-- Modification of Diet in Renal Disease study (MDRD; with or without
-  consideration of race, using either the original equation
-  (published 2001) or the equation updated to reflect serum creatinine
-  assay standardization (2006))
+- Modification of Diet in Renal Disease study (MDRD; `mdrd`,
+  `mdrd_ignore_race`, `mdrd_original`, `mdrd_original_ignore_race`),
+  with or without consideration of race, using either the original
+  equation (published 2001) or the equation updated to reflect serum
+  creatinine assay standardization (2006)
 
-- CKD-EPI (with or without consideration of race, or 2021 re-fit without
-  race)
+- CKD-EPI (`ckd_epi`, `ckd_epi_ignore_race`, `ckd_epi_as_2021`), with or
+  without consideration of race, or 2021 re-fit without race
 
-- Schwartz
+- European Kidney Function Consortium (EKFC; `ekfc`). Applicable from 2
+  years of age.
 
-- Schwartz revised / bedside
+- Schwartz (`schwartz`)
 
-- Jelliffe
+- Schwartz revised / bedside (`schwartz_revised`, `bedside_schwartz`)
 
-- Jelliffe for unstable renal function. Note that the 15% reduction in
-  P_adj recommended for hemodialysis patients is not included in this
-  implementation.
+- Wright equation for eGFR in cancer patients (`wright`), with
+  creatinine measured using the Jaffe assay. Reports absolute values.
 
-- Wright equation for eGFR in cancer patients, with creatinine measured
-  using the Jaffe assay.
+Methods estimating CrCl:
 
-Equations for estimation of eGFR from Cystatin C concentrations are
-available from the
-[`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)
-function.
+- Cockcroft-Gault (`cockcroft_gault`, `cockcroft_gault_ideal`,
+  `cockcroft_gault_adjusted`, `cockcroft_gault_adaptive`), using total,
+  ideal, adjusted, or adaptive (see
+  [`calc_dosing_weight()`](https://insightrx.github.io/clinPK/reference/calc_dosing_weight.md))
+  body weight. Reports absolute values.
+
+- C-G spinal cord injury (`cockcroft_gault_sci`), using correction
+  factor of 0.7, representing median correction point reported in the
+  original publication (paraplegic patients: 0.8; tetraplegic patients:
+  0.6)
+
+- Jelliffe (`jelliffe`). Reports values per 1.73 m2.
+
+- Jelliffe for unstable renal function (`jelliffe_unstable`). Reports
+  absolute values. Note that the 15% reduction in P_adj recommended for
+  hemodialysis patients is not included in this implementation.
 
 ## Usage
 
 ``` r
 calc_egfr(
-  method = "cockcroft_gault",
+  method = c("cockcroft_gault", "cockcroft_gault_ideal", "cockcroft_gault_adjusted",
+    "cockcroft_gault_adaptive", "cockcroft_gault_sci", "mdrd", "mdrd_ignore_race",
+    "mdrd_original", "mdrd_original_ignore_race", "ckd_epi", "ckd_epi_ignore_race",
+    "ckd_epi_as_2021", "ekfc", "malmo_lund_revised", "schwartz", "schwartz_revised",
+    "bedside_schwartz", "jelliffe", "jelliffe_unstable", "wright"),
   sex = NULL,
   age = NULL,
   scr = NULL,
@@ -70,12 +90,14 @@ calc_egfr(
 
 - method:
 
-  eGFR estimation method, choose from `cockcroft_gault`,
-  `cockcroft_gault_ideal`, `cockcroft_gault_adjusted`,
-  `cockcroft_gault_adaptive`, `mdrd`, `mdrd_ignore_race`,
-  `mdrd_original`, `mdrd_original_ignore_race`, `ckd_epi`,
-  `ckd_epi_ignore_race`, `ckd_epi_as_2021`, `malmo_lund_revised`,
-  `schwartz`, `jelliffe`, `jellife_unstable`, `wright`.
+  eGFR or CrCl estimation method, choose from `"cockcroft_gault"`,
+  `"cockcroft_gault_ideal"`, `"cockcroft_gault_adjusted"`,
+  `"cockcroft_gault_adaptive"`, `"cockcroft_gault_sci"`, `"mdrd"`,
+  `"mdrd_ignore_race"`, `"mdrd_original"`,
+  `"mdrd_original_ignore_race"`, `"ckd_epi"`, `"ckd_epi_ignore_race"`,
+  `"ckd_epi_as_2021"`, `"ekfc"`, `"malmo_lund_revised"`, `"schwartz"`,
+  `"schwartz_revised"`, `"bedside_schwartz"`, `"jelliffe"`,
+  `"jelliffe_unstable"`, `"wright"`. Defaults to `"cockcroft_gault"`.
 
 - sex:
 
@@ -89,13 +111,13 @@ calc_egfr(
 
   serum creatinine (mg/dL)
 
-- scr_unit, :
+- scr_unit:
 
-  `mg/dL` or `micromol/L` (==`umol/L`)
+  `"mg/dL"` or `"micromol/L"` (==`"umol/L"`)
 
 - race:
 
-  `black` or `other`, Required for CKD-EPI and MDRD methods for
+  `"black"` or `"other"`, Required for CKD-EPI and MDRD methods for
   estimating GFR. To use these methods without race, use
   `method = "ckd_epi_ignore_race"`, `method = "ckd_epi_as_2021"`,
   `method = "mdrd_ignore_race"` or
@@ -136,13 +158,15 @@ calc_egfr(
 
 - relative:
 
-  `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if
-  re-calculation required. If `NULL` (=default), will choose value
-  typical for `method`.
+  `TRUE`/`FALSE`. Report eGFR as per 1.73 m2? Requires BSA if conversion
+  is required. If `NULL` (default), uses the units of the equation:
+  `FALSE` for the Cockcroft-Gault, Wright, and Jelliffe for unstable
+  renal function equations, and `TRUE` for the others.
 
 - unit_out:
 
-  `ml/min` (default), `L/hr`, or `mL/hr`
+  `"mL/min"` (default), `"mL/hr"`, `"L/min"`, or `"L/hr"`
+  (case-insensitive)
 
 - verbose:
 
@@ -165,7 +189,10 @@ calc_egfr(
 
 - ...:
 
-  arguments passed on to `calc_abw` or `calc_dosing_weight`
+  arguments passed on to
+  [`calc_abw()`](https://insightrx.github.io/clinPK/reference/calc_abw.md)
+  or
+  [`calc_dosing_weight()`](https://insightrx.github.io/clinPK/reference/calc_dosing_weight.md)
 
 ## Note
 
@@ -213,6 +240,9 @@ less biased estimates ([Inker, et al., NEJM
 - CKD-EPI (2021): [Inker, et al., NEJM
   (2021)](https://www.nejm.org/doi/full/10.1056/NEJMoa2102953).
 
+- EKFC: [Pottel et al., Annals of Internal Medicine
+  (2021)](https://pubmed.ncbi.nlm.nih.gov/33166224/)
+
 - Schwartz: [Schwartz et al., Pediatrics
   (1976)](https://pubmed.ncbi.nlm.nih.gov/951142/)
 
@@ -228,6 +258,14 @@ less biased estimates ([Inker, et al., NEJM
 
 - Wright: [Wright et al., British Journal of Cancer
   (2001)](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2363765/)
+
+## See also
+
+- [`calc_egfr_cystatin()`](https://insightrx.github.io/clinPK/reference/calc_egfr_cystatin.md)
+  for equations using cystatin C alone
+
+- [`calc_egfr_combined()`](https://insightrx.github.io/clinPK/reference/calc_egfr_combined.md)
+  for equations using both creatinine and cystatin C
 
 ## Examples
 
@@ -314,13 +352,13 @@ calc_egfr(sex = "male", age = 50, scr = c(1.1, 0.8),
   weight = 70, height = 170, method = "jelliffe")
 #> Creatinine unit not specified, assuming mg/dL.
 #> $value
-#> [1] 70.37224 96.76183
+#> [1] 67.27273 92.50000
 #> 
 #> $age
 #> [1] 50
 #> 
 #> $bsa
-#> [1] 1.809708
+#> NULL
 #> 
 #> $sex
 #> [1] "male"
@@ -356,7 +394,7 @@ calc_egfr(sex = "male", age = 50, scr = c(1.1, 0.8),
 #> [1] 1.1 0.8
 #> 
 #> $unit
-#> [1] "ml/min/1.73m^2"
+#> [1] "ml/min"
 #> 
 #> $weight
 #> [1] "Total BW"
@@ -384,6 +422,32 @@ calc_egfr(sex = "male", age = 50, scr = 1.1,
 #> 
 #> $unit
 #> [1] "ml/min"
+#> 
+#> $weight
+#> [1] "Total BW"
+#> 
+#> $capped
+#> list()
+#> 
+calc_egfr(sex = "female", age = 50, scr = 0.9, method = "ekfc")
+#> Creatinine unit not specified, assuming mg/dL.
+#> $value
+#> [1] 73.17329
+#> 
+#> $age
+#> [1] 50
+#> 
+#> $bsa
+#> NULL
+#> 
+#> $sex
+#> [1] "female"
+#> 
+#> $scr
+#> [1] 0.9
+#> 
+#> $unit
+#> [1] "ml/min/1.73m^2"
 #> 
 #> $weight
 #> [1] "Total BW"

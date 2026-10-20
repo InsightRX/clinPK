@@ -42,10 +42,39 @@
 <li>Added CDC growth chart data sets as package data (see <code><a href="../reference/growth-charts.html">?"growth-charts"</a></code>).</li>
 <li>Removed <code>read_who_table()</code> function, as part of the refactor for the <code>pct_*_for_*()</code> functions.</li>
 <li>Added <code><a href="../reference/calc_treosulfan_success.html">calc_treosulfan_success()</a></code> function.</li>
+<li>Added <code><a href="../reference/calc_egfr_combined.html">calc_egfr_combined()</a></code> function for estimating eGFR from both creatinine and cystatin C, supporting the CKD-EPI (2021, without race) and EKFC equations.</li>
+<li>Added European Kidney Function Consortium (EKFC) eGFR equations: creatinine-based (<code>calc_egfr(method = "ekfc")</code>), cystatin C-based (<code>calc_egfr_cystatin(method = "ekfc")</code>), and the mean of both (<code>calc_egfr_combined(method = "ekfc")</code>).</li>
+<li>Added CKD-EPI cystatin C equation (2012) (<code>calc_egfr_cystatin(method = "ckd_epi")</code>). <code><a href="../reference/calc_egfr_cystatin.html">calc_egfr_cystatin()</a></code> gains <code>age</code>, <code>sex</code>, and <code>verbose</code> arguments.</li>
 </ul></div>
 <div class="section level3">
 <h3 id="minor-updates-0-14-0">Minor updates<a class="anchor" aria-label="anchor" href="#minor-updates-0-14-0"></a></h3>
 <ul><li>Activated roxygen’s markdown parser for improved function documentation</li>
+<li>
+<code><a href="../reference/calc_egfr_cystatin.html">calc_egfr_cystatin()</a></code> now errors if <code>cystatin_unit</code> is not <code>mg/L</code>. Previously, other units were silently ignored.</li>
+<li>
+<code><a href="../reference/calc_egfr.html">calc_egfr()</a></code> now validates <code>method</code> with <code><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg()</a></code>, so the available methods are listed in its usage. Unrecognized methods now give <code><a href="https://rdrr.io/r/base/match.arg.html" class="external-link">match.arg()</a></code>’s error message, and unambiguous partial method names are accepted.</li>
+<li>
+<code><a href="../reference/egfr_cov_reqs.html">egfr_cov_reqs()</a></code> now returns the canonical method name (<code>"malmo_lund_revised"</code>) for Lund-Malmo aliases.</li>
+<li>
+<code><a href="../reference/calc_egfr.html">calc_egfr()</a></code> now supports vectors of <code>race</code> for the CKD-EPI and MDRD methods, and vectors of <code>age</code> for the bedside Schwartz method. Previously these errored.</li>
+<li>
+<code><a href="../reference/calc_egfr.html">calc_egfr()</a></code> and <code><a href="../reference/calc_egfr_combined.html">calc_egfr_combined()</a></code> now error if <code>unit_out</code> is not one of <code>"mL/min"</code>, <code>"mL/hr"</code>, <code>"L/min"</code>, or <code>"L/hr"</code>. Previously, unrecognized units were silently treated as mL/min.</li>
+<li>
+<code><a href="../reference/calc_egfr_cystatin.html">calc_egfr_cystatin()</a></code>’s <code>unit_out</code> now defaults to <code>NULL</code>, which picks <code>"ml/min"</code> for the Larsson method, and <code>"ml/min/1.73m2"</code> for the Grubb, Hoek, EKFC, and CKD-EPI methods. Previously, the Hoek method errored unless <code>unit_out</code> was set.</li>
+<li>
+<strong>Breaking change:</strong> <code><a href="../reference/calc_egfr.html">calc_egfr()</a></code> now handles absolute and relative (per 1.73 m2) eGFR correctly for the Jelliffe and Wright methods. Previously, all methods other than Cockcroft-Gault were assumed to report values per 1.73 m2.
+<ul><li>
+<code>method = "wright"</code> and <code>method = "jelliffe_unstable"</code> report absolute values (mL/min), as in the original publications. They now default to <code>relative = FALSE</code> (like Cockcroft-Gault) and are labelled correctly. Previously, they were labelled as per 1.73 m2, and <code>relative = FALSE</code> scaled them by BSA a second time. This also affected <code><a href="../reference/calc_carboplatin_calvert.html">calc_carboplatin_calvert()</a></code> with these methods, which overestimated doses.</li>
+<li>
+<code>method = "jelliffe"</code> now reports values per 1.73 m2, as in the original publication (Jelliffe, 1973). Previously, values were multiplied by BSA/1.73 but labelled as per 1.73 m2, and <code>relative = FALSE</code> scaled them by BSA a second time. BSA is now only required when <code>relative = FALSE</code>.</li>
+<li>
+<code>method = "jelliffe"</code> now uses a factor of 0.9 for females, as in the original publication. Previously, it used 0.99.</li>
+</ul></li>
+<li>
+<strong>Breaking change:</strong> <code>calc_egfr_cystatin(method = "grubb")</code> now reports eGFR in mL/min/1.73m2, as in the original publication (Grubb et al., Clinical Chemistry, 2005). Previously, it was labelled as absolute eGFR (mL/min) and could be converted to other absolute units, which was incorrect. The calculated values are unchanged, but the Grubb method now only supports <code>unit_out = "ml/min/1.73m2"</code>.</li>
+<li>Added references for the Grubb, Larsson, and Hoek methods to the <code><a href="../reference/calc_egfr_cystatin.html">calc_egfr_cystatin()</a></code> documentation, along with a note that these equations were developed with cystatin C assays calibrated before international standardization.</li>
+<li>
+<code><a href="../reference/calc_egfr_cystatin.html">calc_egfr_cystatin()</a></code> now warns when the Grubb or CKD-EPI methods are used for patients &lt; 18 years of age, since these equations were developed in adults. For the Grubb method, <code>age</code> is optional and only used for this warning.</li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -97,7 +126,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

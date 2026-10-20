@@ -23,7 +23,7 @@ egfr_cov_reqs(method, relative = NULL)
 ## Examples
 
 ``` r
-egfr_cov_reqs('schwartz_revised')
+egfr_cov_reqs("schwartz_revised")
 #> $schwartz_revised
 #> [1] "creat"  "age"    "sex"    "height"
 #> 
