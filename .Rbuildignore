@@ -12,4 +12,5 @@ slack_notification.sh
 ^\.github$
 ^CRAN-SUBMISSION$
 ^data-raw$
+^AGENTS\.md$
 ^\.claude$
