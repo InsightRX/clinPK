@@ -15,5 +15,5 @@ egfr_cov_reqs(method, relative = NULL)
 returns a named list, with the name being the eGFR method after being checked for certain typos or misspecifications, and the values being the required covariates.
 }
 \examples{
-egfr_cov_reqs('schwartz_revised')
+egfr_cov_reqs("schwartz_revised")
 }

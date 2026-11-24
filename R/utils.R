@@ -1,7 +1,7 @@
 #' Check for inconsistent vector lengths among inputs
 #'
 #' @param ... named arguments to check
-#' @keywords internal
+#' @noRd
 check_input_lengths <- function(...) {
   input_lengths <- lengths(Filter(
     function(x) !is.null(x) && length(x) > 1,
@@ -23,7 +23,7 @@ check_input_lengths <- function(...) {
 #' @param method Character string naming the method (used in error messages).
 #' @param ... Named input arguments (e.g. weight, bmi, sex, height, age).
 #' @return A named list of the supplied inputs, with `bmi` computed if needed.
-#' @keywords internal
+#' @noRd
 prepare_method_inputs <- function(fn, method, ...) {
   inputs <- list(...)
 
@@ -62,7 +62,7 @@ prepare_method_inputs <- function(fn, method, ...) {
 #'
 #' @param sex Character vector.
 #' @return Lowercased `sex`, or `NULL` (invisibly) after a warning.
-#' @keywords internal
+#' @noRd
 normalize_sex <- function(sex) {
   sex <- tolower(sex)
   if (length(sex) == 0 || !all(sex %in% c("male", "female"))) {

@@ -18,6 +18,7 @@ export(calc_creat)
 export(calc_creat_neo)
 export(calc_dosing_weight)
 export(calc_egfr)
+export(calc_egfr_combined)
 export(calc_egfr_cystatin)
 export(calc_ffm)
 export(calc_ibw)
@@ -89,7 +90,11 @@ export(relative2absolute_bsa)
 export(time_to_ss)
 export(valid_units)
 export(weight2kg)
-importFrom(stats,coef)
-importFrom(stats,lm)
-importFrom(utils,read.table)
-importFrom(utils,tail)
+importFrom(stats,
+  coef,
+  lm
+)
+importFrom(utils,
+  read.table,
+  tail
+)
